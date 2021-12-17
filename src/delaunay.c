@@ -251,6 +251,7 @@ TesselationT* tesselation(double* sites,
     /* unsigned verticesFacetsNeighbours[n][nfacets] => stackoverflow */
     for(unsigned v = 0; v < n; v++) {
       allsites[v].id = v;
+      allsites[v].point = getpoint(sites, dim, v);
       allsites[v].nneighsites = 0;
       allsites[v].neighsites = malloc(0); /* will be filled by appending */
       allsites[v].nneighridges = 0;
@@ -591,13 +592,19 @@ x->tiles[f].simplex.sitesids[i]);
 // -------------------------------------------------------------------------- //
 
 // SiteT to SEXP ------------------------------------------------------------ //
-SEXP SiteSXP(SiteT site) {
+SEXP SiteSXP(SiteT site, unsigned dim) {
   unsigned nprotect = 0;
-  SEXP R_site, names, id, neighsites, neighridgesids, neightiles;
+  SEXP R_site, names, id, point, neighsites, neighridgesids, neightiles;
 
   PROTECT(id = allocVector(INTSXP, 1));
   nprotect++;
   INTEGER(id)[0] = 1 + site.id;
+
+  PROTECT(point = allocVector(REALSXP, dim));
+  nprotect++;
+  for(unsigned i = 0; i < dim; i++) {
+    REAL(point)[i] = site.point[i];
+  }
 
   unsigned nneighsites = site.nneighsites;
   PROTECT(neighsites = allocVector(INTSXP, nneighsites));
@@ -620,19 +627,21 @@ SEXP SiteSXP(SiteT site) {
     INTEGER(neightiles)[i] = 1 + site.neightiles[i];
   }
 
-  PROTECT(R_site = allocVector(VECSXP, 4));
+  PROTECT(R_site = allocVector(VECSXP, 5));
   nprotect++;
   SET_VECTOR_ELT(R_site, 0, id);
-  SET_VECTOR_ELT(R_site, 1, neighsites);
-  SET_VECTOR_ELT(R_site, 2, neighridgesids);
-  SET_VECTOR_ELT(R_site, 3, neightiles);
+  SET_VECTOR_ELT(R_site, 1, point);
+  SET_VECTOR_ELT(R_site, 2, neighsites);
+  SET_VECTOR_ELT(R_site, 3, neighridgesids);
+  SET_VECTOR_ELT(R_site, 4, neightiles);
 
-  PROTECT(names = allocVector(VECSXP, 4));
+  PROTECT(names = allocVector(VECSXP, 5));
   nprotect++;
   SET_VECTOR_ELT(names, 0, mkChar("id"));
-  SET_VECTOR_ELT(names, 1, mkChar("neighvertices"));
-  SET_VECTOR_ELT(names, 2, mkChar("neightilefacets"));
-  SET_VECTOR_ELT(names, 3, mkChar("neightiles"));
+  SET_VECTOR_ELT(names, 1, mkChar("point"));
+  SET_VECTOR_ELT(names, 2, mkChar("neighvertices"));
+  SET_VECTOR_ELT(names, 3, mkChar("neightilefacets"));
+  SET_VECTOR_ELT(names, 4, mkChar("neightiles"));
   setAttrib(R_site, R_NamesSymbol, names);
 
   UNPROTECT(nprotect);
@@ -799,7 +808,7 @@ SEXP TileSXP(TileT tile, unsigned dim) {
   unsigned nridges = tile.nridges;  // should be dim+1
   PROTECT(ridgesids = allocVector(INTSXP, nridges));
   nprotect++;
-  for(int i = 0; i < nridges; i++) {
+  for(unsigned i = 0; i < nridges; i++) {
     INTEGER(ridgesids)[i] = 1 + tile.ridgesids[i];
   }
 
@@ -875,7 +884,7 @@ SEXP delaunay_(SEXP sites,
   nprotect += 2;
   for(unsigned i = 0; i < nsites; i++) {
     SEXP vertex;
-    PROTECT(vertex = SiteSXP(vertices[i]));
+    PROTECT(vertex = SiteSXP(vertices[i], dim));
     nprotect++;
     SET_VECTOR_ELT(R_vertices, i, vertex);
     SET_STRING_ELT(vnames, i, Rf_asChar(VECTOR_ELT(vertex, 0)));

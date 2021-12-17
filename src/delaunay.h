@@ -1,5 +1,6 @@
 typedef struct Site {
   unsigned   id;
+  double*    point;
   unsigned*  neighsites;
   unsigned   nneighsites;
   unsigned*  neighridgesids;

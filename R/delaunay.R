@@ -7,6 +7,7 @@
 #' @return
 #' @export
 #' @useDynLib tessellation, .registration = TRUE
+#' @importFrom hash hash
 #' @examples
 #' points <- rbind(
 #'  c(0.5,0.5,0.5),
