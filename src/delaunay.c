@@ -184,7 +184,7 @@ TesselationT* tesselation(double* sites,
           allfacets[i_facet].nneighbors = 0;
           unsigned i_neighbor = 0;
           FOREACHneighbor_(facet) {
-            if(flag[i_neighbor] == facetOK_(neighbor, degenerate)) {
+            if(flag[i_neighbor] = facetOK_(neighbor, degenerate)) {
               allfacets[i_facet].nneighbors++;
             }
             i_neighbor++;
