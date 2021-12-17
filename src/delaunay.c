@@ -765,7 +765,7 @@ SEXP SubtileSXP(SubTileT subtile, unsigned dim) {
   SET_VECTOR_ELT(R_subtile, 3, normal);
   SET_VECTOR_ELT(R_subtile, 4, offset);
 
-  PROTECT(names = allocVector(VECSXP, 4));
+  PROTECT(names = allocVector(VECSXP, 5));
   nprotect++;
   SET_VECTOR_ELT(names, 0, mkChar("id"));
   SET_VECTOR_ELT(names, 1, mkChar("subsimplex"));

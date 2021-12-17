@@ -1,6 +1,6 @@
 /* author: Stéphane Laurent */
 #include <R.h> // to use error
-#include <stdlib.h> // to use realloc
+#include <stdlib.h> // to use realloc and NULL
 #include <math.h> // to use NAN
 
 double* getpoint(double* points, unsigned dim, unsigned id){
