@@ -630,8 +630,8 @@ SEXP SiteSXP(SiteT site) {
   PROTECT(names = allocVector(VECSXP, 4));
   nprotect++;
   SET_VECTOR_ELT(names, 0, mkChar("id"));
-  SET_VECTOR_ELT(names, 1, mkChar("neighsites"));
-  SET_VECTOR_ELT(names, 2, mkChar("neighridgesids"));
+  SET_VECTOR_ELT(names, 1, mkChar("neighvertices"));
+  SET_VECTOR_ELT(names, 2, mkChar("neightilefacets"));
   SET_VECTOR_ELT(names, 3, mkChar("neightiles"));
   setAttrib(R_site, R_NamesSymbol, names);
 
@@ -673,7 +673,7 @@ SEXP SimplexSXP(SimplexT simplex, unsigned dim) {
 
   PROTECT(names = allocVector(VECSXP, 4));
   nprotect++;
-  SET_VECTOR_ELT(names, 0, mkChar("sitesids"));
+  SET_VECTOR_ELT(names, 0, mkChar("vertices"));
   SET_VECTOR_ELT(names, 1, mkChar("circumcenter"));
   SET_VECTOR_ELT(names, 2, mkChar("circumradius"));
   SET_VECTOR_ELT(names, 3, mkChar("volume"));
@@ -717,7 +717,7 @@ SEXP SubsimplexSXP(SimplexT simplex, unsigned dim) {
 
   PROTECT(names = allocVector(VECSXP, 4));
   nprotect++;
-  SET_VECTOR_ELT(names, 0, mkChar("sitesids"));
+  SET_VECTOR_ELT(names, 0, mkChar("vertices"));
   SET_VECTOR_ELT(names, 1, mkChar("circumcenter"));
   SET_VECTOR_ELT(names, 2, mkChar("circumradius"));
   SET_VECTOR_ELT(names, 3, mkChar("volume"));
@@ -727,8 +727,7 @@ SEXP SubsimplexSXP(SimplexT simplex, unsigned dim) {
   return R_subsimplex;
 }
 
-// SubTileT to SEXP ------------------------------------------------------------
-// //
+// SubTileT to SEXP --------------------------------------------------------- //
 SEXP SubtileSXP(SubTileT subtile, unsigned dim) {
   unsigned nprotect = 0;
   SEXP R_subtile, names, id, subsimplex, ridgeOf, normal, offset;
@@ -769,7 +768,7 @@ SEXP SubtileSXP(SubTileT subtile, unsigned dim) {
   nprotect++;
   SET_VECTOR_ELT(names, 0, mkChar("id"));
   SET_VECTOR_ELT(names, 1, mkChar("subsimplex"));
-  SET_VECTOR_ELT(names, 2, mkChar("ridgeOf"));
+  SET_VECTOR_ELT(names, 2, mkChar("facetOf"));
   SET_VECTOR_ELT(names, 3, mkChar("normal"));
   SET_VECTOR_ELT(names, 4, mkChar("offset"));
   setAttrib(R_subtile, R_NamesSymbol, names);
@@ -825,7 +824,7 @@ SEXP TileSXP(TileT tile, unsigned dim) {
   nprotect++;
   SET_VECTOR_ELT(names, 0, mkChar("id"));
   SET_VECTOR_ELT(names, 1, mkChar("simplex"));
-  SET_VECTOR_ELT(names, 2, mkChar("ridgesids"));
+  SET_VECTOR_ELT(names, 2, mkChar("facets"));
   SET_VECTOR_ELT(names, 3, mkChar("neighbors"));
   SET_VECTOR_ELT(names, 4, mkChar("family"));
   SET_VECTOR_ELT(names, 5, mkChar("orientation"));
@@ -917,7 +916,7 @@ SEXP delaunay_(SEXP sites,
   nprotect++;
   SET_VECTOR_ELT(names, 0, mkChar("vertices"));
   SET_VECTOR_ELT(names, 1, mkChar("tiles"));
-  SET_VECTOR_ELT(names, 2, mkChar("subtiles"));
+  SET_VECTOR_ELT(names, 2, mkChar("tilefacets"));
   setAttrib(out, R_NamesSymbol, names);
 
   UNPROTECT(nprotect);
