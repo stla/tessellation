@@ -16,3 +16,8 @@ A list representing the Voronoï tessellation.
 Voronoï tessellation from Delaunay tessellation; this is a list
   of pairs made of a site (a vertex) and a list of edges.
 }
+\examples{
+library(tessellation)
+d <- delaunay(centricCuboctahedron())
+voronoi(d)
+}

@@ -89,8 +89,27 @@ Edge <- R6Class(
     },
 
     #' @description Plot an \code{Edge} object.
+    #' @examples library(tessellation)
+    #' d <- delaunay(centricCuboctahedron())
+    #' v <- voronoi(d)
+    #' cell13 <- v[[13]]
+    #' isBoundedCell(cell13) # TRUE
+    #' library(rgl)
+    #' open3d(windowRect = c(50, 50, 562, 562))
+    #' invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
     plot = function(){
-      lines3d(rbind(private[[".A"]], private[[".B"]]))
+      lines3d(rbind(
+        private[[".A"]],
+        private[[".B"]])
+      )
+    },
+
+    #' @description Stack the two vertices of the edge.
+    stack = function(){
+      rbind(
+        private[[".A"]],
+        private[[".B"]]
+      )
     }
   )
 )

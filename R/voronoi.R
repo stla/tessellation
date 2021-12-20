@@ -58,8 +58,25 @@ voronoi0 <- function(cellGetter, tessellation){
 #' @return A list representing the Voronoï tessellation.
 #' @export
 #'
-#' @examples
+#' @examples library(tessellation)
+#' d <- delaunay(centricCuboctahedron())
+#' voronoi(d)
 voronoi <- function(tessellation){
   voronoi0(voronoiCell(identity, identity), tessellation)
 }
 
+#' @title Is this cell bounded?
+#' @description Check whether a Voronoï cell is bounded, i.e. contains only
+#'   finite edges.
+#'
+#' @param cell Voronoï cell
+#'
+#' @return A Boolean value, whether the cell is bounded.
+#' @export
+#' @importFrom sets is.tuple
+isBoundedCell <- function(cell){
+  if(is.tuple(cell)){
+    cell <- cell[["cell"]]
+  }
+  all(vapply(cell, function(edge) inherits(edge, "Edge"), logical(1L)))
+}

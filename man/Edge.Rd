@@ -24,6 +24,19 @@ edge
 ## ------------------------------------------------
 
 Edge$new(c(2, 0, 0), c(3, -1, 4))
+
+## ------------------------------------------------
+## Method `Edge$plot`
+## ------------------------------------------------
+
+library(tessellation)
+d <- delaunay(centricCuboctahedron())
+v <- voronoi(d)
+cell13 <- v[[13]]
+isBoundedCell(cell13) # TRUE
+library(rgl)
+open3d(windowRect = c(50, 50, 562, 562))
+invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
@@ -40,6 +53,7 @@ Edge$new(c(2, 0, 0), c(3, -1, 4))
 \item \href{#method-new}{\code{Edge$new()}}
 \item \href{#method-print}{\code{Edge$print()}}
 \item \href{#method-plot}{\code{Edge$plot()}}
+\item \href{#method-stack}{\code{Edge$stack()}}
 \item \href{#method-clone}{\code{Edge$clone()}}
 }
 }
@@ -109,6 +123,31 @@ Show instance of an \code{Edge} object.
 Plot an \code{Edge} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Edge$plot()}\if{html}{\out{</div>}}
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{library(tessellation)
+d <- delaunay(centricCuboctahedron())
+v <- voronoi(d)
+cell13 <- v[[13]]
+isBoundedCell(cell13) # TRUE
+library(rgl)
+open3d(windowRect = c(50, 50, 562, 562))
+invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-stack"></a>}}
+\if{latex}{\out{\hypertarget{method-stack}{}}}
+\subsection{Method \code{stack()}}{
+Stack the two vertices of the edge.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Edge$stack()}\if{html}{\out{</div>}}
 }
 
 }
