@@ -1,14 +1,16 @@
-#' Title
+#' @title Delaunay triangulation
+#' @description Delaunay triangulation (or tesellation) of a set of points.
 #'
-#' @param points
-#' @param atinfinity
-#' @param degenerate
+#' @param points the points given as a matrix, one point per row
+#' @param atinfinity Boolean, whether to include a point at infinity
+#' @param degenerate Boolean, whether to include degenerate tiles
 #'
-#' @return
+#' @return The Delaunay tessellation with many details, in a list.
 #' @export
 #' @useDynLib tessellation, .registration = TRUE
 #' @importFrom hash hash
-#' @examples
+#' @seealso \code{\link{getDelaunaySimplicies}}
+#' @examples library(tesselation)
 #' points <- rbind(
 #'  c(0.5,0.5,0.5),
 #'  c(0,0,0),
@@ -64,4 +66,37 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
       hash(as.character(vertices), pointsAsList[vertices])
   }
   tess
+}
+
+#' @title Delaunay simplicies
+#' @description Get Delaunay simplicies.
+#'
+#' @param tessellation the output of \code{\link{delaunay}}
+#' @param hashes Boolean, whether to return the simplicies as hash maps
+#'
+#' @return The list of simplicies of the Delaunay tessellation.
+#' @export
+#' @importFrom hash values
+#'
+#' @examples library(tessellation)
+#' pts <- rbind(
+#'   c(-5, -5,  16),
+#'   c(-5,  8,   3),
+#'   c(4,  -1,   3),
+#'   c(4,  -5,   7),
+#'   c(4,  -1, -10),
+#'   c(4,  -5, -10),
+#'   c(-5,  8, -10),
+#'   c(-5, -5, -10)
+#' )
+#'
+#' tess <- delaunay(pts)
+#' getDelaunaySimplicies(tess)
+getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
+  simplicies <-
+    lapply(lapply(tessellation[["tiles"]], `[[`, "simplex"), `[[`, "vertices")
+  if(!hashes){
+    simplicies <- lapply(simplicies, function(simplex) t(values(simplex)))
+  }
+  simplicies
 }
