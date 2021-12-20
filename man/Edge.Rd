@@ -39,6 +39,7 @@ Edge$new(c(2, 0, 0), c(3, -1, 4))
 \itemize{
 \item \href{#method-new}{\code{Edge$new()}}
 \item \href{#method-print}{\code{Edge$print()}}
+\item \href{#method-plot}{\code{Edge$plot()}}
 \item \href{#method-clone}{\code{Edge$clone()}}
 }
 }
@@ -98,6 +99,15 @@ Show instance of an \code{Edge} object.
 }
 \if{html}{\out{</div>}}
 
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-plot"></a>}}
+\if{latex}{\out{\hypertarget{method-plot}{}}}
+\subsection{Method \code{plot()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Edge$plot()}\if{html}{\out{</div>}}
 }
 
 }

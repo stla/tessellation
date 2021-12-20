@@ -5,6 +5,7 @@
 #'
 #' @export
 #' @importFrom R6 R6Class
+#' @importFrom rgl lines3d
 Edge <- R6Class(
 
   "Edge",
@@ -85,6 +86,10 @@ Edge <- R6Class(
       cat("Edge:\n")
       cat(" vertex A: ", toString(private[[".A"]]), "\n", sep = "")
       cat(" vertex B: ", toString(private[[".B"]]), "\n", sep = "")
+    },
+
+    plot = function(){
+      lines3d(rbind(private[[".A"]], private[[".B"]]))
     }
   )
 )
