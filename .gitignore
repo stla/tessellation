@@ -46,4 +46,4 @@ src-i386/
 src-x64/
 
 # other
-int/ztemp/
+inst/ztemp
