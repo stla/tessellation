@@ -10,7 +10,7 @@
 #' @useDynLib tessellation, .registration = TRUE
 #' @importFrom hash hash
 #' @seealso \code{\link{getDelaunaySimplicies}}
-#' @examples library(tesselation)
+#' @examples library(tessellation)
 #' points <- rbind(
 #'  c(0.5,0.5,0.5),
 #'  c(0,0,0),
@@ -163,4 +163,12 @@ plotDelaunay3D <- function(tesselation, color = TRUE, alpha = 0.3){
     p2 <- vertices[edge[2L], ]
     lines3d(rbind(p1,p2), color = "black")
   }
+}
+
+#' tile facets a vertex belongs to
+#' @noRd
+vertexNeighborFacets <- function(tessellation, vertexId){
+  vertex <- tessellation[["vertices"]][[vertexId]]
+  neighs <- vertex[["neightilefacets"]]
+  tessellation[["tilefacets"]][neighs]
 }

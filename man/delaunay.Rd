@@ -20,7 +20,7 @@ The Delaunay tessellation with many details, in a list.
 Delaunay triangulation (or tesellation) of a set of points.
 }
 \examples{
-library(tesselation)
+library(tessellation)
 points <- rbind(
  c(0.5,0.5,0.5),
  c(0,0,0),
