@@ -80,3 +80,35 @@ isBoundedCell <- function(cell){
   }
   all(vapply(cell, function(edge) inherits(edge, "Edge"), logical(1L)))
 }
+
+#' @title Vertices of a bounded cell
+#' @description Get all vertices of a bounded cell, without duplicates.
+#'
+#' @param cell A bounded Voronoï cell.
+#'
+#' @return A matrix, each row represents a vertex.
+#' @export
+#'
+#' @examples library(tessellation)
+#' d <- delaunay(centricCuboctahedron())
+#' v <- voronoi(d)
+#' cell13 <- v[[13]]
+#' isBoundedCell(cell13) # TRUE
+#' library(rgl)
+#' open3d(windowRect = c(50, 50, 562, 562))
+#' invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
+#' cellvertices <- cellVertices(cell13)
+#' spheres3d(cellvertices, radius = 0.1, color = "green")
+cellVertices <- function(cell){
+  if(!isBoundedCell(cell)){
+    stop(
+      "This function applies to bounded cells only.",
+      call. = TRUE
+    )
+  }
+  if(is.tuple(cell)){
+    cell <- cell[["cell"]]
+  }
+  stackedVertices <- lapply(cell, function(edge) edge$stack())
+  unique(do.call(rbind, stackedVertices))
+}

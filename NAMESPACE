@@ -2,6 +2,7 @@
 
 export(Edge)
 export(IEdge)
+export(cellVertices)
 export(centricCuboctahedron)
 export(delaunay)
 export(getDelaunaySimplicies)
