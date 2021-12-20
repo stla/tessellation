@@ -88,6 +88,7 @@ Edge <- R6Class(
       cat(" vertex B: ", toString(private[[".B"]]), "\n", sep = "")
     },
 
+    #' @description Plot an \code{Edge} object.
     plot = function(){
       lines3d(rbind(private[[".A"]], private[[".B"]]))
     }

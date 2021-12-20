@@ -25,7 +25,9 @@ edgesFromTileFacet <- function(tessellation, tilefacet){
 
 voronoiCell <- function(facetsQuotienter, edgeTransformer){
   function(tessellation, vertexId){
-    tilefacets <- facetsQuotienter(vertexNeighborFacets(tessellation, vertexId))
+    tilefacets <- facetsQuotienter(
+      unname(vertexNeighborFacets(tessellation, vertexId))
+    )
     edges <- Filter(Negate(is.null), lapply(tilefacets, function(tilefacet){
       edgesFromTileFacet(tessellation, tilefacet)
     }))
@@ -36,20 +38,24 @@ voronoiCell <- function(facetsQuotienter, edgeTransformer){
 #' @importFrom sets pair
 #' @noRd
 zip <- function(matrix, list){
-  lapply(seq_len(nrow(matrix)), function(i) pair(matrix[i, ], list[[i]]))
+  lapply(seq_len(nrow(matrix)), function(i){
+    pair(site = matrix[i, ], cell = list[[i]])
+  })
 }
 
 voronoi0 <- function(cellGetter, tessellation){
-  vertices = attr(tessellation, "points")
+  vertices <- attr(tessellation, "points")
   L <- lapply(1:nrow(vertices), function(i) cellGetter(tessellation, i))
   zip(vertices, L)
 }
 
-#' Title
+#' @title Voronoï tessellation
+#' @description Voronoï tessellation from Delaunay tessellation; this is a list
+#'   of pairs made of a site (a vertex) and a list of edges.
 #'
-#' @param tessellation
+#' @param tessellation output of \code{\link{delaunay}}
 #'
-#' @return
+#' @return A list representing the Voronoï tessellation.
 #' @export
 #'
 #' @examples

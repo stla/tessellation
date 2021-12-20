@@ -2,16 +2,17 @@
 % Please edit documentation in R/voronoi.R
 \name{voronoi}
 \alias{voronoi}
-\title{Title}
+\title{Voronoï tessellation}
 \usage{
 voronoi(tessellation)
 }
 \arguments{
-\item{tessellation}{}
+\item{tessellation}{output of \code{\link{delaunay}}}
 }
 \value{
-
+A list representing the Voronoï tessellation.
 }
 \description{
-Title
+Voronoï tessellation from Delaunay tessellation; this is a list
+  of pairs made of a site (a vertex) and a list of edges.
 }

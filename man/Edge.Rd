@@ -106,6 +106,7 @@ Show instance of an \code{Edge} object.
 \if{html}{\out{<a id="method-plot"></a>}}
 \if{latex}{\out{\hypertarget{method-plot}{}}}
 \subsection{Method \code{plot()}}{
+Plot an \code{Edge} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Edge$plot()}\if{html}{\out{</div>}}
 }
