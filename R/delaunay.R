@@ -65,6 +65,7 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
     tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
       hash(as.character(vertices), pointsAsList[vertices])
   }
+  attr(tess, "dimension") <- ncol(points)
   tess
 }
 
