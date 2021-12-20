@@ -23,7 +23,9 @@ cell13 <- v[[13]]
 isBoundedCell(cell13) # TRUE
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
-invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
+invisible(lapply(cell13[["cell"]], function(edge){
+  edge$plot(edgeAsTube = TRUE, tubeRadius = 0.025, tubeColor = "yellow")
+}))
 cellvertices <- cellVertices(cell13)
 spheres3d(cellvertices, radius = 0.1, color = "green")
 }

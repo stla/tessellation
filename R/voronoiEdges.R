@@ -5,7 +5,7 @@
 #'
 #' @export
 #' @importFrom R6 R6Class
-#' @importFrom rgl lines3d
+#' @importFrom rgl lines3d cylinder3d shade3d
 Edge <- R6Class(
 
   "Edge",
@@ -89,6 +89,9 @@ Edge <- R6Class(
     },
 
     #' @description Plot an \code{Edge} object.
+    #' @param edgeAsTube Boolean, whether to plot the edge as a tube
+    #' @param tubeRadius the radius of the tube
+    #' @param tubeColor the color of the tube
     #' @examples library(tessellation)
     #' d <- delaunay(centricCuboctahedron())
     #' v <- voronoi(d)
@@ -97,11 +100,23 @@ Edge <- R6Class(
     #' library(rgl)
     #' open3d(windowRect = c(50, 50, 562, 562))
     #' invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
-    plot = function(){
-      lines3d(rbind(
-        private[[".A"]],
-        private[[".B"]])
-      )
+    plot = function(edgeAsTube = FALSE, tubeRadius, tubeColor){
+      if(edgeAsTube){
+        edge <- cylinder3d(
+          rbind(
+            private[[".A"]],
+            private[[".B"]]
+          ),
+          radius = tubeRadius,
+          sides = 90
+        )
+        shade3d(edge, color = tubeColor)
+      }else{
+        lines3d(rbind(
+          private[[".A"]],
+          private[[".B"]]
+        ))
+      }
     },
 
     #' @description Stack the two vertices of the edge.
@@ -113,6 +128,7 @@ Edge <- R6Class(
     }
   )
 )
+
 
 #' @title R6 class representing an infinite edge of a Voronoï cell
 #'
