@@ -45,20 +45,22 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
       errfile
     )
   }, error = function(e){
-    cat(readLines(errfile), sep="\n")
+    try(cat(readLines(errfile), sep="\n"), silent = TRUE)
     stop(e)
   })
   pointsAsList <- lapply(1:nrow(points), function(i) points[i, ])
-  for(i in seq_along(tess[["tiles"]])){
-    simplex <- tess[[2L]][[i]][["simplex"]]
+  tiles <- tess[["tiles"]]
+  for(i in seq_along(tiles)){
+    simplex <- tiles[[i]][["simplex"]]
     vertices <- simplex[["vertices"]]
-    tess[[2L]][[i]][["simplex"]][["vertices"]] <-
+    tess[["tiles"]][[i]][["simplex"]][["vertices"]] <-
       hash(as.character(vertices), pointsAsList[vertices])
   }
-  for(i in seq_along(tess[["tilefacets"]])){
-    subsimplex <- tess[[3L]][[i]][["subsimplex"]]
+  tilefacets <- tess[["tilefacets"]]
+  for(i in seq_along(tilefacets)){
+    subsimplex <- tilefacets[[i]][["subsimplex"]]
     vertices <- subsimplex[["vertices"]]
-    tess[[3L]][[i]][["subsimplex"]][["vertices"]] <-
+    tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
       hash(as.character(vertices), pointsAsList[vertices])
   }
   tess
