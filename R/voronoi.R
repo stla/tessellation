@@ -45,7 +45,7 @@ zip <- function(matrix, list){
 
 voronoi0 <- function(cellGetter, tessellation){
   vertices <- attr(tessellation, "points")
-  L <- lapply(1:nrow(vertices), function(i) cellGetter(tessellation, i))
+  L <- lapply(1L:nrow(vertices), function(i) cellGetter(tessellation, i))
   zip(vertices, L)
 }
 
@@ -117,14 +117,14 @@ cellVertices <- function(cell){
 }
 
 #' @title Plot a bounded Voronoï cell
-#' @description Plot a bounded Voronoï cell with \emph{rgl}.
+#' @description Plot a bounded Voronoï cell with \strong{rgl}.
 #'
 #' @param cell a bounded Voronoï cell
 #' @param edgesAsTubes Boolean, whether to plot edges as tubes or as lines
 #' @param tubeRadius radius of the tubes if \code{edgesAsTubes = TRUE}
 #' @param tubeColor color of the tubes if \code{edgesAsTubes = TRUE}
 #' @param facetsColor color of the facets; \code{NULL} for no color
-#' @param alpha opacity of the facets, between 0 and 1
+#' @param alpha opacity of the facets, number between 0 and 1
 #'
 #' @return No value, this function just plots the cell.
 #' @export

@@ -14,10 +14,10 @@ An infinite edge is given by a vertex, its origin,
 ## ------------------------------------------------
 
 iedge <- IEdge$new(c(1, 1, 1), c(1, 2, 3))
-edge
-edge$O
-edge$O <- c(1, 0, 0)
-edge
+iedge
+iedge$O
+iedge$O <- c(1, 0, 0)
+iedge
 
 ## ------------------------------------------------
 ## Method `IEdge$print`
@@ -66,10 +66,10 @@ A new \code{IEdge} object.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{iedge <- IEdge$new(c(1, 1, 1), c(1, 2, 3))
-edge
-edge$O
-edge$O <- c(1, 0, 0)
-edge
+iedge
+iedge$O
+iedge$O <- c(1, 0, 0)
+iedge
 }
 \if{html}{\out{</div>}}
 

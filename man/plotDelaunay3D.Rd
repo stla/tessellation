@@ -20,13 +20,13 @@ plotDelaunay3D(
 \item{hue, luminosity}{if \code{color = TRUE}, these arguments are passed to
 \code{\link[randomcoloR]{randomColor}}}
 
-\item{alpha}{opacity, between 0 and 1}
+\item{alpha}{opacity, number between 0 and 1}
 }
 \value{
 No value, just renders a 3D plot.
 }
 \description{
-Plot a 3D Delaunay tessellation with \emph{rgl}.
+Plot a 3D Delaunay tessellation with \strong{rgl}.
 }
 \examples{
 library(tessellation)
@@ -40,7 +40,6 @@ pts <- rbind(
   c(-5,  8, -10),
   c(-5, -5, -10)
 )
-
 tess <- delaunay(pts)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))

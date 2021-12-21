@@ -32,7 +32,7 @@ Edge$new(c(2, 0, 0), c(3, -1, 4))
 library(tessellation)
 d <- delaunay(centricCuboctahedron())
 v <- voronoi(d)
-cell13 <- v[[13]]
+cell13 <- v[[13]] # the point (0, 0, 0), at the center
 isBoundedCell(cell13) # TRUE
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
@@ -141,7 +141,7 @@ Plot an \code{Edge} object.
 \preformatted{library(tessellation)
 d <- delaunay(centricCuboctahedron())
 v <- voronoi(d)
-cell13 <- v[[13]]
+cell13 <- v[[13]] # the point (0, 0, 0), at the center
 isBoundedCell(cell13) # TRUE
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
@@ -156,7 +156,8 @@ invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
 \if{html}{\out{<a id="method-stack"></a>}}
 \if{latex}{\out{\hypertarget{method-stack}{}}}
 \subsection{Method \code{stack()}}{
-Stack the two vertices of the edge.
+Stack the two vertices of the edge (this is for internal
+purpose).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Edge$stack()}\if{html}{\out{</div>}}
 }

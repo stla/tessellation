@@ -29,7 +29,6 @@ pts <- rbind(
   c(-5,  8, -10),
   c(-5, -5, -10)
 )
-
 tess <- delaunay(pts)
 getDelaunaySimplicies(tess)
 }

@@ -29,7 +29,7 @@
 #'   \item{\emph{id}}{the id of the tile}
 #'   \item{\emph{simplex}}{a list describing the simplex (that is, the tile);
 #'   this list contains four fields: \emph{vertices}, a
-#'   \code{\link[=hash]{hash}} giving the simplex vertices and their id,
+#'   \code{\link[hash]{hash}} giving the simplex vertices and their id,
 #'   \emph{circumcenter}, the circumcenter of the simplex, \emph{circumradius},
 #'   the circumradius of the simplex, and \emph{volume}, the volume of the
 #'   simplex}
@@ -67,19 +67,22 @@
 #'  c(1,1,0),
 #'  c(1,1,1)
 #' )
-#' delaunay(points)
+#' del <- delaunay(points)
+#' del$vertices[[1]]
+#' del$tiles[[1]]
+#' del$tilefacets[[1]]
 delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
   if(!is.matrix(points) || !is.numeric(points)){
-    stop("`points` must be a numeric matrix")
+    stop("The `points` argument must be a numeric matrix.", call. = TRUE)
   }
   if(ncol(points) < 2L){
-    stop("dimension must be at least 2")
+    stop("The dimension must be at least 2.", call. = TRUE)
   }
   if(nrow(points) <= ncol(points)){
-    stop("insufficient number of points")
+    stop("Insufficient number of points.", call. = TRUE)
   }
   if(any(is.na(points))){
-    stop("missing values are not allowed")
+    stop("Points with missing values are not allowed.", call. = TRUE)
   }
   errfile <- tempfile(fileext=".txt")
   tess <- tryCatch({
@@ -95,7 +98,7 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
     try(cat(readLines(errfile), sep="\n"), silent = TRUE)
     stop(e)
   })
-  pointsAsList <- lapply(1:nrow(points), function(i) points[i, ])
+  pointsAsList <- lapply(1L:nrow(points), function(i) points[i, ])
   tiles <- tess[["tiles"]]
   for(i in seq_along(tiles)){
     simplex <- tiles[[i]][["simplex"]]
@@ -135,7 +138,6 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
 #'   c(-5,  8, -10),
 #'   c(-5, -5, -10)
 #' )
-#'
 #' tess <- delaunay(pts)
 #' getDelaunaySimplicies(tess)
 getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
@@ -148,13 +150,13 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 }
 
 #' @title Plot 3D Delaunay tessellation
-#' @description Plot a 3D Delaunay tessellation with \emph{rgl}.
+#' @description Plot a 3D Delaunay tessellation with \strong{rgl}.
 #'
 #' @param tesselation the output of \code{\link{delaunay}}
 #' @param color Boolean, whether to use colors
 #' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
 #'   \code{\link[randomcoloR]{randomColor}}
-#' @param alpha opacity, between 0 and 1
+#' @param alpha opacity, number between 0 and 1
 #'
 #' @return No value, just renders a 3D plot.
 #' @export
@@ -174,7 +176,6 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #'   c(-5,  8, -10),
 #'   c(-5, -5, -10)
 #' )
-#'
 #' tess <- delaunay(pts)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
@@ -211,10 +212,11 @@ plotDelaunay3D <- function(
     lines3d(rbind(p1, p2), color = "black")
   }
 }
-  #' tile facets a vertex belongs to
-  #' @noRd
-  vertexNeighborFacets <- function(tessellation, vertexId){
-    vertex <- tessellation[["vertices"]][[vertexId]]
-    neighs <- vertex[["neightilefacets"]]
-    tessellation[["tilefacets"]][neighs]
-  }
+
+#' tile facets a vertex belongs to
+#' @noRd
+vertexNeighborFacets <- function(tessellation, vertexId){
+  vertex <- tessellation[["vertices"]][[vertexId]]
+  neighs <- vertex[["neightilefacets"]]
+  tessellation[["tilefacets"]][neighs]
+}

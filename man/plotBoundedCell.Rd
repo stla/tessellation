@@ -24,13 +24,13 @@ plotBoundedCell(
 
 \item{facetsColor}{color of the facets; \code{NULL} for no color}
 
-\item{alpha}{opacity of the facets, between 0 and 1}
+\item{alpha}{opacity of the facets, number between 0 and 1}
 }
 \value{
 No value, this function just plots the cell.
 }
 \description{
-Plot a bounded Voronoï cell with \emph{rgl}.
+Plot a bounded Voronoï cell with \strong{rgl}.
 }
 \examples{
 library(tessellation)

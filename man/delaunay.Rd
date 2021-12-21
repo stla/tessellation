@@ -38,7 +38,7 @@ The \strong{tiles} field is a list with the following fields:
   \item{\emph{id}}{the id of the tile}
   \item{\emph{simplex}}{a list describing the simplex (that is, the tile);
   this list contains four fields: \emph{vertices}, a
-  \code{\link[=hash]{hash}} giving the simplex vertices and their id,
+  \code{\link[hash]{hash}} giving the simplex vertices and their id,
   \emph{circumcenter}, the circumcenter of the simplex, \emph{circumradius},
   the circumradius of the simplex, and \emph{volume}, the volume of the
   simplex}
@@ -76,7 +76,10 @@ points <- rbind(
  c(1,1,0),
  c(1,1,1)
 )
-delaunay(points)
+del <- delaunay(points)
+del$vertices[[1]]
+del$tiles[[1]]
+del$tilefacets[[1]]
 }
 \seealso{
 \code{\link{getDelaunaySimplicies}}

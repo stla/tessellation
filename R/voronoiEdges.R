@@ -95,7 +95,7 @@ Edge <- R6Class(
     #' @examples library(tessellation)
     #' d <- delaunay(centricCuboctahedron())
     #' v <- voronoi(d)
-    #' cell13 <- v[[13]]
+    #' cell13 <- v[[13]] # the point (0, 0, 0), at the center
     #' isBoundedCell(cell13) # TRUE
     #' library(rgl)
     #' open3d(windowRect = c(50, 50, 562, 562))
@@ -119,7 +119,8 @@ Edge <- R6Class(
       }
     },
 
-    #' @description Stack the two vertices of the edge.
+    #' @description Stack the two vertices of the edge (this is for internal
+    #' purpose).
     stack = function(){
       rbind(
         private[[".A"]],
@@ -184,10 +185,10 @@ IEdge <- R6Class(
     #' @param direction the vector \code{direction}
     #' @return A new \code{IEdge} object.
     #' @examples iedge <- IEdge$new(c(1, 1, 1), c(1, 2, 3))
-    #' edge
-    #' edge$O
-    #' edge$O <- c(1, 0, 0)
-    #' edge
+    #' iedge
+    #' iedge$O
+    #' iedge$O <- c(1, 0, 0)
+    #' iedge
     initialize = function(O, direction) {
       O <- as.vector(O)
       stopifnot(
