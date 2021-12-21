@@ -27,7 +27,7 @@ plotBoundedCell(
 \item{alpha}{opacity of the facets, between 0 and 1}
 }
 \value{
-No value, just plots the cell.
+No value, this function just plots the cell.
 }
 \description{
 Plot a bounded Voronoï cell with \emph{rgl}.
@@ -41,7 +41,7 @@ isBoundedCell(cell13) # TRUE
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
 plotBoundedCell(
-  cell13, edgesAsTubes = TRUE, tubeRadius = 0.1, tubeColor = "yellow",
-  facetsColor = "navy", alpha = 0.3
+  cell13, edgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "yellow",
+  facetsColor = "navy", alpha = 0.7
 )
 }

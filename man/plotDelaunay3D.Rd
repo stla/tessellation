@@ -17,7 +17,7 @@ plotDelaunay3D(tesselation, color = TRUE, alpha = 0.3)
 No value, just renders a 3D plot.
 }
 \description{
-Plot a 3D Delaunay tessellation.
+Plot a 3D Delaunay tessellation with \emph{rgl}.
 }
 \examples{
 library(tessellation)

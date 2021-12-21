@@ -15,7 +15,7 @@ getDelaunaySimplicies(tessellation, hashes = FALSE)
 The list of simplicies of the Delaunay tessellation.
 }
 \description{
-Get Delaunay simplicies.
+Get Delaunay simplicies (tiles).
 }
 \examples{
 library(tessellation)

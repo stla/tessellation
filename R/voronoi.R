@@ -88,6 +88,7 @@ isBoundedCell <- function(cell){
 #'
 #' @return A matrix, each row represents a vertex.
 #' @export
+#' @importFrom sets is.tuple
 #'
 #' @examples library(tessellation)
 #' d <- delaunay(centricCuboctahedron())
@@ -125,10 +126,11 @@ cellVertices <- function(cell){
 #' @param facetsColor color of the facets; \code{NULL} for no color
 #' @param alpha opacity of the facets, between 0 and 1
 #'
-#' @return No value, just plots the cell.
+#' @return No value, this function just plots the cell.
 #' @export
 #' @importFrom cxhull cxhull
 #' @importFrom rgl lines3d cylinder3d shade3d
+#' @importFrom sets is.tuple
 #'
 #' @examples library(tessellation)
 #' d <- delaunay(centricCuboctahedron())
@@ -148,6 +150,13 @@ plotBoundedCell <- function(
   if(!isBoundedCell(cell)){
     stop(
       "This function applies to bounded cells only.",
+      call. = TRUE
+    )
+  }
+  if(edgesAsTubes && (missing(tubeRadius) || missing(tubeColor))){
+    stop(
+      "If you use the option `edgesAsTubes`, you have to set a value for ",
+      "`tubRadius` and `tubeColor`.",
       call. = TRUE
     )
   }
@@ -178,8 +187,10 @@ plotBoundedCell <- function(
   if(!is.null(facetsColor)){
     h <- cxhull(vertices, triangulate = TRUE)
     for(facet in h$facets){
-      triangle <- t(sapply(facet$vertices,
-                           function(id) h$vertices[[as.character(id)]]$point))
+      triangle <- t(vapply(
+        facet$vertices, function(id) h$vertices[[as.character(id)]]$point,
+        numeric(3L)
+      ))
       triangles3d(triangle, color = facetsColor, alpha = alpha)
     }
   }

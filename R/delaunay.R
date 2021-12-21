@@ -70,7 +70,7 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
 }
 
 #' @title Delaunay simplicies
-#' @description Get Delaunay simplicies.
+#' @description Get Delaunay simplicies (tiles).
 #'
 #' @param tessellation the output of \code{\link{delaunay}}
 #' @param hashes Boolean, whether to return the simplicies as hash maps
@@ -103,7 +103,7 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 }
 
 #' @title Plot 3D Delaunay tessellation
-#' @description Plot a 3D Delaunay tessellation.
+#' @description Plot a 3D Delaunay tessellation with \emph{rgl}.
 #'
 #' @param tesselation the output of \code{\link{delaunay}}
 #' @param color Boolean, whether to use colors
@@ -134,7 +134,7 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' plotDelaunay3D(tess)
 plotDelaunay3D <- function(tesselation, color = TRUE, alpha = 0.3){
   vertices <- attr(tesselation, "points")
-  if(ncol(vertices) != 3){
+  if(ncol(vertices) != 3L){
     stop(
       sprintf("Invalid dimension (%d instead of 3).", ncol(vertices)),
       call. = TRUE
@@ -161,7 +161,7 @@ plotDelaunay3D <- function(tesselation, color = TRUE, alpha = 0.3){
     edge <- edges[i, ]
     p1 <- vertices[edge[1L], ]
     p2 <- vertices[edge[2L], ]
-    lines3d(rbind(p1,p2), color = "black")
+    lines3d(rbind(p1, p2), color = "black")
   }
 }
 
