@@ -84,7 +84,7 @@ isBoundedCell <- function(cell){
 #' @title Vertices of a bounded cell
 #' @description Get all vertices of a bounded cell, without duplicates.
 #'
-#' @param cell A bounded Voronoï cell.
+#' @param cell a bounded Voronoï cell
 #'
 #' @return A matrix, each row represents a vertex.
 #' @export
@@ -113,4 +113,74 @@ cellVertices <- function(cell){
   }
   stackedVertices <- lapply(cell, function(edge) edge$stack())
   unique(do.call(rbind, stackedVertices))
+}
+
+#' @title Plot a bounded Voronoï cell
+#' @description Plot a bounded Voronoï cell with \emph{rgl}.
+#'
+#' @param cell a bounded Voronoï cell
+#' @param edgesAsTubes Boolean, whether to plot edges as tubes or as lines
+#' @param tubeRadius radius of the tubes if \code{edgesAsTubes = TRUE}
+#' @param tubeColor color of the tubes if \code{edgesAsTubes = TRUE}
+#' @param facetsColor color of the facets; \code{NULL} for no color
+#' @param alpha opacity of the facets, between 0 and 1
+#'
+#' @return No value, just plots the cell.
+#' @export
+#' @importFrom cxhull cxhull
+#' @importFrom rgl lines3d cylinder3d shade3d
+#'
+#' @examples library(tessellation)
+#' d <- delaunay(centricCuboctahedron())
+#' v <- voronoi(d)
+#' cell13 <- v[[13]]
+#' isBoundedCell(cell13) # TRUE
+#' library(rgl)
+#' open3d(windowRect = c(50, 50, 562, 562))
+#' plotBoundedCell(
+#'   cell13, edgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "yellow",
+#'   facetsColor = "navy", alpha = 0.7
+#' )
+plotBoundedCell <- function(
+  cell, edgesAsTubes = FALSE, tubeRadius, tubeColor,
+  facetsColor = NULL, alpha = 1
+){
+  if(!isBoundedCell(cell)){
+    stop(
+      "This function applies to bounded cells only.",
+      call. = TRUE
+    )
+  }
+  if(is.tuple(cell)){
+    cell <- cell[["cell"]]
+  }
+  if(edgesAsTubes || !is.null(facetsColor)){
+    stackedVertices <- lapply(cell, function(edge) edge$stack())
+    vertices <- unique(do.call(rbind, stackedVertices))
+  }
+  if(edgesAsTubes){
+    for(edge in cell){
+      tube <- cylinder3d(
+        rbind(
+          edge$A, edge$B
+        ),
+        radius = tubeRadius,
+        sides = 90
+      )
+      shade3d(tube, color = tubeColor)
+    }
+    spheres3d(vertices, radius = 1.5*tubeRadius, color = tubeColor)
+  }else{
+    for(edge in cell){
+      edge$plot()
+    }
+  }
+  if(!is.null(facetsColor)){
+    h <- cxhull(vertices, triangulate = TRUE)
+    for(facet in h$facets){
+      triangle <- t(sapply(facet$vertices,
+                           function(id) h$vertices[[as.character(id)]]$point))
+      triangles3d(triangle, color = facetsColor, alpha = alpha)
+    }
+  }
 }

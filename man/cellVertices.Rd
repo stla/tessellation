@@ -7,7 +7,7 @@
 cellVertices(cell)
 }
 \arguments{
-\item{cell}{A bounded Voronoï cell.}
+\item{cell}{a bounded Voronoï cell}
 }
 \value{
 A matrix, each row represents a vertex.

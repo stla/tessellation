@@ -10,5 +10,5 @@ centricCuboctahedron()
 A numeric matrix with 13 rows and 3 columns.
 }
 \description{
-A cuboctahedron (12 vertices) with a point added at its center.
+A cuboctahedron (12 vertices), with a point added at its center.
 }

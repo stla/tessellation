@@ -22,6 +22,6 @@ v <- voronoi(d)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
 for(i in 1:8){
-  cell000 <- Filter(function(x) inherits(x, "Edge"), v[[i]][["cell"]])
-  lapply(cell000, function(edge) edge$plot())
+  #cell000 <- Filter(function(x) inherits(x, "Edge"), v[[i]][["cell"]])
+  lapply(v[[i]][["cell"]], function(edge) edge$plot())
 }
