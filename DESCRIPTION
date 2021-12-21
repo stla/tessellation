@@ -1,13 +1,17 @@
 Package: tessellation
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Delaunay and Voronoï Tessellations
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+  person("Stéphane", "Laurent", role=c("aut","cre"), email="laurent_step@outlook.fr"),
+  person("C. B.", "Barber", role="cph", comment="author of the Qhull library"),
+  person("The Geometry Center", role="cph"))
+Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
+Description: Delaunay and Voronoï tessellation, with emphasis on the three-dimensional case.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull
+URL: https://github.com/stla/tessellation
+BugReports: https://github.com/stla/tessellation/issues
 RoxygenNote: 7.1.2
