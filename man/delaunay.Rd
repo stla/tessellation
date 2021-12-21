@@ -14,7 +14,51 @@ delaunay(points, atinfinity = FALSE, degenerate = FALSE)
 \item{degenerate}{Boolean, whether to include degenerate tiles}
 }
 \value{
-The Delaunay tessellation with many details, in a list.
+The Delaunay tessellation with many details, in a list. This list
+  contains three fields:
+\describe{
+  \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these are the
+  points passed to the function}
+  \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
+  tetrahedra in dimension 3)}
+  \item{\emph{tilefacets}}{the facets of the tiles of the tesselation}
+}
+The \strong{vertices} field is a list with the following fields:
+\describe{
+  \item{\emph{id}}{the id of the vertex; this is nothing but the index of
+  the corresponding point passed to the function}
+  \item{\emph{neighvertices}}{the ids of the vertices of the tessellation
+  connected to this vertex by an edge}
+  \item{\emph{neightilefacets}}{the ids of the tile facets this vertex
+  belongs to}
+  \item{\emph{neightiles}}{the ids of the tiles this vertex belongs to}
+}
+The \strong{tiles} field is a list with the following fields:
+\describe{
+  \item{\emph{id}}{the id of the tile}
+  \item{\emph{simplex}}{a list describing the simplex (that is, the tile);
+  this list contains four fields: \emph{vertices}, a
+  \code{\link[=hash]{hash}} giving the simplex vertices and their id,
+  \emph{circumcenter}, the circumcenter of the simplex, \emph{circumradius},
+  the circumradius of the simplex, and \emph{volume}, the volume of the
+  simplex}
+  \item{\emph{facets}}{the ids of the facets of this tile}
+  \item{\emph{neighbors}}{the ids of the tiles adjacent to this tile}
+  \item{\emph{family}}{xxxxxxx}
+  \item{\emph{orientation}}{\code{1} or \code{-1}, an indicator of the
+  orientation of the tile}
+}
+The \strong{tilefacets} field is a list with the following fields:
+\describe{
+  \item{\emph{id}}{the id of this tile facet}
+  \item{\emph{subsimplex}}{a list describing the subsimplex (that is, the
+  tile facet); this list is similar to the \emph{simplex} list of
+  \strong{tiles}}
+  \item{\emph{facetOf}}{one or two ids, the id(s) of the tile this facet
+  belongs to}
+  \item{\emph{normal}}{a vector, the normal of the tile facet}
+  \item{\emph{offset}}{a number, the offset of the tile facet}
+}
 }
 \description{
 Delaunay triangulation (or tesellation) of a set of points.
