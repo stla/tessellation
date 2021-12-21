@@ -107,6 +107,8 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #'
 #' @param tesselation the output of \code{\link{delaunay}}
 #' @param color Boolean, whether to use colors
+#' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
+#'   \code{\link[randomcoloR]{randomColor}}
 #' @param alpha opacity, between 0 and 1
 #'
 #' @return No value, just renders a 3D plot.
@@ -132,7 +134,9 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' plotDelaunay3D(tess)
-plotDelaunay3D <- function(tesselation, color = TRUE, alpha = 0.3){
+plotDelaunay3D <- function(
+  tesselation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3
+){
   vertices <- attr(tesselation, "points")
   if(ncol(vertices) != 3L){
     stop(
@@ -146,15 +150,13 @@ plotDelaunay3D <- function(tesselation, color = TRUE, alpha = 0.3){
   })))
   nsimplicies <- length(simplicies)
   if(color){
-    colors <- randomColor(nsimplicies, hue = "random", luminosity = "light")
-  }else{
-    colors <- rep("white", nsimplicies)
-  }
-  triangles <- combn(4L, 3L)
-  for(i in 1L:nsimplicies){
-    simplex <- t(values(simplicies[[i]]))
-    for(j in 1L:4L){
-      triangles3d(simplex[triangles[, j], ], color = colors[i], alpha = alpha)
+    colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+    triangles <- combn(4L, 3L)
+    for(i in 1L:nsimplicies){
+      simplex <- t(values(simplicies[[i]]))
+      for(j in 1L:4L){
+        triangles3d(simplex[triangles[, j], ], color = colors[i], alpha = alpha)
+      }
     }
   }
   for(i in 1L:nrow(edges)){
@@ -164,11 +166,10 @@ plotDelaunay3D <- function(tesselation, color = TRUE, alpha = 0.3){
     lines3d(rbind(p1, p2), color = "black")
   }
 }
-
-#' tile facets a vertex belongs to
-#' @noRd
-vertexNeighborFacets <- function(tessellation, vertexId){
-  vertex <- tessellation[["vertices"]][[vertexId]]
-  neighs <- vertex[["neightilefacets"]]
-  tessellation[["tilefacets"]][neighs]
-}
+  #' tile facets a vertex belongs to
+  #' @noRd
+  vertexNeighborFacets <- function(tessellation, vertexId){
+    vertex <- tessellation[["vertices"]][[vertexId]]
+    neighs <- vertex[["neightilefacets"]]
+    tessellation[["tilefacets"]][neighs]
+  }

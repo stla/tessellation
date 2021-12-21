@@ -4,12 +4,21 @@
 \alias{plotDelaunay3D}
 \title{Plot 3D Delaunay tessellation}
 \usage{
-plotDelaunay3D(tesselation, color = TRUE, alpha = 0.3)
+plotDelaunay3D(
+  tesselation,
+  color = TRUE,
+  hue = "random",
+  luminosity = "light",
+  alpha = 0.3
+)
 }
 \arguments{
 \item{tesselation}{the output of \code{\link{delaunay}}}
 
 \item{color}{Boolean, whether to use colors}
+
+\item{hue, luminosity}{if \code{color = TRUE}, these arguments are passed to
+\code{\link[randomcoloR]{randomColor}}}
 
 \item{alpha}{opacity, between 0 and 1}
 }
