@@ -35,7 +35,10 @@
 #'   simplex}
 #'   \item{\emph{facets}}{the ids of the facets of this tile}
 #'   \item{\emph{neighbors}}{the ids of the tiles adjacent to this tile}
-#'   \item{\emph{family}}{xxxxxxx}
+#'   \item{\emph{family}}{two tiles have the same family if they share the
+#'   same circumcenter; in this case the family is an integer, and the family is
+#'   \code{NA} for tiles which do not share their circumcenter with any other
+#'   tile}
 #'   \item{\emph{orientation}}{\code{1} or \code{-1}, an indicator of the
 #'   orientation of the tile}
 #' }
