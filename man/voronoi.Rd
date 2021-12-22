@@ -10,7 +10,9 @@ voronoi(tessellation)
 \item{tessellation}{output of \code{\link{delaunay}}}
 }
 \value{
-A list representing the Voronoï tessellation.
+A list of pairs representing the Voronoï tessellation. Each
+  \code{\link[sets]{pair}} is named: the first component is called
+  \code{"site"}, and the second component is called \code{"cell"}.
 }
 \description{
 Voronoï tessellation from Delaunay tessellation; this is a list
@@ -19,5 +21,13 @@ Voronoï tessellation from Delaunay tessellation; this is a list
 \examples{
 library(tessellation)
 d <- delaunay(centricCuboctahedron())
-voronoi(d)
+v <- voronoi(d)
+# the Voronoï diagram has 13 cells (one for each site):
+length(v)
+# there is only one bounded cell:
+length(Filter(isBoundedCell, v))
+}
+\seealso{
+\code{\link{isBoundedCell}}, \code{\link{cellVertices}},
+  \code{\link{plotBoundedCell}}
 }

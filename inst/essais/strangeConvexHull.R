@@ -1,6 +1,6 @@
 library(tessellation)
 
-alpha <- seq(0, pi, length.out = 150)[-1]
+alpha <- seq(0, 2*pi, length.out = 150)[-1]
 points <- t(vapply(alpha, function(x){
   c(
     sin(x)*cos(2*x), sin(x)*sin(2*x), cos(x)
@@ -13,7 +13,7 @@ d <- delaunay(points, degenerate = TRUE)
 v <- voronoi(d)
 
 library(rgl)
-open3d(windowRect = c(50, 50, 562, 562))
+open3d(windowRect = c(50, 50, 450, 450))
 plotBoundedCell(v[[1]])
 
 
@@ -44,5 +44,5 @@ movie3d(
 
 pngs <- list.files("./inst/ztemp/", pattern = "^oooooo", full.names = TRUE)
 library(gifski)
-gifski(pngs, "strangeVoronoiCell.gif",
-       width = 512, height = 512, delay = 1/12)
+gifski(pngs, "strangeVoronoiCell_400x.gif",
+       width = 400, height = 400, delay = 1/10)

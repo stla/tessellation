@@ -55,12 +55,21 @@ voronoi0 <- function(cellGetter, tessellation){
 #'
 #' @param tessellation output of \code{\link{delaunay}}
 #'
-#' @return A list representing the Voronoï tessellation.
+#' @return A list of pairs representing the Voronoï tessellation. Each
+#'   \code{\link[sets]{pair}} is named: the first component is called
+#'   \code{"site"}, and the second component is called \code{"cell"}.
+#'
+#' @seealso \code{\link{isBoundedCell}}, \code{\link{cellVertices}},
+#'   \code{\link{plotBoundedCell}}
 #' @export
 #'
 #' @examples library(tessellation)
 #' d <- delaunay(centricCuboctahedron())
-#' voronoi(d)
+#' v <- voronoi(d)
+#' # the Voronoï diagram has 13 cells (one for each site):
+#' length(v)
+#' # there is only one bounded cell:
+#' length(Filter(isBoundedCell, v))
 voronoi <- function(tessellation){
   voronoi0(voronoiCell(identity, identity), tessellation)
 }
