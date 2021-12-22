@@ -17,3 +17,5 @@ The Voronoï diagram (restricted to its bounded cells) of a dodecahedron surroun
 A strange Voronoï cell:
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/strangeVoronoiCell.gif)
+
+In fact this is not a Voronoï cell, I did a mistake :). Voronoï cells are convex.
