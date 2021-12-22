@@ -13,3 +13,7 @@ The Voronoï diagram (restricted to its bounded cells) of a cube surrounded by t
 The Voronoï diagram (restricted to its bounded cells) of a dodecahedron surrounded by three perpendicular circles:
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/dodecahedron.gif)
+
+A strange Voronoï cell:
+
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/strangeVornoiCell.gif)
