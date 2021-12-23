@@ -223,3 +223,40 @@ vertexNeighborFacets <- function(tessellation, vertexId){
   neighs <- vertex[["neightilefacets"]]
   tessellation[["tilefacets"]][neighs]
 }
+
+#' @title Tessellation volume
+#' @description The volume of the Delaunay tessellation, that is, the volume of
+#'   the convex hull of the sites.
+#'
+#' @param tessellation output of \code{\link{delaunay}}
+#'
+#' @return A number, the volume of the Delaunay tessellation.
+#' @seealso \code{\link{surface}}
+#' @export
+volume <- function(tessellation){
+  tileVolumes <- vapply(tessellation[["tiles"]], function(tile){
+    tile[["simplex"]][["volume"]]
+  }, numeric(1L))
+  sum(tileVolumes)
+}
+
+sandwichedFacet <- function(tilefacet){
+  length(tilefacet[["facetOf"]]) == 2L
+}
+
+#' @title Tessellation surface
+#' @description Exterior surface of the Delaunay tessellation.
+#'
+#' @param tessellation output of \code{\link{delaunay}}
+#'
+#' @return A number, the exterior surface of the Delaunay tessellation.
+#' @seealso \code{\link{volume}}
+#' @export
+surface <- function(tessellation){
+  exteriorFacets <-
+    Filter(Negate(sandwichedFacet), tessellation[["tilefacets"]])
+  ridgeSurfaces <- vapply(exteriorFacets, function(tilefacet){
+    tilefacet[["subsimplex"]][["volume"]]
+  }, numeric(1L))
+  sum(ridgeSurfaces)
+}

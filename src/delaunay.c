@@ -407,7 +407,7 @@ TesselationT* tesselation(double* sites,
                 parity = -parity;
               }
               double surface = sqrt(squaredNorm);
-              for(unsigned k = 2; k < dim - 1; k++) {
+              for(unsigned k = 2; k < dim; k++) {
                 surface /= k;
               }
               allridges_dup[i_ridge_dup].simplex.volume = surface;
