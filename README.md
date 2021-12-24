@@ -1,5 +1,9 @@
 # tessellation
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/stla/tessellation/workflows/R-CMD-check/badge.svg)](https://github.com/stla/tessellation/actions)
+<!-- badges: end -->
+
 ## Delaunay and Voronoï tessellations.
 
 The Voronoï cell of a point inside the Utah teapot:
