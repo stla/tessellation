@@ -71,7 +71,15 @@ voronoi0 <- function(cellGetter, tessellation){
 #' # there is only one bounded cell:
 #' length(Filter(isBoundedCell, v))
 voronoi <- function(tessellation){
-  voronoi0(voronoiCell(identity, identity), tessellation)
+  if(!inherits(tessellation, "delaunay")){
+    stop(
+      "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
+  v <- voronoi0(voronoiCell(identity, identity), tessellation)
+  class(v) <- "voronoi"
+  v
 }
 
 #' @title Is this cell bounded?
@@ -349,6 +357,12 @@ plotBoundedCell2D <- function(
 plotVoronoiDiagram <- function(
   v, color = TRUE, hue = "random", luminosity = "light", alpha = 1, ...
 ){
+  if(!inherits(v, "voronoi")){
+    stop(
+      "The argument `v` must be an output of the `voronoi` function.",
+      call. = TRUE
+    )
+  }
   dimension <- length(v[[1L]][["site"]])
   cells <- Filter(isBoundedCell, v)
   ncells <- length(cells)

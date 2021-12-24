@@ -133,6 +133,7 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
       "A subsimplex volume is nothing but the area of a triangle."
     )
   }
+  class(tess) <- "delaunay"
   tess
 }
 
@@ -160,6 +161,12 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
 #' tess <- delaunay(pts)
 #' getDelaunaySimplicies(tess)
 getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
+  if(!inherits(tessellation, "delaunay")){
+    stop(
+      "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
   simplicies <-
     lapply(lapply(tessellation[["tiles"]], `[[`, "simplex"), `[[`, "vertices")
   if(!hashes){
@@ -211,6 +218,12 @@ plotDelaunay2D <- function(
   tesselation, border = "black", color = TRUE, hue = "random",
   luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
 ){
+  if(!inherits(tessellation, "delaunay")){
+    stop(
+      "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
   vertices <- attr(tesselation, "points")
   if(ncol(vertices) != 2L){
     stop(
@@ -281,6 +294,12 @@ plotDelaunay2D <- function(
 plotDelaunay3D <- function(
   tesselation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3
 ){
+  if(!inherits(tessellation, "delaunay")){
+    stop(
+      "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
   vertices <- attr(tesselation, "points")
   if(ncol(vertices) != 3L){
     stop(
@@ -329,6 +348,12 @@ vertexNeighborFacets <- function(tessellation, vertexId){
 #' @seealso \code{\link{surface}}
 #' @export
 volume <- function(tessellation){
+  if(!inherits(tessellation, "delaunay")){
+    stop(
+      "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
   tileVolumes <- vapply(tessellation[["tiles"]], function(tile){
     tile[["simplex"]][["volume"]]
   }, numeric(1L))
@@ -348,6 +373,12 @@ sandwichedFacet <- function(tilefacet){
 #' @seealso \code{\link{volume}}
 #' @export
 surface <- function(tessellation){
+  if(!inherits(tessellation, "delaunay")){
+    stop(
+      "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
   exteriorFacets <-
     Filter(Negate(sandwichedFacet), tessellation[["tilefacets"]])
   ridgeSurfaces <- vapply(exteriorFacets, function(tilefacet){
