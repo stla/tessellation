@@ -40,6 +40,11 @@
    information it supplies.
 */
 
+/*
+Modification by Stéphane Laurent
+On 2018-07-30
+*/
+
 #include "qhull_ra.h"
 
 #include <stdarg.h>
@@ -128,9 +133,9 @@ int qh_new_qhull(qhT *qh, int dim, int numpoints, coordT *points, boolT ismalloc
   boolT new_ismalloc;
   coordT *new_points;
 
-  if(!errfile){
-    errfile= stderr;
-  }
+//  if(!errfile){
+//    errfile= stderr;
+//  }
   if (!qh->qhmem.ferr) {
     qh_meminit(qh, errfile);
   } else {
@@ -523,5 +528,3 @@ void qh_user_memsizes(qhT *qh) {
   QHULL_UNUSED(qh)
   /* qh_memsize(qh, size); */
 } /* user_memsizes */
-
-
