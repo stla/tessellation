@@ -7,7 +7,7 @@ sameFamily <- function(tile1, tile2){
   family1 == family2
 }
 
-edgesFromTileFacet <- function(tessellation, tilefacet){
+edgeFromTileFacet <- function(tessellation, tilefacet){
   tileindices <- tilefacet[["facetOf"]]
   tiles <- tessellation[["tiles"]]
   tile1 <- tiles[[tileindices[1L]]]
@@ -29,7 +29,7 @@ voronoiCell <- function(facetsQuotienter, edgeTransformer){
       unname(vertexNeighborFacets(tessellation, vertexId))
     )
     edges <- Filter(Negate(is.null), lapply(tilefacets, function(tilefacet){
-      edgesFromTileFacet(tessellation, tilefacet)
+      edgeFromTileFacet(tessellation, tilefacet)
     }))
     edgeTransformer(edges)
   }
