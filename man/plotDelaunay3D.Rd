@@ -9,7 +9,10 @@ plotDelaunay3D(
   color = TRUE,
   hue = "random",
   luminosity = "light",
-  alpha = 0.3
+  alpha = 0.3,
+  exteriorEdgesAsTubes = FALSE,
+  tubeRadius,
+  tubeColor
 )
 }
 \arguments{
@@ -21,6 +24,15 @@ plotDelaunay3D(
 \code{\link[randomcoloR]{randomColor}}}
 
 \item{alpha}{opacity, number between 0 and 1}
+
+\item{exteriorEdgesAsTubes}{Boolean, whether to plot the exterior edges
+as tubes}
+
+\item{tubeRadius}{if \code{exteriorEdgesAsTubes = TRUE}, the radius of
+the tubes}
+
+\item{tubeColor}{if \code{exteriorEdgesAsTubes = TRUE}, the color of
+the tubes}
 }
 \value{
 No value, just renders a 3D plot.
@@ -44,4 +56,8 @@ tess <- delaunay(pts)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
 plotDelaunay3D(tess)
+open3d(windowRect = c(50, 50, 562, 562))
+plotDelaunay3D(
+  tess, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.3, tubeColor = "yellow"
+)
 }

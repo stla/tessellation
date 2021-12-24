@@ -1,5 +1,28 @@
+#' @importFrom hash keys
+#' @noRd
+exteriorDelaunayEdges <- function(tilefacets, points){
+  exteriorFacets <- Filter(Negate(sandwichedFacet), tilefacets)
+  edges <- unique(do.call(rbind, lapply(exteriorFacets, function(f){
+    ids <- sort(as.integer(keys(f[["subsimplex"]][["vertices"]])))
+    rbind(
+      c(ids[1L], ids[2L]),
+      c(ids[2L], ids[3L]),
+      c(ids[1L], ids[3L])
+    )
+  })))
+  vertices <- points[unique(c(edges)), ]
+  nedges <- nrow(edges)
+  edges3 <- vector("list", length = nedges)
+  for(i in 1L:nedges){
+    edges3[[i]] <-
+      Edge3$new(A = points[edges[i, 1L], ], B = points[edges[i, 2L], ])
+  }
+  attr(edges3, "vertices") <- vertices
+  edges3
+}
+
 #' @title Delaunay triangulation
-#' @description Delaunay triangulation (or tesellation) of a set of points.
+#' @description Delaunay triangulation (or tessellation) of a set of points.
 #'
 #' @param points the points given as a matrix, one point per row
 #' @param atinfinity Boolean, whether to include a point at infinity
@@ -14,6 +37,10 @@
 #'   tetrahedra in dimension 3)}
 #'   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
 #' }
+#' In dimension 3, the list contains an additional field,
+#'   \emph{exteriorEdges}, the list of the exterior edges as
+#'   \code{\link{Edge3}} objects.
+#'
 #' The \strong{vertices} field is a list with the following fields:
 #' \describe{
 #'   \item{\emph{id}}{the id of the vertex; this is nothing but the index of
@@ -116,6 +143,10 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
     vertices <- subsimplex[["vertices"]]
     tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
       hash(as.character(vertices), pointsAsList[vertices])
+  }
+  if(dimension == 3L){
+    tess[["exteriorEdges"]] <-
+      exteriorDelaunayEdges(tess[["tilefacets"]], points)
   }
   attr(tess, "points") <- points
   if(dimension == 2L){
@@ -268,12 +299,18 @@ plotDelaunay2D <- function(
 #' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
 #'   \code{\link[randomcoloR]{randomColor}}
 #' @param alpha opacity, number between 0 and 1
+#' @param exteriorEdgesAsTubes Boolean, whether to plot the exterior edges
+#'   as tubes
+#' @param tubeRadius if \code{exteriorEdgesAsTubes = TRUE}, the radius of
+#'   the tubes
+#' @param tubeColor if \code{exteriorEdgesAsTubes = TRUE}, the color of
+#'   the tubes
 #'
 #' @return No value, just renders a 3D plot.
 #' @export
 #' @importFrom randomcoloR randomColor
 #' @importFrom utils combn
-#' @importFrom rgl triangles3d
+#' @importFrom rgl triangles3d spheres3d
 #' @importFrom hash keys values
 #'
 #' @examples library(tessellation)
@@ -291,8 +328,13 @@ plotDelaunay2D <- function(
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' plotDelaunay3D(tess)
+#' open3d(windowRect = c(50, 50, 562, 562))
+#' plotDelaunay3D(
+#'   tess, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.3, tubeColor = "yellow"
+#' )
 plotDelaunay3D <- function(
-  tessellation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3
+  tessellation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3,
+  exteriorEdgesAsTubes = FALSE, tubeRadius, tubeColor
 ){
   if(!inherits(tessellation, "delaunay")){
     stop(
@@ -327,6 +369,17 @@ plotDelaunay3D <- function(
     p1 <- vertices[edge[1L], ]
     p2 <- vertices[edge[2L], ]
     lines3d(rbind(p1, p2), color = "black")
+  }
+  if(exteriorEdgesAsTubes){
+    edges3 <- tessellation[["exteriorEdges"]]
+    for(edge3 in edges3){
+      edge3$plot(
+        edgeAsTube = TRUE, tubeRadius = tubeRadius, tubeColor = tubeColor
+      )
+    }
+    spheres3d(
+      attr(edges3, "vertices"), radius = 1.5*tubeRadius, color = tubeColor
+    )
   }
 }
 

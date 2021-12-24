@@ -23,6 +23,10 @@ The Delaunay tessellation with many details, in a list. This list
   tetrahedra in dimension 3)}
   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
 }
+In dimension 3, the list contains an additional field,
+  \emph{exteriorEdges}, the list of the exterior edges as
+  \code{\link{Edge3}} objects.
+
 The \strong{vertices} field is a list with the following fields:
 \describe{
   \item{\emph{id}}{the id of the vertex; this is nothing but the index of
@@ -64,7 +68,7 @@ The \strong{tilefacets} field is a list with the following fields:
 }
 }
 \description{
-Delaunay triangulation (or tesellation) of a set of points.
+Delaunay triangulation (or tessellation) of a set of points.
 }
 \examples{
 library(tessellation)
