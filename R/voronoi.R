@@ -164,7 +164,7 @@ cellVertices <- function(cell, check.bounded = TRUE){
 #' @return No value, this function just plots the cell.
 #' @export
 #' @importFrom cxhull cxhull
-#' @importFrom rgl lines3d cylinder3d shade3d
+#' @importFrom rgl lines3d cylinder3d shade3d triangles3d spheres3d
 #' @importFrom sets is.tuple
 #'
 #' @examples library(tessellation)
