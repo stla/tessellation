@@ -4,10 +4,14 @@
 \alias{cellVertices}
 \title{Vertices of a bounded cell}
 \usage{
-cellVertices(cell)
+cellVertices(cell, check.bounded = TRUE)
 }
 \arguments{
 \item{cell}{a bounded Voronoï cell}
+
+\item{check.bounded}{Boolean, whether to check that the cell is bounded;
+set to \code{FALSE} for a small speed gain if you know that the cell is
+bounded}
 }
 \value{
 A matrix, each row represents a vertex.

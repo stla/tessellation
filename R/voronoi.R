@@ -78,7 +78,7 @@ voronoi <- function(tessellation){
 #' @description Check whether a Voronoï cell is bounded, i.e. contains only
 #'   finite edges.
 #'
-#' @param cell Voronoï cell
+#' @param cell a Voronoï cell
 #'
 #' @return A Boolean value, whether the cell is bounded.
 #' @export
@@ -96,6 +96,9 @@ isBoundedCell <- function(cell){
 #' @description Get all vertices of a bounded cell, without duplicates.
 #'
 #' @param cell a bounded Voronoï cell
+#' @param check.bounded Boolean, whether to check that the cell is bounded;
+#'   set to \code{FALSE} for a small speed gain if you know that the cell is
+#'   bounded
 #'
 #' @return A matrix, each row represents a vertex.
 #' @export
@@ -113,8 +116,8 @@ isBoundedCell <- function(cell){
 #' }))
 #' cellvertices <- cellVertices(cell13)
 #' spheres3d(cellvertices, radius = 0.1, color = "green")
-cellVertices <- function(cell){
-  if(!isBoundedCell(cell)){
+cellVertices <- function(cell, check.bounded = TRUE){
+  if(check.bounded && !isBoundedCell(cell)){
     stop(
       "This function applies to bounded cells only.",
       call. = TRUE
@@ -124,7 +127,17 @@ cellVertices <- function(cell){
     cell <- cell[["cell"]]
   }
   stackedVertices <- lapply(cell, function(edge) edge$stack())
-  unique(do.call(rbind, stackedVertices))
+  vertices <- unique(do.call(rbind, stackedVertices))
+  if(ncol(vertices) == 2L){ # i.e. dimension 2
+    # we must order the vertices:
+    vectors <- sweep(vertices, 2L, colMeans(vertices), check.margin = FALSE)
+    vector1 <- vectors[1L, ]
+    a <- atan2(vector1[2L], vector1[1L])
+    vectors <- vectors[-1L, ]
+    angles <- c(0, apply(vectors, 1L, function(v) atan2(v[2L], v[1L]) - a))
+    vertices <- vertices[order(angles %% (2*pi)), ]
+  }
+  vertices
 }
 
 #' @title Plot a bounded Voronoï 3D cell
@@ -134,8 +147,11 @@ cellVertices <- function(cell){
 #' @param edgesAsTubes Boolean, whether to plot edges as tubes or as lines
 #' @param tubeRadius radius of the tubes if \code{edgesAsTubes = TRUE}
 #' @param tubeColor color of the tubes if \code{edgesAsTubes = TRUE}
-#' @param facetsColor color of the facets; \code{NULL} for no color
+#' @param facetsColor color of the facets; \code{NA} for no color
 #' @param alpha opacity of the facets, a number between 0 and 1
+#' @param check.bounded Boolean, whether to check that the cell is bounded;
+#'   set to \code{FALSE} for a small speed gain if you know that the cell is
+#'   bounded
 #'
 #' @return No value, this function just plots the cell.
 #' @export
@@ -156,9 +172,9 @@ cellVertices <- function(cell){
 #' )
 plotBoundedCell3D <- function(
   cell, edgesAsTubes = FALSE, tubeRadius, tubeColor,
-  facetsColor = NULL, alpha = 1
+  facetsColor = NA, alpha = 1, check.bounded = TRUE
 ){
-  if(!isBoundedCell(cell)){
+  if(check.bounded && !isBoundedCell(cell)){
     stop(
       "This function applies to bounded cells only.",
       call. = TRUE
@@ -195,7 +211,7 @@ plotBoundedCell3D <- function(
       edge$plot()
     }
   }
-  if(!is.null(facetsColor)){
+  if(!is.na(facetsColor)){
     h <- cxhull(vertices, triangulate = TRUE)
     for(facet in h$facets){
       triangle <- t(vapply(
@@ -208,17 +224,19 @@ plotBoundedCell3D <- function(
 }
 
 
-
 #' @title Plot a bounded Voronoï 2D cell
 #' @description Plot a bounded Voronoï 2D cell.
 #'
 #' @param cell a bounded Voronoï 2D cell
-#' @param tubeColor color of the tubes if \code{edgesAsTubes = TRUE}
 #' @param border color of the borders of the cell; \code{NA} for no color
 #' @param color color of the cell; \code{NA} for no color
+#' @param check.bounded Boolean, whether to check that the cell is bounded;
+#'   set to \code{FALSE} for a small speed gain if you know that the cell is
+#'   bounded
 #' @param ... graphical parameters for the borders
 #'
-#' @return No value, this function just plots the cell.
+#' @return No value, this function just plots the cell (more precisely, it adds
+#'   the plot of the cell to the current plot).
 #' @export
 #' @importFrom graphics polygon segments
 #' @importFrom sets is.tuple
@@ -231,28 +249,111 @@ plotBoundedCell3D <- function(
 #' v <- voronoi(d)
 #' cell5 <- v[[5]]
 #' isBoundedCell(cell5) # TRUE
-#' plot(centricSquare, type = "n", asp = 1)
+#' plot(centricSquare, type = "n", asp = 1, xlab = "x", ylab = "y")
 #' plotBoundedCell2D(cell5, color = "pink")
 plotBoundedCell2D <- function(
-  cell, border = "black", color = NA, ...
+  cell, border = "black", color = NA, check.bounded = TRUE, ...
 ){
-  if(!isBoundedCell(cell)){
-    stop(
-      "This function applies to bounded cells only.",
-      call. = TRUE
-    )
-  }
-  if(is.tuple(cell)){
-    cell <- cell[["cell"]]
-  }
+  # if(!isBoundedCell(cell)){
+  #   stop(
+  #     "This function applies to bounded cells only.",
+  #     call. = TRUE
+  #   )
+  # }
+  # if(is.tuple(cell)){
+  #   cell <- cell[["cell"]]
+  # }
   if(!is.na(color)){
-    stackedVertices <- lapply(cell, function(edge) edge$stack())
-    vertices <- unique(do.call(rbind, stackedVertices))
+    vertices <- cellVertices(cell, check.bounded = check.bounded)
+    # stackedVertices <- lapply(cell, function(edge) edge$stack())
+    # vertices <- unique(do.call(rbind, stackedVertices))
+    # # we must order the vertices:
+    # vectors <- sweep(vertices, 2L, colMeans(vertices), check.margin = FALSE)
+    # vector1 <- vectors[1L, ]
+    # a <- atan2(vector1[2L], vector1[1L])
+    # vectors <- vectors[-1L, ]
+    # angles <- c(0, apply(vectors, 1L, function(v) atan2(v[2L], v[1L]) - a))
+    # vertices <- vertices[order(angles %% (2*pi)), ]
     polygon(vertices, border = NA, col = color)
   }
   if(!is.na(border)){
+    if(is.na(color) && check.bounded){
+      if(!isBoundedCell(cell)){
+        stop(
+          "This function applies to bounded cells only.",
+          call. = TRUE
+        )
+      }
+    }
+    if(is.tuple(cell)){
+      cell <- cell[["cell"]]
+    }
     for(edge in cell){
       edge$plot(color = border, ...)
+    }
+  }
+}
+
+
+#' @title Plot Voronoî diagram
+#' @description Plot all the bounded cells of a 2D or 3D Voronoï tessellation.
+#'
+#' @param v an output of \code{\link{voronoi}}
+#' @param color Boolean, whether to use colors
+#' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
+#'   \code{\link[randomcoloR]{randomColor}}
+#' @param alpha opacity, a number between 0 and 1
+#'   (used when \code{color = TRUE})
+#' @param ... arguments passed to \code{\link{plotBoundedCell2D}} or
+#'   \code{\link{plotBoundedCell3D}}
+#'
+#' @return No returned value.
+#' @export
+#' @importFrom randomcoloR randomColor
+#' @importFrom scales alpha
+#'
+#' @examples library(tessellation)
+#' # 2D example: sunflower
+#' pts <- sunflower(150L)
+#' d <- delaunay(pts)
+#' v <- voronoi(d)
+#' opar <- par(mar = c(0, 0, 0, 0))
+#' plot(pts, type = "n", xlab = NA, ylab = NA, asp = 1, axes = FALSE)
+#' plotVoronoiDiagram(
+#'   v, luminosity = "dark"
+#' )
+#' par(opar)
+#'
+plotVoronoiDiagram <- function(
+  v, color = TRUE, hue = "random", luminosity = "light", alpha = 1, ...
+){
+  dimension <- length(v[[1L]][["site"]])
+  cells <- Filter(isBoundedCell, v)
+  ncells <- length(cells)
+  if(ncells == 0L){
+    stop(
+      "This Voronoï tessellation has no bounded cells.",
+      call. = TRUE
+    )
+  }
+  if(color){
+    colors <- scales::alpha(
+      randomColor(ncells, hue = hue, luminosity = luminosity), alpha
+    )
+  }else{
+    colors <- rep(NA, ncells)
+  }
+  if(dimension == 2L){
+    for(i in 1L:ncells){
+      plotBoundedCell2D(
+        cells[[i]], color = colors[i], check.bounded = FALSE, ...
+      )
+    }
+  }else{
+    for(i in 1L:ncells){
+      plotBoundedCell3D(
+        cells[[i]], facetsColor = colors[i], check.bounded = FALSE, ...
+      )
     }
   }
 }

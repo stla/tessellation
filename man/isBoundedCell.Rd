@@ -7,7 +7,7 @@
 isBoundedCell(cell)
 }
 \arguments{
-\item{cell}{Voronoï cell}
+\item{cell}{a Voronoï cell}
 }
 \value{
 A Boolean value, whether the cell is bounded.

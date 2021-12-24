@@ -4,7 +4,13 @@
 \alias{plotBoundedCell2D}
 \title{Plot a bounded Voronoï 2D cell}
 \usage{
-plotBoundedCell2D(cell, border = "black", color = NA, ...)
+plotBoundedCell2D(
+  cell,
+  border = "black",
+  color = NA,
+  check.bounded = TRUE,
+  ...
+)
 }
 \arguments{
 \item{cell}{a bounded Voronoï 2D cell}
@@ -13,12 +19,15 @@ plotBoundedCell2D(cell, border = "black", color = NA, ...)
 
 \item{color}{color of the cell; \code{NA} for no color}
 
-\item{...}{graphical parameters for the borders}
+\item{check.bounded}{Boolean, whether to check that the cell is bounded;
+set to \code{FALSE} for a small speed gain if you know that the cell is
+bounded}
 
-\item{tubeColor}{color of the tubes if \code{edgesAsTubes = TRUE}}
+\item{...}{graphical parameters for the borders}
 }
 \value{
-No value, this function just plots the cell.
+No value, this function just plots the cell (more precisely, it adds
+  the plot of the cell to the current plot).
 }
 \description{
 Plot a bounded Voronoï 2D cell.
@@ -32,6 +41,6 @@ d <- delaunay(centricSquare)
 v <- voronoi(d)
 cell5 <- v[[5]]
 isBoundedCell(cell5) # TRUE
-plot(centricSquare, type = "n", asp = 1)
+plot(centricSquare, type = "n", asp = 1, xlab = "x", ylab = "y")
 plotBoundedCell2D(cell5, color = "pink")
 }

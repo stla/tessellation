@@ -11,7 +11,7 @@ Description: Delaunay and Voronoï tessellation, with emphasis on the three-dime
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics
+Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales
 Suggests: uniformly
 URL: https://github.com/stla/tessellation
 BugReports: https://github.com/stla/tessellation/issues

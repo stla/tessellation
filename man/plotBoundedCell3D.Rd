@@ -9,8 +9,9 @@ plotBoundedCell3D(
   edgesAsTubes = FALSE,
   tubeRadius,
   tubeColor,
-  facetsColor = NULL,
-  alpha = 1
+  facetsColor = NA,
+  alpha = 1,
+  check.bounded = TRUE
 )
 }
 \arguments{
@@ -22,9 +23,13 @@ plotBoundedCell3D(
 
 \item{tubeColor}{color of the tubes if \code{edgesAsTubes = TRUE}}
 
-\item{facetsColor}{color of the facets; \code{NULL} for no color}
+\item{facetsColor}{color of the facets; \code{NA} for no color}
 
 \item{alpha}{opacity of the facets, a number between 0 and 1}
+
+\item{check.bounded}{Boolean, whether to check that the cell is bounded;
+set to \code{FALSE} for a small speed gain if you know that the cell is
+bounded}
 }
 \value{
 No value, this function just plots the cell.
