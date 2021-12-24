@@ -72,3 +72,28 @@ movie3d(
 pngs <- list.files("./inst/ztemp/", pattern = "^zpictetra", full.names = TRUE)
 gifski(pngs, "surroundedTetrahedron.gif",
        width = 512, height = 512, delay = 1/12)
+
+
+
+###########
+
+
+tetrahedron <-
+  rbind(
+    c(2*sqrt(2)/3, 0, -1/3),
+    c(-sqrt(2)/3, sqrt(2/3), -1/3),
+    c(-sqrt(2)/3, -sqrt(2/3), -1/3),
+    c(0, 0, 1)
+  )
+angles <- seq(0, 2*pi, length.out = 91)[-1]
+R <- 2.5
+circle1 <- t(vapply(angles, function(a) R*c(cos(a), sin(a), 0), numeric(3L)))
+circle2 <- t(vapply(angles, function(a) R*c(cos(a), 0, sin(a)), numeric(3L)))
+circle3 <- t(vapply(angles, function(a) R*c(0, cos(a), sin(a)), numeric(3L)))
+circles <- rbind(circle1, circle2, circle3)
+pts <- rbind(tetrahedron, circles)
+d <- delaunay(pts, degenerate = TRUE)
+v <- voronoi(d)
+library(rgl)
+open3d(windowRect = c(50, 50, 562, 562))
+plotVoronoiDiagram(v, luminosity = "dark")

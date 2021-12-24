@@ -2,7 +2,7 @@
 % Please edit documentation in R/voronoi.R
 \name{plotVoronoiDiagram}
 \alias{plotVoronoiDiagram}
-\title{Plot Voronoî diagram}
+\title{Plot Voronoï diagram}
 \usage{
 plotVoronoiDiagram(
   v,
@@ -35,8 +35,10 @@ Plot all the bounded cells of a 2D or 3D Voronoï tessellation.
 }
 \examples{
 library(tessellation)
-# 2D example: sunflower
-pts <- sunflower(150L)
+# 2D example: sunflower surrounded by a circle
+angles <- seq(0, 2*pi, length.out=91)[-1]
+circle <- 1.5 * cbind(cos(angles), sin(angles))
+pts <- rbind(sunflower(150L), circle)
 d <- delaunay(pts)
 v <- voronoi(d)
 opar <- par(mar = c(0, 0, 0, 0))
@@ -46,4 +48,24 @@ plotVoronoiDiagram(
 )
 par(opar)
 
+# 3D example : tetrahdron surrounded by three circles
+tetrahedron <-
+  rbind(
+    c(2*sqrt(2)/3, 0, -1/3),
+    c(-sqrt(2)/3, sqrt(2/3), -1/3),
+    c(-sqrt(2)/3, -sqrt(2/3), -1/3),
+    c(0, 0, 1)
+  )
+angles <- seq(0, 2*pi, length.out = 91)[-1]
+R <- 2.5
+circle1 <- t(vapply(angles, function(a) R*c(cos(a), sin(a), 0), numeric(3L)))
+circle2 <- t(vapply(angles, function(a) R*c(cos(a), 0, sin(a)), numeric(3L)))
+circle3 <- t(vapply(angles, function(a) R*c(0, cos(a), sin(a)), numeric(3L)))
+circles <- rbind(circle1, circle2, circle3)
+pts <- rbind(tetrahedron, circles)
+d <- delaunay(pts, degenerate = TRUE)
+v <- voronoi(d)
+library(rgl)
+open3d(windowRect = c(50, 50, 562, 562))
+plotVoronoiDiagram(v, luminosity = "dark")
 }
