@@ -87,7 +87,7 @@ isBoundedCell <- function(cell){
   if(is.tuple(cell)){
     cell <- cell[["cell"]]
   }
-  all(vapply(cell, function(edge){
+  length(cell) != 0L && all(vapply(cell, function(edge){
     inherits(edge, "Edge2") || inherits(edge, "Edge3")
   }, logical(1L)))
 }
@@ -345,7 +345,7 @@ plotBoundedCell2D <- function(
 #' v <- voronoi(d)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
-#' plotVoronoiDiagram(v, luminosity = "dark")
+#' plotVoronoiDiagram(v, luminosity = "bright")
 plotVoronoiDiagram <- function(
   v, color = TRUE, hue = "random", luminosity = "light", alpha = 1, ...
 ){

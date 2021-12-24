@@ -67,5 +67,5 @@ d <- delaunay(pts, degenerate = TRUE)
 v <- voronoi(d)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
-plotVoronoiDiagram(v, luminosity = "dark")
+plotVoronoiDiagram(v, luminosity = "bright")
 }
