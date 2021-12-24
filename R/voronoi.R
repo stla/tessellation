@@ -117,7 +117,6 @@ isBoundedCell <- function(cell){
 #' v <- voronoi(d)
 #' cell13 <- v[[13]]
 #' isBoundedCell(cell13) # TRUE
-#' options(rgl.useNULL = TRUE)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' invisible(lapply(cell13[["cell"]], function(edge){
@@ -173,7 +172,6 @@ cellVertices <- function(cell, check.bounded = TRUE){
 #' v <- voronoi(d)
 #' cell13 <- v[[13]]
 #' isBoundedCell(cell13) # TRUE
-#' options(rgl.useNULL = TRUE)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' plotBoundedCell3D(
@@ -353,7 +351,6 @@ plotBoundedCell2D <- function(
 #' pts <- rbind(tetrahedron, circles)
 #' d <- delaunay(pts, degenerate = TRUE)
 #' v <- voronoi(d)
-#' options(rgl.useNULL = TRUE)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' plotVoronoiDiagram(v, luminosity = "bright")

@@ -43,7 +43,6 @@ d <- delaunay(centricCuboctahedron())
 v <- voronoi(d)
 cell13 <- v[[13]]
 isBoundedCell(cell13) # TRUE
-options(rgl.useNULL = TRUE)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
 plotBoundedCell3D(
