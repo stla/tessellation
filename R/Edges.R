@@ -232,7 +232,7 @@ IEdge3 <- R6Class(
 #'
 #' @export
 #' @importFrom R6 R6Class
-#' @importFrom graphics segment
+#' @importFrom graphics segments
 Edge2 <- R6Class(
 
   "Edge2",
@@ -318,6 +318,7 @@ Edge2 <- R6Class(
     #' @description Plot an \code{Edge2} object.
     #' @param color the color of the edge
     #' @param ... graphical parameters such as \code{lty} or \code{lwd}
+    #' @importFrom graphics segments
     #' @examples library(tessellation)
     #' centricSquare <- rbind(
     #'   c(-1, 1), c(1, 1), c(1, -1), c(-1, -1), c(0, 0)
