@@ -10,7 +10,8 @@ surface(tessellation)
 \item{tessellation}{output of \code{\link{delaunay}}}
 }
 \value{
-A number, the exterior surface of the Delaunay tessellation.
+A number, the exterior surface of the Delaunay tessellation
+  (perimeter in 2D).
 }
 \description{
 Exterior surface of the Delaunay tessellation.

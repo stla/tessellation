@@ -344,7 +344,7 @@ vertexNeighborFacets <- function(tessellation, vertexId){
 #'
 #' @param tessellation output of \code{\link{delaunay}}
 #'
-#' @return A number, the volume of the Delaunay tessellation.
+#' @return A number, the volume of the Delaunay tessellation (area in 2D).
 #' @seealso \code{\link{surface}}
 #' @export
 volume <- function(tessellation){
@@ -369,7 +369,8 @@ sandwichedFacet <- function(tilefacet){
 #'
 #' @param tessellation output of \code{\link{delaunay}}
 #'
-#' @return A number, the exterior surface of the Delaunay tessellation.
+#' @return A number, the exterior surface of the Delaunay tessellation
+#'   (perimeter in 2D).
 #' @seealso \code{\link{volume}}
 #' @export
 surface <- function(tessellation){

@@ -10,7 +10,7 @@ volume(tessellation)
 \item{tessellation}{output of \code{\link{delaunay}}}
 }
 \value{
-A number, the volume of the Delaunay tessellation.
+A number, the volume of the Delaunay tessellation (area in 2D).
 }
 \description{
 The volume of the Delaunay tessellation, that is, the volume of
