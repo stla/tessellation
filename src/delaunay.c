@@ -34,11 +34,12 @@ TesselationT* tesselation(double* sites,
   qhT qh_qh; /* Qhull's data structure */
   qhT* qh = &qh_qh;
   QHULL_LIB_CHECK
-  qh_meminit(qh, stderr);
+//  qh_meminit(qh, stderr);
   boolT ismalloc = False; /* True if qhull should free points in qh_freeqhull()
                              or reallocation */
   FILE* errfile = fopen(errfilename, "w+");
   FILE* outfile = NULL;
+  qh_meminit(qh, errfile);
   qh_zero(qh, errfile);
   exitcode[0] =
       qh_new_qhull(qh, dim, n, sites, ismalloc, opts, outfile, errfile);
