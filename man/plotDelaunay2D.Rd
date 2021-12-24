@@ -50,7 +50,7 @@ d <- delaunay(pts)
 plotDelaunay2D(d, xlab = "x", ylab = "y", asp = 1)
 
 # sunflower tessellation
-pts <- sunflower(150L)
+pts <- sunflower(50L, 150L)
 d <- delaunay(pts)
 opar <- par(mar = c(0, 0, 0, 0))
 plotDelaunay2D(

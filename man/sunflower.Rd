@@ -4,19 +4,19 @@
 \alias{sunflower}
 \title{Sunflower}
 \usage{
-sunflower(nmax)
+sunflower(nmin, nmax)
 }
 \arguments{
-\item{nmax}{maximum value of the index (try it on the example)}
+\item{nmin, nmax}{range of the index (try on the example)}
 }
 \value{
-A numeric matrix with \code{nmax} rows and two columns.
+A numeric matrix of 2D points (rows).
 }
 \description{
 Returns a cloud of points looking like a sunflower.
 }
 \examples{
-pts <- sunflower(150L)
+pts <- sunflower(50L, 150L)
 opar <- par(mar = c(0, 0, 0, 0))
 plot(pts, pch = 19, asp = 1, axes = FALSE, xlab = NA, ylab = NA)
 }

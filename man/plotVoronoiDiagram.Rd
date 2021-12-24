@@ -37,8 +37,8 @@ Plot all the bounded cells of a 2D or 3D Voronoï tessellation.
 library(tessellation)
 # 2D example: sunflower surrounded by a circle
 angles <- seq(0, 2*pi, length.out=91)[-1]
-circle <- 1.5 * cbind(cos(angles), sin(angles))
-pts <- rbind(sunflower(150L), circle)
+circle <- 250000 * cbind(cos(angles), sin(angles))
+pts <- rbind(sunflower(50L, 150L), circle)
 d <- delaunay(pts)
 v <- voronoi(d)
 opar <- par(mar = c(0, 0, 0, 0))
@@ -48,7 +48,7 @@ plotVoronoiDiagram(
 )
 par(opar)
 
-# 3D example : tetrahdron surrounded by three circles
+# 3D example: tetrahdron surrounded by three circles
 tetrahedron <-
   rbind(
     c(2*sqrt(2)/3, 0, -1/3),
