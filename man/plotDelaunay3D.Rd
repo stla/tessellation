@@ -41,6 +41,7 @@ pts <- rbind(
   c(-5, -5, -10)
 )
 tess <- delaunay(pts)
+options(rgl.useNULL = TRUE)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
 plotDelaunay3D(tess)
