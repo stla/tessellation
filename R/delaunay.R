@@ -78,10 +78,11 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
   if(!is.matrix(points) || !is.numeric(points)){
     stop("The `points` argument must be a numeric matrix.", call. = TRUE)
   }
-  if(ncol(points) < 2L){
+  dimension <- ncol(points)
+  if(dimension < 2L){
     stop("The dimension must be at least 2.", call. = TRUE)
   }
-  if(nrow(points) <= ncol(points)){
+  if(nrow(points) <= dimension){
     stop("Insufficient number of points.", call. = TRUE)
   }
   if(any(is.na(points))){
@@ -117,6 +118,21 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
       hash(as.character(vertices), pointsAsList[vertices])
   }
   attr(tess, "points") <- points
+  if(dimension == 2L){
+    attr(tess[["tiles"]], "info") <-
+      "Dimension 2. Tiles are triangles. A simplex volume is a triangle area."
+    attr(tess[["tilefacets"]], "info") <- paste0(
+      "Dimension 2. Tile facets are the edges of the triangles. ",
+      "A subsimplex volume is nothing but the length of an edge."
+    )
+  }else if(dimension == 3L){
+    attr(tess[["tiles"]], "info") <-
+      "Dimension 3. Tiles are tetrahedra."
+    attr(tess[["tilefacets"]], "info") <- paste0(
+      "Dimension 3. Tile facets are the triangles. ",
+      "A subsimplex volume is nothing but the area of a triangle."
+    )
+  }
   tess
 }
 
@@ -151,6 +167,76 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
   }
   simplicies
 }
+
+
+#' @title Plot 2D Delaunay tessellation
+#' @description Plot a 2D Delaunay tessellation.
+#'
+#' @param tesselation the output of \code{\link{delaunay}}
+#' @param border the color of the borders of the triangles; \code{NULL} for
+#'   no borders
+#' @param color Boolean, whether to use colors
+#' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
+#'   \code{\link[randomcoloR]{randomColor}}
+#' @param lty,lwd graphical parameters
+#' @param ... arguments passed to \code{\link{plot}}
+#'
+#' @return No value, just renders a 2D plot.
+#' @export
+#' @importFrom randomcoloR randomColor
+#' @importFrom hash keys values
+#' @importFrom graphics plot polygon par segments
+#'
+#' @examples # random points in a square
+#' set.seed(314)
+#' library(tessellation)
+#' library(uniformly)
+#' square <- rbind(
+#'   c(-1, 1), c(1, 1), c(1, -1), c(-1, -1)
+#' )
+#' ptsin <- runif_in_cube(10L, d = 2L)
+#' pts <- rbind(square, ptsin)
+#' d <- delaunay(pts)
+#' plotDelaunay2D(d, xlab = "x", ylab = "y", asp = 1)
+plotDelaunay2D <- function(
+  tesselation, border = "black", color = TRUE, hue = "random",
+  luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
+){
+  vertices <- attr(tesselation, "points")
+  if(ncol(vertices) != 2L){
+    stop(
+      sprintf("Invalid dimension (%d instead of 2).", ncol(vertices)),
+      call. = TRUE
+    )
+  }
+  plot(vertices, type = "n", ...)
+  if(color){
+    simplicies <- getDelaunaySimplicies(tesselation, hashes = TRUE)
+    nsimplicies <- length(simplicies)
+    colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+    for(i in 1L:nsimplicies){
+      triangle <- t(values(simplicies[[i]]))
+      polygon(triangle, border = NA, col = colors[i])
+    }
+  }
+  if(!is.null(border)){
+    edges <- lapply(tesselation[["tilefacets"]], function(tilefacet){
+      as.integer(keys(tilefacet[["subsimplex"]][["vertices"]]))
+    })
+    cat("nedges:\n")
+    print(length(edges))
+    edges <- uniqueWith(edges, sameSegments)
+    print(length(edges))
+    for(edge in edges){
+      p0 <- vertices[edge[1L], ]
+      p1 <- vertices[edge[2L], ]
+      segments(
+        p0[1L], p0[2L], p1[1L], p1[2L], col = border, lty = lty, lwd = lwd
+      )
+    }
+  }
+}
+
 
 #' @title Plot 3D Delaunay tessellation
 #' @description Plot a 3D Delaunay tessellation with \strong{rgl}.
