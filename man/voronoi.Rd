@@ -29,5 +29,5 @@ length(Filter(isBoundedCell, v))
 }
 \seealso{
 \code{\link{isBoundedCell}}, \code{\link{cellVertices}},
-  \code{\link{plotBoundedCell}}
+  \code{\link{plotBoundedCell2D}}, \code{\link{plotBoundedCell3D}}
 }

@@ -60,7 +60,7 @@ voronoi0 <- function(cellGetter, tessellation){
 #'   \code{"site"}, and the second component is called \code{"cell"}.
 #'
 #' @seealso \code{\link{isBoundedCell}}, \code{\link{cellVertices}},
-#'   \code{\link{plotBoundedCell}}
+#'   \code{\link{plotBoundedCell2D}}, \code{\link{plotBoundedCell3D}}
 #' @export
 #'
 #' @examples library(tessellation)

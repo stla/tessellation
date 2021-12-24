@@ -198,6 +198,15 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' pts <- rbind(square, ptsin)
 #' d <- delaunay(pts)
 #' plotDelaunay2D(d, xlab = "x", ylab = "y", asp = 1)
+#'
+#' # sunflower tessellation
+#' pts <- sunflower(150L)
+#' d <- delaunay(pts)
+#' opar <- par(mar = c(0, 0, 0, 0))
+#' plotDelaunay2D(
+#'   d, xlab = NA, ylab = NA, asp = 1, axes = FALSE, luminosity = "dark"
+#' )
+#' par(opar)
 plotDelaunay2D <- function(
   tesselation, border = "black", color = TRUE, hue = "random",
   luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
