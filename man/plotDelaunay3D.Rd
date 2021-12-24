@@ -5,7 +5,7 @@
 \title{Plot 3D Delaunay tessellation}
 \usage{
 plotDelaunay3D(
-  tesselation,
+  tessellation,
   color = TRUE,
   hue = "random",
   luminosity = "light",
@@ -13,7 +13,7 @@ plotDelaunay3D(
 )
 }
 \arguments{
-\item{tesselation}{the output of \code{\link{delaunay}}}
+\item{tessellation}{the output of \code{\link{delaunay}}}
 
 \item{color}{Boolean, whether to use colors}
 

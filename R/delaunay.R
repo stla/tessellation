@@ -12,7 +12,7 @@
 #'   points passed to the function}
 #'   \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
 #'   tetrahedra in dimension 3)}
-#'   \item{\emph{tilefacets}}{the facets of the tiles of the tesselation}
+#'   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
 #' }
 #' The \strong{vertices} field is a list with the following fields:
 #' \describe{
@@ -179,7 +179,7 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' @title Plot 2D Delaunay tessellation
 #' @description Plot a 2D Delaunay tessellation.
 #'
-#' @param tesselation the output of \code{\link{delaunay}}
+#' @param tessellation the output of \code{\link{delaunay}}
 #' @param border the color of the borders of the triangles; \code{NULL} for
 #'   no borders
 #' @param color Boolean, whether to use colors
@@ -215,7 +215,7 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' )
 #' par(opar)
 plotDelaunay2D <- function(
-  tesselation, border = "black", color = TRUE, hue = "random",
+  tessellation, border = "black", color = TRUE, hue = "random",
   luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
 ){
   if(!inherits(tessellation, "delaunay")){
@@ -224,7 +224,7 @@ plotDelaunay2D <- function(
       call. = TRUE
     )
   }
-  vertices <- attr(tesselation, "points")
+  vertices <- attr(tessellation, "points")
   if(ncol(vertices) != 2L){
     stop(
       sprintf("Invalid dimension (%d instead of 2).", ncol(vertices)),
@@ -233,7 +233,7 @@ plotDelaunay2D <- function(
   }
   plot(vertices, type = "n", ...)
   if(color){
-    simplicies <- getDelaunaySimplicies(tesselation, hashes = TRUE)
+    simplicies <- getDelaunaySimplicies(tessellation, hashes = TRUE)
     nsimplicies <- length(simplicies)
     colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
     for(i in 1L:nsimplicies){
@@ -242,7 +242,7 @@ plotDelaunay2D <- function(
     }
   }
   if(!is.null(border)){
-    edges <- lapply(tesselation[["tilefacets"]], function(tilefacet){
+    edges <- lapply(tessellation[["tilefacets"]], function(tilefacet){
       as.integer(keys(tilefacet[["subsimplex"]][["vertices"]]))
     })
     cat("nedges:\n")
@@ -263,7 +263,7 @@ plotDelaunay2D <- function(
 #' @title Plot 3D Delaunay tessellation
 #' @description Plot a 3D Delaunay tessellation with \strong{rgl}.
 #'
-#' @param tesselation the output of \code{\link{delaunay}}
+#' @param tessellation the output of \code{\link{delaunay}}
 #' @param color Boolean, whether to use colors
 #' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
 #'   \code{\link[randomcoloR]{randomColor}}
@@ -292,7 +292,7 @@ plotDelaunay2D <- function(
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' plotDelaunay3D(tess)
 plotDelaunay3D <- function(
-  tesselation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3
+  tessellation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3
 ){
   if(!inherits(tessellation, "delaunay")){
     stop(
@@ -300,14 +300,14 @@ plotDelaunay3D <- function(
       call. = TRUE
     )
   }
-  vertices <- attr(tesselation, "points")
+  vertices <- attr(tessellation, "points")
   if(ncol(vertices) != 3L){
     stop(
       sprintf("Invalid dimension (%d instead of 3).", ncol(vertices)),
       call. = TRUE
     )
   }
-  simplicies <- getDelaunaySimplicies(tesselation, hashes = TRUE)
+  simplicies <- getDelaunaySimplicies(tessellation, hashes = TRUE)
   edges <- unique(do.call(rbind, lapply(simplicies, function(simplex){
     t(combn(as.integer(keys(simplex)), 2L))
   })))

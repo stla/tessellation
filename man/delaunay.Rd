@@ -21,7 +21,7 @@ The Delaunay tessellation with many details, in a list. This list
   points passed to the function}
   \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
   tetrahedra in dimension 3)}
-  \item{\emph{tilefacets}}{the facets of the tiles of the tesselation}
+  \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
 }
 The \strong{vertices} field is a list with the following fields:
 \describe{

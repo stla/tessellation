@@ -5,7 +5,7 @@
 \title{Plot 2D Delaunay tessellation}
 \usage{
 plotDelaunay2D(
-  tesselation,
+  tessellation,
   border = "black",
   color = TRUE,
   hue = "random",
@@ -16,7 +16,7 @@ plotDelaunay2D(
 )
 }
 \arguments{
-\item{tesselation}{the output of \code{\link{delaunay}}}
+\item{tessellation}{the output of \code{\link{delaunay}}}
 
 \item{border}{the color of the borders of the triangles; \code{NULL} for
 no borders}

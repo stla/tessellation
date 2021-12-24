@@ -1,7 +1,7 @@
 phi <- pi*(3 - sqrt(5))
 
 n <- 1:150
-c <- 0.1
+c <- 100
 r <- c * sqrt(n)
 theta <- n * phi
 
