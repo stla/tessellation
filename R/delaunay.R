@@ -313,6 +313,11 @@ plotDelaunay2D <- function(
 #' @importFrom rgl triangles3d spheres3d
 #' @importFrom hash keys values
 #'
+#' @note The option \code{exteriorEdgesAsTubes} is experimental. I found an
+#'   example for which it renders some tubes at the interior of the convex
+#'   hull. However I do not remove it from the package since it seems to
+#'   work in many cases.
+#'
 #' @examples library(tessellation)
 #' pts <- rbind(
 #'   c(-5, -5,  16),

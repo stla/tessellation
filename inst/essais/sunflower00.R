@@ -2,8 +2,8 @@ phi <- pi*(3 - sqrt(5))
 
 n <- c(0, 50:150)
 c <- 1
-r <- c * n*n
 theta <- n * phi
+r <- sqrt(n) * theta
 
 
 x <- r * cos(theta)

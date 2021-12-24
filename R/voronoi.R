@@ -323,7 +323,7 @@ plotBoundedCell2D <- function(
 #' @examples library(tessellation)
 #' # 2D example: sunflower surrounded by a circle
 #' angles <- seq(0, 2*pi, length.out=91)[-1]
-#' circle <- 250000 * cbind(cos(angles), sin(angles))
+#' circle <- 25000 * cbind(cos(angles), sin(angles))
 #' pts <- rbind(sunflower(50L, 150L), circle)
 #' d <- delaunay(pts)
 #' v <- voronoi(d)
