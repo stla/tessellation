@@ -14,7 +14,7 @@ v <- voronoi(d)
 
 library(rgl)
 open3d(windowRect = c(50, 50, 450, 450))
-plotBoundedCell(v[[1]])
+plotBoundedCell3D(v[[1]])
 
 
 # animation ####

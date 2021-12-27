@@ -172,6 +172,29 @@ plotVoronoiDiagram(v, colors = turbo(7))
 ![](VoronoiTetrahedronWithCircles.gif)
 
 
-***Note:*** I encountered some cases for which I had to set the option 
-`degenerate=TRUE` in the `delaunay` function in order to get a better 
-Voronoï diagram.
+# Option `degenerate = TRUE`
+
+I encountered some cases for which I had to set the option `degenerate=TRUE` in 
+the `delaunay` function in order to get a better Voronoï diagram. This is the 
+case for example of this dodecahedron surrounded by three circles:
+
+```{r dodecahedron_with_circles, eval=FALSE}
+xi_ <- seq(0, 2*pi, length.out = 91)[-1]
+R <- 3
+circle1 <- t(vapply(xi_, function(xi) R * c(cos(xi), sin(xi), 0), numeric(3L)))
+circle2 <- t(vapply(xi_, function(xi) R * c(cos(xi), 0, sin(xi)), numeric(3L)))
+circle3 <- t(vapply(xi_, function(xi) R * c(0, cos(xi), sin(xi)), numeric(3L)))
+circles <- rbind(circle1, circle2, circle3)
+dodecahedron <- t(dodecahedron3d()$vb[-4,])
+pts <- rbind(dodecahedron, circles)
+del <- delaunay(pts, degenerate = TRUE)
+v <- voronoi(del)
+open3d(windowRect = c(50, 50, 562, 562))
+bg3d("aliceblue")
+plotVoronoiDiagram(v, colors = rainbow(20))
+```
+
+![](DodecahedronWithCircles.gif)
+
+
+Try it with `del <- delaunay(pts, degenerate = FALSE)`. 
