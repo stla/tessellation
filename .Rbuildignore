@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^inst/ztemp$
 ^\.github$
+^inst/essais$
+^inst/screenshots$

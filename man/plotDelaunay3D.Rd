@@ -41,12 +41,6 @@ No value, just renders a 3D plot.
 \description{
 Plot a 3D Delaunay tessellation with \strong{rgl}.
 }
-\note{
-The option \code{exteriorEdgesAsTubes} is experimental. I found an
-  example for which it renders some tubes at the interior of the convex
-  hull. However I do not remove it from the package since it seems to
-  work in many cases.
-}
 \examples{
 library(tessellation)
 pts <- rbind(

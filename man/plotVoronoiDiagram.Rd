@@ -36,6 +36,12 @@ No returned value.
 \description{
 Plot all the bounded cells of a 2D or 3D Voronoï tessellation.
 }
+\note{
+Sometimes, it is necessary to set the option \code{degenerate=TRUE}
+  in the \code{\link{delaunay}} function in order to get a correct
+  Voronoï diagram with the \code{plotVoronoiDiagram} function (I don't know
+  why).
+}
 \examples{
 library(tessellation)
 # 2D example: sunflower surrounded by a circle

@@ -323,6 +323,11 @@ plotBoundedCell2D <- function(
 #' @importFrom randomcoloR randomColor
 #' @importFrom scales alpha
 #'
+#' @note Sometimes, it is necessary to set the option \code{degenerate=TRUE}
+#'   in the \code{\link{delaunay}} function in order to get a correct
+#'   Voronoï diagram with the \code{plotVoronoiDiagram} function (I don't know
+#'   why).
+#'
 #' @examples library(tessellation)
 #' # 2D example: sunflower surrounded by a circle
 #' angles <- seq(0, 2*pi, length.out=91)[-1]
