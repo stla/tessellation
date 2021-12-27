@@ -185,7 +185,7 @@ TesselationT* tesselation(double* sites,
           allfacets[i_facet].nneighbors = 0;
           unsigned i_neighbor = 0;
           FOREACHneighbor_(facet) {
-            if(flag[i_neighbor] = facetOK_(neighbor, degenerate)) {
+            if((flag[i_neighbor] = facetOK_(neighbor, degenerate))) {
               allfacets[i_facet].nneighbors++;
             }
             i_neighbor++;
@@ -884,9 +884,10 @@ SEXP delaunay_(SEXP sites,
   PROTECT(vnames = allocVector(STRSXP, nsites));
   nprotect += 2;
   for(unsigned i = 0; i < nsites; i++) {
-    SEXP vertex;
-    PROTECT(vertex = SiteSXP(vertices[i], dim));
-    nprotect++;
+    SEXP vertex = SiteSXP(vertices[i], dim);
+//    SEXP vertex;
+//    PROTECT(vertex = SiteSXP(vertices[i], dim));
+//    nprotect++;
     SET_VECTOR_ELT(R_vertices, i, vertex);
     SET_STRING_ELT(vnames, i, Rf_asChar(VECTOR_ELT(vertex, 0)));
   }
