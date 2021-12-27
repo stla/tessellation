@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 library(tessellation)
 ```
 
+# Delaunay tessellation
 
 The main function of the **tessellation** package is `delaunay`. It performs 
 the Delaunay tessellation (or triangulation) of a set of points.
@@ -85,4 +86,34 @@ plotDelaunay3D(del, color=TRUE, luminosity = "bright", alpha=0.5)
 ```
 
 ![](TetrahedronDelaunay.gif)
+
+It is not easy to visualize a 3D Delaunay tessellation. The colors are not 
+very helpful. Something which helps a little is to plot the exterior edges as 
+tubes. To do so, one firstly has to execute the `delaunay` function with the 
+option `exteriorEdges=TRUE`, then one has to run the `plotDelaunay3D` function 
+with the option `exteriorEdgesAsTubes=TRUE`:
+
+```{r tetrahedron_delaunay_with_tubes, eval=FALSE}
+del <- delaunay(pts, exteriorEdges = TRUE)
+open3d(windowRect = c(50, 50, 562, 562))
+bg3d("slategray")
+material3d(lwd = 2)
+plotDelaunay3D(
+  del, color=TRUE, luminosity = "bright", alpha = 0.2,
+  exteriorEdgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "navy"
+)
+```
+
+![](TetrahedronDelaunayWithTubes.gif)
+
+Let's have a look at each tile, separately:
+
+![](TetrahedronTiles.png)
+
+
+# Voronoï tessellation
+
+The Delaunay tessellation is mainly implemented in C, with the **Qhull** 
+library. The Voronoï tessellation, that we will see now, is derived from the 
+Delaunay tessellation and this derivation is implemented in R only.
 

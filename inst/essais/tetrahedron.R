@@ -74,3 +74,19 @@ for(i in seq_along(tiles)){
 
 
 
+del <- delaunay(pts, exteriorEdges = TRUE)
+open3d(windowRect = c(50, 50, 562, 562))
+bg3d("slategray")
+material3d(lwd = 2)
+plotDelaunay3D(
+  del, color=TRUE, luminosity = "bright", alpha = 0.2,
+  exteriorEdgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "navy"
+)
+movie3d(
+  spin3d(axis = c(0, 0, 1), rpm = 12),
+  duration = 5, fps = 12,
+  movie = "TetrahedronDelaunayWithTubes", dir = ".",
+  convert = "magick convert -dispose previous -loop 0 -delay 1x%d %s*.png %s.%s",
+  startTime = 1/60
+)
+
