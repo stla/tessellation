@@ -90,3 +90,59 @@ movie3d(
   startTime = 1/60
 )
 
+# Voronoï ####
+v <- voronoi(del)
+open3d(windowRect = c(50, 50, 562, 562))
+bg3d("palegoldenrod")
+material3d(lwd = 2)
+plotVoronoiDiagram(v, luminosity = "dark")
+
+# animation ####
+M <- par3d("userMatrix")
+movie3d(
+  par3dinterp(
+    time = seq(0, 1, len = 9),
+    userMatrix = list(
+      M,
+      rotate3d(M, pi, 1, 0, 0),
+      rotate3d(M, pi, 1, 1, 0),
+      rotate3d(M, pi, 1, 1, 1),
+      rotate3d(M, pi, 0, 1, 1),
+      rotate3d(M, pi, 0, 1, 0),
+      rotate3d(M, pi, 1, 0, 1),
+      rotate3d(M, pi, 0, 0, 1),
+      M
+    )
+  ),
+  fps = 100,
+  duration = 1,
+  dir = ".",
+  frames = "zVoronoiTetrahedron",
+  convert = "echo \"%d %s %s %s\"",
+  clean = FALSE
+)
+
+pngs <- list.files(".", pattern = "^zVoronoiTetrahedron", full.names = TRUE)
+library(gifski)
+gifski(pngs, "VoronoiTetrahedron.gif",
+       width = 512, height = 512, delay = 1/10)
+#####################
+
+xi_ <- seq(0, 2*pi, length.out = 91)[-1]
+R <- 2
+circle1 <- t(vapply(xi_, function(xi) R * c(cos(xi), sin(xi), 0), numeric(3L)))
+circle2 <- t(vapply(xi_, function(xi) R * c(cos(xi), 0, sin(xi)), numeric(3L)))
+circles <- rbind(circle1, circle2)
+
+open3d(windowRect = c(50, 50, 562, 562), zoom=0.7)
+bg3d("palegoldenrod")
+plotTetrahedron(tetrahedron, alpha = 0.3)
+spheres3d(randomPoints, radius = 0.04, color = "black")
+spheres3d(circles, radius = 0.04, color = "black")
+
+
+object <- rbind(tetrahedron, randomPoints, circles)
+d <- delaunay(object, degenerate = TRUE)
+v <- voronoi(d)
+plotVoronoiDiagram(v)
+

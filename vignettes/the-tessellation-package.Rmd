@@ -117,3 +117,40 @@ The Delaunay tessellation is mainly implemented in C, with the **Qhull**
 library. The Voronoï tessellation, that we will see now, is derived from the 
 Delaunay tessellation and this derivation is implemented in R only.
 
+The Voronoï tessellation is obtained with the `voronoi` function. It is 
+restricted to its bounded cells. Let's see what it gives on our example:
+
+```{r voronoi, eval=FALSE}
+v <- voronoi(del)
+open3d(windowRect = c(50, 50, 562, 562))
+bg3d("palegoldenrod")
+material3d(lwd = 2)
+plotVoronoiDiagram(v, luminosity = "dark")
+```
+
+![](VoronoiTetrahedron.gif)
+
+Well, not very funny. Let's add some fun. We draw two circles around the 
+tetrahedron (two sets of points on circles, I should say):
+
+```{r tetrahedron_with_circls, eval=FALSE}
+xi_ <- seq(0, 2*pi, length.out = 91)[-1]
+R <- 2
+circle1 <- t(vapply(xi_, function(xi) R * c(cos(xi), sin(xi), 0), numeric(3L)))
+circle2 <- t(vapply(xi_, function(xi) R * c(cos(xi), 0, sin(xi)), numeric(3L)))
+circles <- rbind(circle1, circle2)
+open3d(windowRect = c(50, 50, 562, 562), zoom=0.7)
+bg3d("palegoldenrod")
+plotTetrahedron(tetrahedron, alpha = 0.3)
+spheres3d(randomPoints, radius = 0.04, color = "black")
+spheres3d(circles, radius = 0.04, color = "black")
+```
+
+![](TetrahedronAndTwoCircles.png)
+
+And now we draw the Voronoï diagram of this object:
+
+```{r voronoi_tetrahedron_with_circles}
+
+```
+
