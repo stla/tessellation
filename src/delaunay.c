@@ -910,9 +910,9 @@ SEXP delaunay_(SEXP sites,
   PROTECT(tnames = allocVector(STRSXP, ntiles));
   nprotect += 2;
   for(unsigned i = 0; i < ntiles; i++) {
-    SEXP tile;
-    PROTECT(tile = TileSXP(tiles[i], dim));
-    nprotect++;
+    SEXP tile = TileSXP(tiles[i], dim);
+//    PROTECT(tile = TileSXP(tiles[i], dim));
+//    nprotect++;
     SET_VECTOR_ELT(R_tiles, i, tile);
     SET_STRING_ELT(tnames, i, Rf_asChar(VECTOR_ELT(tile, 0)));
   }
@@ -922,9 +922,9 @@ SEXP delaunay_(SEXP sites,
   PROTECT(stnames = allocVector(STRSXP, nsubtiles));
   nprotect += 2;
   for(unsigned i = 0; i < nsubtiles; i++) {
-    SEXP subtile;
-    PROTECT(subtile = SubtileSXP(subtiles[i], dim));
-    nprotect++;
+    SEXP subtile = SubtileSXP(subtiles[i], dim);
+//    PROTECT(subtile = SubtileSXP(subtiles[i], dim));
+//    nprotect++;
     SET_VECTOR_ELT(R_subtiles, i, subtile);
     SET_STRING_ELT(stnames, i, Rf_asChar(VECTOR_ELT(subtile, 0)));
   }
