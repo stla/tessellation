@@ -98,5 +98,82 @@ stereog <- function(q, r2 = 3 + sqrt2plus1^2){
 pts <- t(apply(pts4, 1L, stereog))
 
 d <- delaunay(pts)
+cxfacets <- cxhull::cxhull(pts)$facets
+
+edges <- d$exteriorEdges
+
+edges3 <- list()
+
+j <- 0
+for(edge in edges){
+  j <- j + 1
+  A <- edge$A
+  x <- sapply(cxfacets, function(f){
+    c(crossprod(f$normal, A)) + f$offset
+  })
+  Abelongs <- which(abs(x) < sqrt(.Machine$double.eps))
+  B <- edge$B
+  if(length(Abelongs)){
+    x <- sapply(Abelongs, function(i){
+      f <- cxfacets[[i]]
+      c(crossprod(f$normal, B)) + f$offset
+    })
+    Bext <- any(abs(x) < sqrt(.Machine$double.eps))
+    if(Bext){
+      edges3 <- append(edges3, list(edge))
+    }
+  }
+}
+
+
+
+
+library(gMOIP)
+hull <- geometry::convhulln(pts)
+edges3 <- list()
+for(edge in edges){
+  if(inHull(rbind(edge$A), pts, hull, tol = sqrt(.Machine$double.eps)) == 0 &&
+     inHull(rbind(edge$B), pts, hull, tol = sqrt(.Machine$double.eps)) == 0){
+    edges3 <- append(edges3, list(edge))
+  }
+}
+plotDelaunay3D(d, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "green")
+invisible(lapply(edges3, function(edge) edge$plot(edgeAsTube = TRUE, tubeRadius = 0.03, tubeColor = "green")))
+
+
+
+
+library(geometry)
+ch <- convhulln(pts)
+
+M <- lapply(edges, function(edge){
+  rbind(edge$A, edge$B)
+})
+
+
+edges3 <- list()
+for(edge in edges){
+  if(inhulln(ch, rbind(edge$A)) && inhulln(ch, rbind(edge$B))){
+    edges3 <- append(edges3, list(edge))
+  }
+}
+
 
 plotDelaunay3D(d, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "orange")
+
+
+
+
+
+
+
+
+
+library(cxhull)
+h <- cxhull(pts, triangulate = TRUE)
+library(rgl)
+for(i in 1:nrow(h$edges)){
+  edge <- h$edges[i,]
+  tube <- cylinder3d(rbind(pts[edge[1],], pts[edge[2],]), sides= 30, radius = 0.035)
+  shade3d(tube, color= "green")
+}

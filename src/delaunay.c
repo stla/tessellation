@@ -2,6 +2,7 @@
 #include <R.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
+#include <float.h>  // to use DBL_EPSILON
 #define qh_QHimport
 #include <math.h> /* to use NAN */
 #include "delaunay.h"
@@ -34,7 +35,7 @@ TesselationT* tesselation(double* sites,
   qhT qh_qh; /* Qhull's data structure */
   qhT* qh = &qh_qh;
   QHULL_LIB_CHECK
-//  qh_meminit(qh, stderr);
+  //  qh_meminit(qh, stderr);
   boolT ismalloc = False; /* True if qhull should free points in qh_freeqhull()
                              or reallocation */
   FILE* errfile = fopen(errfilename, "w+");
@@ -420,6 +421,7 @@ TesselationT* tesselation(double* sites,
             }
             allridges_dup[i_ridge_dup].offset =
                 -dotproduct(points[0], normal, dim);
+
             if(dim > 2) { /* ridge center is already done if dim 2 */
               // if(facet->degenerate){
               //   allridges_dup[i_ridge_dup].simplex.center = nanvector(dim);
@@ -436,6 +438,7 @@ TesselationT* tesselation(double* sites,
                 allridges_dup[i_ridge_dup].simplex.center[i] =
                     allfacets[i_facet].simplex.center[i] + scal * normal[i];
               }
+              // rdg = allridges_dup[i_ridge_dup];
               allridges_dup[i_ridge_dup].simplex.radius = sqrt(squaredDistance(
                   allridges_dup[i_ridge_dup].simplex.center, points[0], dim));
               //              }
@@ -444,30 +447,40 @@ TesselationT* tesselation(double* sites,
             if(allridges_dup[i_ridge_dup].ridgeOf2 == -1)
             //&& (!facet->degenerate || dim==2))
             {
-              pointT* otherpoint = /* the remaining vertex of the facet (the one
-                                      not in the ridge) */
-                  qh->interior_point;  // getpoint(sites, dim,
-                                       // allfacets[facet->id].simplex.sitesids[m]);
-              double thepoint[dim]; /* the point center+normal */
-              for(unsigned i = 0; i < dim; i++) {
-                thepoint[i] = allridges_dup[i_ridge_dup].simplex.center[i] +
-                              allridges_dup[i_ridge_dup].normal[i];
-              }
+              double value =
+                  dotproduct(allridges_dup[i_ridge_dup].simplex.center, normal,
+                             dim) +
+                  allridges_dup[i_ridge_dup].offset;
+              //              pointT* otherpoint = /* the remaining vertex of
+              //              the facet (the one
+              //                                      not in the ridge)
+              //                                      qh->interior_point; */
+              //                  getpoint(sites, dim,
+              //                  allfacets[facet->id].simplex.sitesids[m]);
+              //              double thepoint[dim]; /* the point center+normal
+              //              */ for(unsigned i = 0; i < dim; i++) {
+              //                thepoint[i] =
+              //                allridges_dup[i_ridge_dup].simplex.center[i] +
+              //                              allridges_dup[i_ridge_dup].normal[i];
+              //              }
               /* we check that these two points are on the same side of the
                * ridge */
-              double h1 = dotproduct(otherpoint,
-                                     allridges_dup[i_ridge_dup].normal, dim) +
-                          allridges_dup[i_ridge_dup].offset;
-              double h2 =
-                  dotproduct(thepoint, allridges_dup[i_ridge_dup].normal, dim) +
-                  allridges_dup[i_ridge_dup].offset;
+              //              double h1 = dotproduct(otherpoint,
+              //                                     allridges_dup[i_ridge_dup].normal,
+              //                                     dim) +
+              //                          allridges_dup[i_ridge_dup].offset;
+              //              double h2 =
+              //                  dotproduct(thepoint,
+              //                  allridges_dup[i_ridge_dup].normal, dim) +
+              //                  allridges_dup[i_ridge_dup].offset;
               // printf("deg: %u, h1: %f, h2: %f\n", facet->degenerate, h1, h2);
               // printf("offset: %f\n", allridges_dup[i_ridge_dup].offset);
               // printf("normal: %f %f %f\n",
               // allridges_dup[i_ridge_dup].normal[0],
               // allridges_dup[i_ridge_dup].normal[1],
               // allridges_dup[i_ridge_dup].normal[2]);
-              if(h1 * h2 >= 0) {
+              //              if(h1 * h2 >= 0) {
+              if(value > sqrt(DBL_EPSILON)) {
                 for(unsigned i = 0; i < dim; i++) {
                   allridges_dup[i_ridge_dup].normal[i] *= -1;
                 }
@@ -480,7 +493,7 @@ TesselationT* tesselation(double* sites,
           i_ridge_dup++;
         }  // end loop combinations (m)
         qsortu(allfacets[i_facet].ridgesids, dim + 1);
-        /**/
+
         i_facet++;
       }  // end FORALLfacets
     }
@@ -874,9 +887,9 @@ SEXP delaunay_(SEXP sites,
 
   SiteT* vertices = tess->sites;
   TileT* tiles = tess->tiles;
-  unsigned  ntiles = tess->ntiles;
+  unsigned ntiles = tess->ntiles;
   SubTileT* subtiles = tess->subtiles;
-  unsigned  nsubtiles = tess->nsubtiles;
+  unsigned nsubtiles = tess->nsubtiles;
 
   SEXP out, names, R_vertices, vnames, R_tiles, tnames, R_subtiles, stnames;
 
@@ -885,9 +898,9 @@ SEXP delaunay_(SEXP sites,
   nprotect += 2;
   for(unsigned i = 0; i < nsites; i++) {
     SEXP vertex = SiteSXP(vertices[i], dim);
-//    SEXP vertex;
-//    PROTECT(vertex = SiteSXP(vertices[i], dim));
-//    nprotect++;
+    //    SEXP vertex;
+    //    PROTECT(vertex = SiteSXP(vertices[i], dim));
+    //    nprotect++;
     SET_VECTOR_ELT(R_vertices, i, vertex);
     SET_STRING_ELT(vnames, i, Rf_asChar(VECTOR_ELT(vertex, 0)));
   }
@@ -933,4 +946,3 @@ SEXP delaunay_(SEXP sites,
   UNPROTECT(nprotect);
   return out;
 }
-

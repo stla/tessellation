@@ -1,22 +1,88 @@
+#' @importFrom cxhull cxhull
 #' @importFrom hash keys
 #' @noRd
-exteriorDelaunayEdges <- function(tilefacets, points){
+exteriorDelaunayEdges <- function(tessellation){
+  tilefacets <- tessellation[["tilefacets"]]
+  points <- attr(tessellation, "points")
   exteriorFacets <- Filter(Negate(sandwichedFacet), tilefacets)
-  edges <- unique(do.call(rbind, lapply(exteriorFacets, function(f){
-    ids <- sort(as.integer(keys(f[["subsimplex"]][["vertices"]])))
-    rbind(
-      c(ids[1L], ids[2L]),
-      c(ids[2L], ids[3L]),
-      c(ids[1L], ids[3L])
-    )
-  })))
-  vertices <- points[unique(c(edges)), ]
-  nedges <- nrow(edges)
-  edges3 <- vector("list", length = nedges)
-  for(i in 1L:nedges){
-    edges3[[i]] <-
-      Edge3$new(A = points[edges[i, 1L], ], B = points[edges[i, 2L], ])
+  edges <- NULL
+  for(tilefacet in exteriorFacets){
+    normal <- tilefacet[["normal"]]
+    offset <- tilefacet[["offset"]]
+    # center <- tilefacet[["subsimplex"]][["circumcenter"]]
+    # if(abs(crossprod(center, normal) + offset) >= sqrt(.Machine$double.eps)){
+    #   normal <- -normal
+    #   cat("orientation:\n")
+    #
+    #   tileparent <- tess$tiles[[tilefacet[["facetOf"]]]]
+    #
+    #   print(tileparent[["orientation"]])
+    # }else{
+    #   cat("nochaneg\n")
+    # }
+    ids <- sort(as.integer(keys(tilefacet[["subsimplex"]][["vertices"]])))
+    pt1 <- points[ids[1L], ]
+    pt2 <- points[ids[2L], ]
+    if(
+      abs(crossprod(pt1, normal) + offset) < sqrt(.Machine$double.eps)
+      && abs(crossprod(pt2, normal) + offset) < sqrt(.Machine$double.eps)
+    ){
+      edges <- rbind(
+        edges,
+        c(ids[1L], ids[2L]),
+        c(ids[2L], ids[3L]),
+        c(ids[1L], ids[3L])
+      )
+    }
   }
+  edges <- unique(edges)
+  hullfacets <- cxhull(points)[["facets"]]
+  edges3 <- list()
+  vertices <- NULL
+  prec <- sqrt(.Machine[["double.eps"]])
+  for(i in 1L:nrow(edges)){
+    edge <- edges[i, ]
+    A <- points[edge[1L], ]
+    x <- vapply(hullfacets, function(f){
+      c(crossprod(f[["normal"]], A)) + f[["offset"]]
+    }, numeric(1L))
+    Abelongs <- which(abs(x) < prec)
+    B <- points[edge[2L], ]
+    if(length(Abelongs)){
+      x <- vapply(Abelongs, function(j){
+        f <- hullfacets[[j]]
+        c(crossprod(f[["normal"]], B)) + f[["offset"]]
+      }, numeric(1L))
+      if(any(abs(x) < prec)){
+        edges3 <- append(edges3, list(Edge3$new(A = A, B = B)))
+        vertices <- rbind(vertices, A, B)
+      }
+    }
+  }
+  # edges <- unique(do.call(rbind, lapply(exteriorFacets, function(f){
+  #   ids <- sort(as.integer(keys(f[["subsimplex"]][["vertices"]])))
+  #   rbind(
+  #     c(ids[1L], ids[2L]),
+  #     c(ids[2L], ids[3L]),
+  #     c(ids[1L], ids[3L])
+  #   )
+  # })))
+  # A_Bs <- apply(edges, 1L, function(edge){
+  #   paste0(edge[1L], "-", edge[2L])
+  # })
+  # print(A_Bs)
+  # unique_edges <- edges[which(table(A_Bs) == 1L), ]
+  # print(unique_edges)
+#  edges < unique(edges)
+  vertices <- unique(vertices)
+  # vertices <- points[unique(c(edges)), ]
+  # nedges <- nrow(edges)
+  # edges3 <- vector("list", length = nedges)
+  # for(i in 1L:nedges){
+  #   edge <- edges[i,]
+  #   edges3[[i]] <-
+  #     Edge3$new(A = points[edge[1L], ], B = points[edge[2L], ])
+  # }
   attr(edges3, "vertices") <- vertices
   edges3
 }
@@ -144,11 +210,10 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
     tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
       hash(as.character(vertices), pointsAsList[vertices])
   }
-  if(dimension == 3L){
-    tess[["exteriorEdges"]] <-
-      exteriorDelaunayEdges(tess[["tilefacets"]], points)
-  }
   attr(tess, "points") <- points
+  if(dimension == 3L){
+    tess[["exteriorEdges"]] <- exteriorDelaunayEdges(tess)
+  }
   if(dimension == 2L){
     attr(tess[["tiles"]], "info") <-
       "Dimension 2. Tiles are triangles. A simplex volume is a triangle area."
