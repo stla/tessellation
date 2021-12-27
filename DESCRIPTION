@@ -12,7 +12,11 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales
-Suggests: uniformly
+Suggests: 
+    rmarkdown,
+    knitr,
+    uniformly
 URL: https://github.com/stla/tessellation
 BugReports: https://github.com/stla/tessellation/issues
 RoxygenNote: 7.1.2
+VignetteBuilder: knitr
