@@ -1,6 +1,6 @@
 library(tessellation)
 
-alpha <- seq(0, 2*pi, length.out = 150)[-1]
+alpha <- seq(0, pi, length.out = 200)[-1]
 points <- t(vapply(alpha, function(x){
   c(
     sin(x)*cos(2*x), sin(x)*sin(2*x), cos(x)
