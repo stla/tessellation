@@ -93,6 +93,8 @@ exteriorDelaunayEdges <- function(tessellation){
 #' @param points the points given as a matrix, one point per row
 #' @param atinfinity Boolean, whether to include a point at infinity
 #' @param degenerate Boolean, whether to include degenerate tiles
+#' @param exteriorEdges Boolean, for dimension 3 only, wheter to return
+#'   the exterior edges (see below)
 #'
 #' @return The Delaunay tessellation with many details, in a list. This list
 #'   contains three fields:
@@ -103,9 +105,10 @@ exteriorDelaunayEdges <- function(tessellation){
 #'   tetrahedra in dimension 3)}
 #'   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
 #' }
-#' In dimension 3, the list contains an additional field,
-#'   \emph{exteriorEdges}, the list of the exterior edges as
-#'   \code{\link{Edge3}} objects.
+#' In dimension 3, the list contains an additional field \emph{exteriorEdges}
+#'   if you set \code{exteriorEdges = TRUE}. This is the list of the exterior
+#'   edges, represented as \code{\link{Edge3}} objects. This field is involved
+#'   in the function \code{\link{plotDelaunay3D}}.
 #'
 #' The \strong{vertices} field is a list with the following fields:
 #' \describe{
@@ -167,7 +170,9 @@ exteriorDelaunayEdges <- function(tessellation){
 #' del$vertices[[1]]
 #' del$tiles[[1]]
 #' del$tilefacets[[1]]
-delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
+delaunay <- function(
+  points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE
+){
   if(!is.matrix(points) || !is.numeric(points)){
     stop("The `points` argument must be a numeric matrix.", call. = TRUE)
   }
@@ -211,7 +216,7 @@ delaunay <- function(points, atinfinity = FALSE, degenerate = FALSE){
       hash(as.character(vertices), pointsAsList[vertices])
   }
   attr(tess, "points") <- points
-  if(dimension == 3L){
+  if(dimension == 3L && exteriorEdges){
     tess[["exteriorEdges"]] <- exteriorDelaunayEdges(tess)
   }
   if(dimension == 2L){
@@ -365,7 +370,8 @@ plotDelaunay2D <- function(
 #'   \code{\link[randomcoloR]{randomColor}}
 #' @param alpha opacity, number between 0 and 1
 #' @param exteriorEdgesAsTubes Boolean, whether to plot the exterior edges
-#'   as tubes
+#'   as tubes; in order to use this feature, you need to set
+#'   \code{exteriorEdges = TRUE} in the \code{\link{delaunay}} function
 #' @param tubeRadius if \code{exteriorEdgesAsTubes = TRUE}, the radius of
 #'   the tubes
 #' @param tubeColor if \code{exteriorEdgesAsTubes = TRUE}, the color of
@@ -441,6 +447,12 @@ plotDelaunay3D <- function(
     lines3d(rbind(p1, p2), color = "black")
   }
   if(exteriorEdgesAsTubes){
+    if(!"exteriorEdges" %in% names(tessellation)){
+      warning(
+        "You didn't set the option `exteriorEdges=TRUE` in the `delaunay` ",
+        "function, therefore the option `exteriorEdgesAsTubes` is ignored."
+      )
+    }
     edges3 <- tessellation[["exteriorEdges"]]
     for(edge3 in edges3){
       edge3$plot(

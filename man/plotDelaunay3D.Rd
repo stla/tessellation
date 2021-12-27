@@ -26,7 +26,8 @@ plotDelaunay3D(
 \item{alpha}{opacity, number between 0 and 1}
 
 \item{exteriorEdgesAsTubes}{Boolean, whether to plot the exterior edges
-as tubes}
+as tubes; in order to use this feature, you need to set
+\code{exteriorEdges = TRUE} in the \code{\link{delaunay}} function}
 
 \item{tubeRadius}{if \code{exteriorEdgesAsTubes = TRUE}, the radius of
 the tubes}

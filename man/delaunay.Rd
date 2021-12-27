@@ -4,7 +4,7 @@
 \alias{delaunay}
 \title{Delaunay triangulation}
 \usage{
-delaunay(points, atinfinity = FALSE, degenerate = FALSE)
+delaunay(points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE)
 }
 \arguments{
 \item{points}{the points given as a matrix, one point per row}
@@ -12,6 +12,9 @@ delaunay(points, atinfinity = FALSE, degenerate = FALSE)
 \item{atinfinity}{Boolean, whether to include a point at infinity}
 
 \item{degenerate}{Boolean, whether to include degenerate tiles}
+
+\item{exteriorEdges}{Boolean, for dimension 3 only, wheter to return
+the exterior edges (see below)}
 }
 \value{
 The Delaunay tessellation with many details, in a list. This list
@@ -23,9 +26,10 @@ The Delaunay tessellation with many details, in a list. This list
   tetrahedra in dimension 3)}
   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
 }
-In dimension 3, the list contains an additional field,
-  \emph{exteriorEdges}, the list of the exterior edges as
-  \code{\link{Edge3}} objects.
+In dimension 3, the list contains an additional field \emph{exteriorEdges}
+  if you set \code{exteriorEdges = TRUE}. This is the list of the exterior
+  edges, represented as \code{\link{Edge3}} objects. This field is involved
+  in the function \code{\link{plotDelaunay3D}}.
 
 The \strong{vertices} field is a list with the following fields:
 \describe{

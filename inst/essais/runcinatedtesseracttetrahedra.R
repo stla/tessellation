@@ -98,6 +98,14 @@ stereog <- function(q, r2 = 3 + sqrt2plus1^2){
 pts <- t(apply(pts4, 1L, stereog))
 
 d <- delaunay(pts)
+
+plotDelaunay3D(d, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "green")
+
+
+
+
+
+
 cxfacets <- cxhull::cxhull(pts)$facets
 
 edges <- d$exteriorEdges
