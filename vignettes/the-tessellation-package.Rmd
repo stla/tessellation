@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rgl.useNULL=TRUE)
 ```
 
 ```{r setup}
@@ -69,14 +70,14 @@ Here is our tetrahedron with its three additional random points:
 open3d(windowRect = c(50, 50, 562, 562))
 bg3d("slategray")
 plotTetrahedron(tetrahedron, alpha = 0.3)
-spheres3d(randomPoints, radius = 0.04, color = "black"
+spheres3d(randomPoints, radius = 0.04, color = "black")
 ```
 
 ![](Tetrahedron.gif)
 
 Now let's compute and plot the Delaunay tessellation of these seven points:
 
-```{r tetrahedron_delaunay, eval=FALSE}
+```{r tetrahedron_delaunay, eval=TRUE, results='hide'}
 library(tessellation)
 pts <- rbind(tetrahedron, randomPoints)
 del <- delaunay(pts)
@@ -120,7 +121,7 @@ Delaunay tessellation and this derivation is implemented in R only.
 The Voronoï tessellation is obtained with the `voronoi` function. It is 
 restricted to its bounded cells. Let's see what it gives on our example:
 
-```{r voronoi, eval=FALSE}
+```{r voronoi, eval=TRUE}
 v <- voronoi(del)
 open3d(windowRect = c(50, 50, 562, 562))
 bg3d("palegoldenrod")
@@ -133,7 +134,7 @@ plotVoronoiDiagram(v, luminosity = "dark")
 Well, not very funny. Let's add some fun. We draw two circles around the 
 tetrahedron (two sets of points on circles, I should say):
 
-```{r tetrahedron_with_circls, eval=FALSE}
+```{r tetrahedron_with_circls, eval=TRUE, results='hide'}
 xi_ <- seq(0, 2*pi, length.out = 91)[-1]
 R <- 2
 circle1 <- t(vapply(xi_, function(xi) R * c(cos(xi), sin(xi), 0), numeric(3L)))
@@ -148,9 +149,29 @@ spheres3d(circles, radius = 0.04, color = "black")
 
 ![](TetrahedronAndTwoCircles.png)
 
-And now we draw the Voronoï diagram of this object:
+And now we gonna draw the Voronoï diagram of this object. There are seven 
+bounded cells:
 
-```{r voronoi_tetrahedron_with_circles}
-
+```{r nboundedcells}
+object <- rbind(tetrahedron, randomPoints, circles)
+del <- delaunay(object)
+v <- voronoi(del)
+length(Filter(isBoundedCell, v))
 ```
 
+In fact these are the cells corresponding to the four tetrahedra vertices and 
+the three random points.
+
+```{r voronoi_tetrahedron_with_circles, eval=FALSE}
+library(viridisLite)
+open3d(windowRect = c(50, 50, 562, 562))
+bg3d("palegoldenrod")
+plotVoronoiDiagram(v, colors = turbo(7))
+```
+
+![](VoronoiTetrahedronWithCircles.gif)
+
+
+***Note:*** I encountered some cases for which I had to set the option 
+`degenerate=TRUE` in the `delaunay` function in order to get a better 
+Voronoï diagram.

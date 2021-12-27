@@ -24,6 +24,7 @@ p code {
 
 pre.sourceCode {
   border: 1px solid silver;
+  padding-left: 1rem;
 }
 
 code.sourceCode {
@@ -59,12 +60,12 @@ code span.kw {
 }
 
 div.sourceCode {
-  background-color: seashell;
+  background-color: snow;
   margin-left: 1em;
 }
 
 @media print {
   div.sourceCode {
-    background-color: seashell;
+    background-color: snow;
   }
 }

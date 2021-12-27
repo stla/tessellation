@@ -15,7 +15,8 @@ Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales
 Suggests: 
     rmarkdown,
     knitr,
-    uniformly
+    uniformly,
+    viridisLite
 URL: https://github.com/stla/tessellation
 BugReports: https://github.com/stla/tessellation/issues
 RoxygenNote: 7.1.2

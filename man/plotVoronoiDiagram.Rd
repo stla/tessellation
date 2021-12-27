@@ -6,7 +6,7 @@
 \usage{
 plotVoronoiDiagram(
   v,
-  color = TRUE,
+  colors = "random",
   hue = "random",
   luminosity = "light",
   alpha = 1,
@@ -16,13 +16,16 @@ plotVoronoiDiagram(
 \arguments{
 \item{v}{an output of \code{\link{voronoi}}}
 
-\item{color}{Boolean, whether to use colors}
+\item{colors}{this can be \code{"random"} to use random colors for the cells,
+\code{NA} for no colors, or a vector of colors; the length of this vector
+of colors must match the number of bounded cells, that you can get by
+typing \code{length(Filter(isBoundedCell, v))}}
 
-\item{hue, luminosity}{if \code{color = TRUE}, these arguments are passed to
-\code{\link[randomcoloR]{randomColor}}}
+\item{hue, luminosity}{if \code{colors = "random"}, these arguments are passed
+to \code{\link[randomcoloR]{randomColor}}}
 
 \item{alpha}{opacity, a number between 0 and 1
-(used when \code{color = TRUE})}
+(used when \code{colors} is not \code{NA})}
 
 \item{...}{arguments passed to \code{\link{plotBoundedCell2D}} or
 \code{\link{plotBoundedCell3D}}}

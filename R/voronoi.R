@@ -307,11 +307,14 @@ plotBoundedCell2D <- function(
 #' @description Plot all the bounded cells of a 2D or 3D Voronoï tessellation.
 #'
 #' @param v an output of \code{\link{voronoi}}
-#' @param color Boolean, whether to use colors
-#' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
-#'   \code{\link[randomcoloR]{randomColor}}
+#' @param colors this can be \code{"random"} to use random colors for the cells,
+#'   \code{NA} for no colors, or a vector of colors; the length of this vector
+#'   of colors must match the number of bounded cells, that you can get by
+#'   typing \code{length(Filter(isBoundedCell, v))}
+#' @param hue,luminosity if \code{colors = "random"}, these arguments are passed
+#'   to \code{\link[randomcoloR]{randomColor}}
 #' @param alpha opacity, a number between 0 and 1
-#'   (used when \code{color = TRUE})
+#'   (used when \code{colors} is not \code{NA})
 #' @param ... arguments passed to \code{\link{plotBoundedCell2D}} or
 #'   \code{\link{plotBoundedCell3D}}
 #'
@@ -355,7 +358,7 @@ plotBoundedCell2D <- function(
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' plotVoronoiDiagram(v, luminosity = "bright")
 plotVoronoiDiagram <- function(
-  v, color = TRUE, hue = "random", luminosity = "light", alpha = 1, ...
+  v, colors = "random", hue = "random", luminosity = "light", alpha = 1, ...
 ){
   if(!inherits(v, "voronoi")){
     stop(
@@ -372,12 +375,21 @@ plotVoronoiDiagram <- function(
       call. = TRUE
     )
   }
-  if(color){
+  if(identical(colors, "random")){
     colors <- scales::alpha(
       randomColor(ncells, hue = hue, luminosity = luminosity), alpha
     )
-  }else{
+  }else if(identical(colors, NA)){
     colors <- rep(NA, ncells)
+  }else{
+    if(length(colors) != ncells){
+      stop(
+        sprintf(
+          "There are %d bounded Vorono\u00ef cells and you supplied %d colors.",
+          ncells, length(colors)
+        )
+      )
+    }
   }
   if(dimension == 2L){
     for(i in 1L:ncells){
