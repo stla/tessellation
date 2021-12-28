@@ -334,20 +334,24 @@ plotBoundedCell2D <- function(
 #'   why).
 #'
 #' @examples library(tessellation)
-#' # 2D example: sunflower surrounded by a circle
-#' angles <- seq(0, 2*pi, length.out=91)[-1]
-#' circle <- 25000 * cbind(cos(angles), sin(angles))
-#' pts <- rbind(sunflower(50L, 150L), circle)
-#' d <- delaunay(pts)
-#' v <- voronoi(d)
-#' opar <- par(mar = c(0, 0, 0, 0))
-#' plot(pts, type = "n", xlab = NA, ylab = NA, asp = 1, axes = FALSE)
-#' plotVoronoiDiagram(
-#'   v, luminosity = "dark"
-#' )
+#' # 2D example: Fermat spiral
+#' theta <- seq(0, 100, length.out = 300L)
+#' x <- sqrt(theta) * cos(theta)
+#' y <- sqrt(theta) * sin(theta)
+#' pts <- cbind(x,y)
+#' opar <- par(mar = c(0, 0, 0, 0), bg = "black")
+#' # Here is a Fermat spiral:
+#' plot(pts, asp = 1, xlab = NA, ylab = NA, axes = FALSE, pch = 19, col = "white")
+#' # And here is its Voronoï diagram:
+#' plot(NULL, asp = 1, xlim = c(-15, 15), ylim = c(-15, 15),
+#'      xlab = NA, ylab = NA, axes = FALSE)
+#' del <- delaunay(pts)
+#' v <- voronoi(del)
+#' length(Filter(isBoundedCell, v)) # 281 bounded cells
+#' plotVoronoiDiagram(v, colors = viridisLite::turbo(281L))
 #' par(opar)
 #'
-#' # 3D example: tetrahdron surrounded by three circles
+#' # 3D example: tetrahedron surrounded by three circles
 #' tetrahedron <-
 #'   rbind(
 #'     c(2*sqrt(2)/3, 0, -1/3),
@@ -366,6 +370,7 @@ plotBoundedCell2D <- function(
 #' v <- voronoi(d)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
+#' material3d(lwd = 2)
 #' plotVoronoiDiagram(v, luminosity = "bright")
 plotVoronoiDiagram <- function(
   v, colors = "random", hue = "random", luminosity = "light", alpha = 1, ...
