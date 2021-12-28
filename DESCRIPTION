@@ -10,13 +10,13 @@ Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
 Description: Delaunay and Voronoï tessellation, with emphasis on the three-dimensional case.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
 Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales
 Suggests: 
     rmarkdown,
     knitr,
     uniformly,
-    viridisLite
+    viridisLite,
+    paletteer
 URL: https://github.com/stla/tessellation
 BugReports: https://github.com/stla/tessellation/issues
 RoxygenNote: 7.1.2

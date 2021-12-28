@@ -171,6 +171,39 @@ plotVoronoiDiagram(v, colors = turbo(7))
 
 ![](VoronoiTetrahedronWithCircles.gif)
 
+Now, let's enclose a cube with three circles, and let's draw the corresponding 
+Voronoï diagram:
+
+```{r cubewithcircles}
+cube <-
+  rbind(
+    c(-1, -1, -1),
+    c( 1, -1, -1),
+    c(-1,  1, -1),
+    c( 1,  1, -1),
+    c(-1, -1,  1),
+    c( 1, -1,  1),
+    c(-1,  1,  1),
+    c( 1,  1,  1)
+  )
+xi_ <- seq(0, 2*pi, length.out = 91)[-1]
+R <- 3
+circle1 <- t(vapply(xi_, function(xi) R*c(cos(xi), sin(xi), 0), numeric(3L)))
+circle2 <- t(vapply(xi_, function(xi) R*c(cos(xi), 0, sin(xi)), numeric(3L)))
+circle3 <- t(vapply(xi_, function(xi) R*c(0, cos(xi), sin(xi)), numeric(3L)))
+enclosedCube <- rbind(cube, circle1, circle2, circle3)
+d <- delaunay(enclosedCube, degenerate = TRUE)
+v <- voronoi(d)
+library(paletteer) # provides many color palettes
+open3d(windowRect = c(50, 50, 512, 512))
+bg3d("palegoldenrod")
+plotVoronoiDiagram(v, colors = paletteer_c("grDevices::Dark 3", 8L))
+```
+
+![](CubeWithCircles.gif)
+
+The Voronoï diagram is highly symmetric.
+
 
 # Option `degenerate = TRUE`
 

@@ -62,7 +62,7 @@ vertices <- rbind(
   c(  C0,   C0,   C0)
 )
 
-pts <- rbind(vertices, circles)
+pts <- rbind(c(0,0,0), vertices)
 
 
 del <- delaunay(pts, degenerate = TRUE)
