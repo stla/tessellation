@@ -12,12 +12,17 @@ edgeFromTileFacet <- function(tessellation, tilefacet){
   tiles <- tessellation[["tiles"]]
   tile1 <- tiles[[tileindices[1L]]]
   c1 <- tile1[["simplex"]][["circumcenter"]]
+  if(any(is.nan(c1))){
+    return(NULL)
+  }
   if(length(tileindices) == 1L){
     return(newIEdge(c1, tilefacet[["normal"]]))
   }
   tile2 <- tiles[[tileindices[2L]]]
   c2 <- tile2[["simplex"]][["circumcenter"]]
-  if(sameFamily(tile1, tile2) || isTRUE(all.equal(c1, c2))){
+  if(
+    sameFamily(tile1, tile2) || isTRUE(all.equal(c1, c2)) || any(is.nan(c2))
+  ){
     return(NULL)
   }
   newEdge(c1, c2)
