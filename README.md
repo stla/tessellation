@@ -28,4 +28,7 @@ A strange Voronoï cell:
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/strangeVoronoiCell.gif)
 
-In fact this is not a Voronoï cell, I did a mistake :). Voronoï cells are convex.
+The Voronoï diagram of some points along a Fermat spiral:
+
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/Voronoi2D_FermatSpiral_tikZ.png)
+
