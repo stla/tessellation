@@ -4,6 +4,12 @@
 [![R-CMD-check](https://github.com/stla/tessellation/workflows/R-CMD-check/badge.svg)](https://github.com/stla/tessellation/actions)
 <!-- badges: end -->
 
+This package is not on CRAN yet. You can install it by typing:
+
+```r
+remotes::install_github("stla/tessellation", dependencies = TRUE, build_vignettes = TRUE)
+```
+
 ## Delaunay and Voronoï tessellations.
 
 The Voronoï cell of a point inside the Utah teapot:
