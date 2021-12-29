@@ -121,7 +121,7 @@ Delaunay tessellation and this derivation is implemented in R only.
 The Voronoï tessellation is obtained with the `voronoi` function. It is 
 restricted to its bounded cells. Let's see what it gives on our example:
 
-```{r voronoi, eval=TRUE, message=FALSE}
+```{r voronoi, eval=TRUE, results='hide'}
 v <- voronoi(del)
 open3d(windowRect = c(50, 50, 562, 562))
 bg3d("palegoldenrod")

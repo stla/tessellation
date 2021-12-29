@@ -36,8 +36,8 @@ voronoiCell <- function(facetsQuotienter, edgeTransformer){
     edges <- Filter(Negate(is.null), lapply(tilefacets, function(tilefacet){
       edgeFromTileFacet(tessellation, tilefacet)
     }))
-    bounded <- TRUE
     nedges <- length(edges)
+    bounded <- nedges > 0L
     while(nedges > 0L){
       bounded <- bounded && inherits(edges[[nedges]], c("Edge2", "Edge3"))
       nedges <- nedges - 1L
@@ -103,7 +103,7 @@ voronoi <- function(tessellation){
   message(
     sprintf(
       "Vorono\u00ef diagram with %d bounded cell%s.",
-      ifelse(nbounded <= 100L, english(nbounded), nbounded),
+      ifelse(nbounded <= 100L, as.character(english(nbounded)), nbounded),
       ifelse(nbounded > 1L, "s", "")
     )
   )
