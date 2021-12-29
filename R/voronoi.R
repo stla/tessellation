@@ -36,7 +36,15 @@ voronoiCell <- function(facetsQuotienter, edgeTransformer){
     edges <- Filter(Negate(is.null), lapply(tilefacets, function(tilefacet){
       edgeFromTileFacet(tessellation, tilefacet)
     }))
-    edgeTransformer(edges)
+    bounded <- TRUE
+    nedges <- length(edges)
+    while(nedges > 0L){
+      bounded <- bounded && inherits(edges[[nedges]], c("Edge2", "Edge3"))
+      nedges <- nedges - 1L
+    }
+    cell <- edgeTransformer(edges)
+    attr(cell, "bounded") <- bounded
+    cell
   }
 }
 
@@ -50,8 +58,15 @@ zip <- function(matrix, list){
 
 voronoi0 <- function(cellGetter, tessellation){
   vertices <- attr(tessellation, "points")
-  L <- lapply(1L:nrow(vertices), function(i) cellGetter(tessellation, i))
-  zip(vertices, L)
+  bounded <- logical(nrow(vertices))
+  L <- lapply(1L:nrow(vertices), function(i){
+    cell <- cellGetter(tessellation, i)
+    bounded[i] <<- attr(cell, "bounded")
+    cell
+  })
+  out <- zip(vertices, L)
+  attr(out, "nbounded") <- sum(bounded)
+  out
 }
 
 #' @title Voronoï tessellation
@@ -67,6 +82,7 @@ voronoi0 <- function(cellGetter, tessellation){
 #' @seealso \code{\link{isBoundedCell}}, \code{\link{cellVertices}},
 #'   \code{\link{plotBoundedCell2D}}, \code{\link{plotBoundedCell3D}}
 #' @export
+#' @importFrom english english
 #'
 #' @examples library(tessellation)
 #' d <- delaunay(centricCuboctahedron())
@@ -74,7 +90,7 @@ voronoi0 <- function(cellGetter, tessellation){
 #' # the Voronoï diagram has 13 cells (one for each site):
 #' length(v)
 #' # there is only one bounded cell:
-#' length(Filter(isBoundedCell, v))
+#' length(Filter(isBoundedCell, v)) # or attr(v, "nbounded")
 voronoi <- function(tessellation){
   if(!inherits(tessellation, "delaunay")){
     stop(
@@ -83,6 +99,14 @@ voronoi <- function(tessellation){
     )
   }
   v <- voronoi0(voronoiCell(identity, identity), tessellation)
+  nbounded <- attr(v, "nbounded")
+  message(
+    sprintf(
+      "Vorono\u00ef diagram with %d bounded cell%s.",
+      ifelse(nbounded <= 100L, english(nbounded), nbounded),
+      ifelse(nbounded > 1L, "s", "")
+    )
+  )
   class(v) <- "voronoi"
   v
 }
@@ -312,10 +336,14 @@ plotBoundedCell2D <- function(
 #' @description Plot all the bounded cells of a 2D or 3D Voronoï tessellation.
 #'
 #' @param v an output of \code{\link{voronoi}}
-#' @param colors this can be \code{"random"} to use random colors for the cells,
-#'   \code{NA} for no colors, or a vector of colors; the length of this vector
-#'   of colors must match the number of bounded cells, that you can get by
-#'   typing \code{length(Filter(isBoundedCell, v))}
+#' @param colors this can be \code{"random"} to use random colors for the cells
+#'   (with \code{\link[randomcoloR]{randomColor}}), \code{"distinct"} to use
+#'   distinct colors with the help of
+#'   \code{\link[randomcoloR]{distinctColorPalette}}, or this can be \code{NA}
+#'   for no colors, or a vector of colors; the length of this vector
+#'   of colors must match the number of bounded cells, which is displayed when
+#'   you run the \code{\link{voronoi}} function and that you can also get by
+#'   typing \code{attr(v, "nbounded")}
 #' @param hue,luminosity if \code{colors = "random"}, these arguments are passed
 #'   to \code{\link[randomcoloR]{randomColor}}
 #' @param alpha opacity, a number between 0 and 1
@@ -325,7 +353,7 @@ plotBoundedCell2D <- function(
 #'
 #' @return No returned value.
 #' @export
-#' @importFrom randomcoloR randomColor
+#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom scales alpha
 #'
 #' @note Sometimes, it is necessary to set the option \code{degenerate=TRUE}
@@ -394,6 +422,8 @@ plotVoronoiDiagram <- function(
     colors <- scales::alpha(
       randomColor(ncells, hue = hue, luminosity = luminosity), alpha
     )
+  }else if(identical(colors, "distinct")){
+    colors <- scales::alpha(distinctColorPalette(ncells))
   }else if(identical(colors, NA)){
     colors <- rep(NA, ncells)
   }else{
@@ -404,6 +434,8 @@ plotVoronoiDiagram <- function(
           ncells, length(colors)
         )
       )
+    }else{
+      colors <- scales::alpha(colors)
     }
   }
   if(dimension == 2L){

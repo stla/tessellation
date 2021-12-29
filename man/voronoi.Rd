@@ -25,7 +25,7 @@ v <- voronoi(d)
 # the Voronoï diagram has 13 cells (one for each site):
 length(v)
 # there is only one bounded cell:
-length(Filter(isBoundedCell, v))
+length(Filter(isBoundedCell, v)) # or attr(v, "nbounded")
 }
 \seealso{
 \code{\link{isBoundedCell}}, \code{\link{cellVertices}},

@@ -7,7 +7,7 @@
 plotDelaunay2D(
   tessellation,
   border = "black",
-  color = TRUE,
+  color = "distinct",
   hue = "random",
   luminosity = "light",
   lty = par("lty"),
@@ -21,10 +21,13 @@ plotDelaunay2D(
 \item{border}{the color of the borders of the triangles; \code{NULL} for
 no borders}
 
-\item{color}{Boolean, whether to use colors}
+\item{color}{controls the filling colors of the triangles, either
+\code{FALSE} for no color, \code{"random"} to use
+\code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
+\code{\link[randomcoloR]{distinctColorPalette}}}
 
-\item{hue, luminosity}{if \code{color = TRUE}, these arguments are passed to
-\code{\link[randomcoloR]{randomColor}}}
+\item{hue, luminosity}{if \code{color = "random"}, these arguments are passed
+to \code{\link[randomcoloR]{randomColor}}}
 
 \item{lty, lwd}{graphical parameters}
 
@@ -47,14 +50,9 @@ square <- rbind(
 ptsin <- runif_in_cube(10L, d = 2L)
 pts <- rbind(square, ptsin)
 d <- delaunay(pts)
-plotDelaunay2D(d, xlab = "x", ylab = "y", asp = 1)
-
-# sunflower tessellation
-pts <- sunflower(50L, 150L)
-d <- delaunay(pts)
 opar <- par(mar = c(0, 0, 0, 0))
 plotDelaunay2D(
-  d, xlab = NA, ylab = NA, asp = 1, axes = FALSE, luminosity = "dark"
+  d, xlab = NA, ylab = NA, asp = 1, color = "random", luminosity = "dark"
 )
 par(opar)
 }

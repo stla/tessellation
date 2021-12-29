@@ -16,10 +16,14 @@ plotVoronoiDiagram(
 \arguments{
 \item{v}{an output of \code{\link{voronoi}}}
 
-\item{colors}{this can be \code{"random"} to use random colors for the cells,
-\code{NA} for no colors, or a vector of colors; the length of this vector
-of colors must match the number of bounded cells, that you can get by
-typing \code{length(Filter(isBoundedCell, v))}}
+\item{colors}{this can be \code{"random"} to use random colors for the cells
+(with \code{\link[randomcoloR]{randomColor}}), \code{"distinct"} to use
+distinct colors with the help of
+\code{\link[randomcoloR]{distinctColorPalette}}, or this can be \code{NA}
+for no colors, or a vector of colors; the length of this vector
+of colors must match the number of bounded cells, which is displayed when
+you run the \code{\link{voronoi}} function and that you can also get by
+typing \code{attr(v, "nbounded")}}
 
 \item{hue, luminosity}{if \code{colors = "random"}, these arguments are passed
 to \code{\link[randomcoloR]{randomColor}}}

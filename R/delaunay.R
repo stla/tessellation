@@ -283,15 +283,18 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' @param tessellation the output of \code{\link{delaunay}}
 #' @param border the color of the borders of the triangles; \code{NULL} for
 #'   no borders
-#' @param color Boolean, whether to use colors
-#' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
-#'   \code{\link[randomcoloR]{randomColor}}
+#' @param color controls the filling colors of the triangles, either
+#'   \code{FALSE} for no color, \code{"random"} to use
+#'   \code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
+#'   \code{\link[randomcoloR]{distinctColorPalette}}
+#' @param hue,luminosity if \code{color = "random"}, these arguments are passed
+#'   to \code{\link[randomcoloR]{randomColor}}
 #' @param lty,lwd graphical parameters
 #' @param ... arguments passed to \code{\link{plot}}
 #'
 #' @return No value, just renders a 2D plot.
 #' @export
-#' @importFrom randomcoloR randomColor
+#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom hash keys values
 #' @importFrom graphics plot polygon par segments
 #'
@@ -305,18 +308,13 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
 #' ptsin <- runif_in_cube(10L, d = 2L)
 #' pts <- rbind(square, ptsin)
 #' d <- delaunay(pts)
-#' plotDelaunay2D(d, xlab = "x", ylab = "y", asp = 1)
-#'
-#' # sunflower tessellation
-#' pts <- sunflower(50L, 150L)
-#' d <- delaunay(pts)
 #' opar <- par(mar = c(0, 0, 0, 0))
 #' plotDelaunay2D(
-#'   d, xlab = NA, ylab = NA, asp = 1, axes = FALSE, luminosity = "dark"
+#'   d, xlab = NA, ylab = NA, asp = 1, color = "random", luminosity = "dark"
 #' )
 #' par(opar)
 plotDelaunay2D <- function(
-  tessellation, border = "black", color = TRUE, hue = "random",
+  tessellation, border = "black", color = "distinct", hue = "random",
   luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
 ){
   if(!inherits(tessellation, "delaunay")){
@@ -333,10 +331,15 @@ plotDelaunay2D <- function(
     )
   }
   plot(vertices, type = "n", ...)
-  if(color){
+  if(!isFALSE(color)){
+    color <- match.arg(color, c("random", "distinct"))
     simplicies <- getDelaunaySimplicies(tessellation, hashes = TRUE)
     nsimplicies <- length(simplicies)
-    colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+    if(color == "random"){
+      colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+    }else{
+      colors <- distinctColorPalette(nsimplicies)
+    }
     for(i in 1L:nsimplicies){
       triangle <- t(values(simplicies[[i]]))
       polygon(triangle, border = NA, col = colors[i])
@@ -365,9 +368,12 @@ plotDelaunay2D <- function(
 #' @description Plot a 3D Delaunay tessellation with \strong{rgl}.
 #'
 #' @param tessellation the output of \code{\link{delaunay}}
-#' @param color Boolean, whether to use colors
-#' @param hue,luminosity if \code{color = TRUE}, these arguments are passed to
-#'   \code{\link[randomcoloR]{randomColor}}
+#' @param color controls the filling colors of the tetrahedra, either
+#'   \code{FALSE} for no color, \code{"random"} to use
+#'   \code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
+#'   \code{\link[randomcoloR]{distinctColorPalette}}
+#' @param hue,luminosity if \code{color = "random"}, these arguments are passed
+#'   to \code{\link[randomcoloR]{randomColor}}
 #' @param alpha opacity, number between 0 and 1
 #' @param exteriorEdgesAsTubes Boolean, whether to plot the exterior edges
 #'   as tubes; in order to use this feature, you need to set
@@ -379,7 +385,7 @@ plotDelaunay2D <- function(
 #'
 #' @return No value, just renders a 3D plot.
 #' @export
-#' @importFrom randomcoloR randomColor
+#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom utils combn
 #' @importFrom rgl triangles3d spheres3d
 #' @importFrom hash keys values
@@ -404,8 +410,8 @@ plotDelaunay2D <- function(
 #'   tess, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.3, tubeColor = "yellow"
 #' )
 plotDelaunay3D <- function(
-  tessellation, color = TRUE, hue = "random", luminosity = "light", alpha = 0.3,
-  exteriorEdgesAsTubes = FALSE, tubeRadius, tubeColor
+  tessellation, color = "distinct", hue = "random", luminosity = "light",
+  alpha = 0.3, exteriorEdgesAsTubes = FALSE, tubeRadius, tubeColor
 ){
   if(!inherits(tessellation, "delaunay")){
     stop(
@@ -425,8 +431,13 @@ plotDelaunay3D <- function(
     t(combn(as.integer(keys(simplex)), 2L))
   })))
   nsimplicies <- length(simplicies)
-  if(color){
-    colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+  if(!isFALSE(color)){
+    color <- match.arg(color, c("random", "distinct"))
+    if(color == "random"){
+      colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+    }else{
+      colors <- distinctColorPalette(nsimplicies)
+    }
     triangles <- combn(4L, 3L)
     for(i in 1L:nsimplicies){
       simplex <- t(values(simplicies[[i]]))

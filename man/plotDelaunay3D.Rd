@@ -6,7 +6,7 @@
 \usage{
 plotDelaunay3D(
   tessellation,
-  color = TRUE,
+  color = "distinct",
   hue = "random",
   luminosity = "light",
   alpha = 0.3,
@@ -18,10 +18,13 @@ plotDelaunay3D(
 \arguments{
 \item{tessellation}{the output of \code{\link{delaunay}}}
 
-\item{color}{Boolean, whether to use colors}
+\item{color}{controls the filling colors of the tetrahedra, either
+\code{FALSE} for no color, \code{"random"} to use
+\code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
+\code{\link[randomcoloR]{distinctColorPalette}}}
 
-\item{hue, luminosity}{if \code{color = TRUE}, these arguments are passed to
-\code{\link[randomcoloR]{randomColor}}}
+\item{hue, luminosity}{if \code{color = "random"}, these arguments are passed
+to \code{\link[randomcoloR]{randomColor}}}
 
 \item{alpha}{opacity, number between 0 and 1}
 
