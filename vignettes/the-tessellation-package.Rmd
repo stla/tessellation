@@ -83,7 +83,7 @@ pts <- rbind(tetrahedron, randomPoints)
 del <- delaunay(pts)
 open3d(windowRect = c(50, 50, 562, 562))
 material3d(lwd = 2)
-plotDelaunay3D(del, color=TRUE, luminosity = "bright", alpha=0.5)
+plotDelaunay3D(del, color="random", luminosity = "bright", alpha=0.5)
 ```
 
 ![](TetrahedronDelaunay.gif)
@@ -100,7 +100,7 @@ open3d(windowRect = c(50, 50, 562, 562))
 bg3d("slategray")
 material3d(lwd = 2)
 plotDelaunay3D(
-  del, color=TRUE, luminosity = "bright", alpha = 0.2,
+  del, color="random", luminosity = "bright", alpha = 0.2,
   exteriorEdgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "navy"
 )
 ```
@@ -121,7 +121,7 @@ Delaunay tessellation and this derivation is implemented in R only.
 The Voronoï tessellation is obtained with the `voronoi` function. It is 
 restricted to its bounded cells. Let's see what it gives on our example:
 
-```{r voronoi, eval=TRUE}
+```{r voronoi, eval=TRUE, message=FALSE}
 v <- voronoi(del)
 open3d(windowRect = c(50, 50, 562, 562))
 bg3d("palegoldenrod")
@@ -156,7 +156,6 @@ bounded cells:
 object <- rbind(tetrahedron, randomPoints, circles)
 del <- delaunay(object)
 v <- voronoi(del)
-length(Filter(isBoundedCell, v))
 ```
 
 In fact these are the cells corresponding to the four tetrahedra vertices and 
