@@ -173,7 +173,7 @@ plotVoronoiDiagram(v, colors = turbo(7))
 Now, let's enclose a cube with three circles, and let's draw the corresponding 
 Voronoï diagram:
 
-```{r cubewithcircles}
+```{r cubewithcircles, results='hide'}
 cube <-
   rbind(
     c(-1, -1, -1),

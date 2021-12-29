@@ -30,5 +30,5 @@ A strange Voronoï cell:
 
 The Voronoï diagram of some points along a Fermat spiral:
 
-![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/Voronoi2D_FermatSpiral_tikZ.png)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral.gif)
 

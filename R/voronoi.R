@@ -399,7 +399,7 @@ plotBoundedCell2D <- function(
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' material3d(lwd = 2)
-#' plotVoronoiDiagram(v, luminosity = "bright")
+#' \donttest{plotVoronoiDiagram(v, luminosity = "bright")}
 plotVoronoiDiagram <- function(
   v, colors = "random", hue = "random", luminosity = "light", alpha = 1, ...
 ){
