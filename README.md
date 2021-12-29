@@ -32,3 +32,6 @@ The Voronoï diagram of some points along a Fermat spiral:
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral.gif)
 
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral2.gif)
+
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral3.gif)

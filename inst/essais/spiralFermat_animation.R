@@ -5,9 +5,9 @@ vectorcycle <- function(v, i){
 }
 
 library(paletteer)
-colors <- paletteer_c("pals::kovesi.cyclic_mygbm_30_95_c78_s25", 281)
+colors <- paletteer_c("pals::kovesi.cyclic_mygbm_30_95_c78_s25", 360)#281)
 
-theta <- seq(0, 100, length.out = 300L)
+theta <- seq(0, 110, length.out = 382L) # 100 300
 x <- sqrt(theta) * cos(theta)
 y <- sqrt(theta) * sin(theta)
 pts <- cbind(x,y)
@@ -15,13 +15,15 @@ opar <- par(mar = c(0, 0, 0, 0), bg = "black")
 # Here is a Fermat spiral:
 plot(pts, asp = 1, xlab = NA, ylab = NA, axes = FALSE, pch = 19, col = "white")
 # And here is its Voronoï diagram:
+svg("zz.svg")
+opar <- par(mar = c(0, 0, 0, 0), bg = "black")
 plot(NULL, asp = 1, xlim = c(-15, 15), ylim = c(-15, 15),
      xlab = NA, ylab = NA, axes = FALSE)
 del <- delaunay(pts)
 v <- voronoi(del)
 attr(v, "nbounded") # 281
 plotVoronoiDiagram(v, colors = vectorcycle(colors, 100L))
-
+dev.off()
 
 
 Fplot <- function(i){
@@ -55,9 +57,10 @@ for(dvifile in dvifiles){
   system(command)
 }
 
-pngfiles <- list.files(pattern = "^fermat.*png$")
-
 system("mogrify -resize 512x512! fermat*.png")
+
+
+pngfiles <- list.files(pattern = "^fermat.*png$")
 
 library(gifski)
 gifski(
