@@ -102,7 +102,7 @@ voronoi <- function(tessellation){
   nbounded <- attr(v, "nbounded")
   message(
     sprintf(
-      "Vorono\u00ef diagram with %d bounded cell%s.",
+      "Vorono\u00ef diagram with %s bounded cell%s.",
       ifelse(nbounded <= 100L, as.character(english(nbounded)), nbounded),
       ifelse(nbounded > 1L, "s", "")
     )
