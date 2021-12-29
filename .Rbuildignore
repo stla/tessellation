@@ -4,3 +4,4 @@
 ^\.github$
 ^inst/essais$
 ^inst/screenshots$
+^\.Rprofile$

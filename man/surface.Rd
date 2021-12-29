@@ -16,6 +16,16 @@ A number, the exterior surface of the Delaunay tessellation
 \description{
 Exterior surface of the Delaunay tessellation.
 }
+\note{
+It is not guaranteed that this function provides the correct result
+  for all cases. The exterior surface of the Delaunay tessellation is the
+  exterior surface of the convex hull of the sites (the points), and you can
+  get it with the \strong{cxhull} package (by summing the volumes of the
+  facets). Moreover, I encountered some cases for which I got a correct
+  result only with the option \code{degenerate=TRUE} in the
+  \code{delaunay} function. I will probably remove this function in the
+  next version.
+}
 \seealso{
 \code{\link{volume}}
 }

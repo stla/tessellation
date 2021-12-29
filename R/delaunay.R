@@ -6,6 +6,7 @@ exteriorDelaunayEdges <- function(tessellation){
   points <- attr(tessellation, "points")
   exteriorFacets <- Filter(Negate(sandwichedFacet), tilefacets)
   edges <- NULL
+  prec <- sqrt(.Machine[["double.eps"]])
   for(tilefacet in exteriorFacets){
     normal <- tilefacet[["normal"]]
     offset <- tilefacet[["offset"]]
@@ -24,8 +25,8 @@ exteriorDelaunayEdges <- function(tessellation){
     pt1 <- points[ids[1L], ]
     pt2 <- points[ids[2L], ]
     if(
-      abs(crossprod(pt1, normal) + offset) < sqrt(.Machine$double.eps)
-      && abs(crossprod(pt2, normal) + offset) < sqrt(.Machine$double.eps)
+      abs(crossprod(pt1, normal) + offset) < prec
+      && abs(crossprod(pt2, normal) + offset) < prec
     ){
       edges <- rbind(
         edges,
@@ -39,7 +40,6 @@ exteriorDelaunayEdges <- function(tessellation){
   hullfacets <- cxhull(points)[["facets"]]
   edges3 <- list()
   vertices <- NULL
-  prec <- sqrt(.Machine[["double.eps"]])
   for(i in 1L:nrow(edges)){
     edge <- edges[i, ]
     A <- points[edge[1L], ]
@@ -186,7 +186,8 @@ delaunay <- function(
   if(any(is.na(points))){
     stop("Points with missing values are not allowed.", call. = TRUE)
   }
-  errfile <- tempfile(fileext=".txt")
+  storage.mode(points) <- "double"
+  errfile <- tempfile(fileext = ".txt")
   tess <- tryCatch({
     .Call(
       "delaunay_",
@@ -513,6 +514,14 @@ sandwichedFacet <- function(tilefacet){
 #' @return A number, the exterior surface of the Delaunay tessellation
 #'   (perimeter in 2D).
 #' @seealso \code{\link{volume}}
+#' @note It is not guaranteed that this function provides the correct result
+#'   for all cases. The exterior surface of the Delaunay tessellation is the
+#'   exterior surface of the convex hull of the sites (the points), and you can
+#'   get it with the \strong{cxhull} package (by summing the volumes of the
+#'   facets). Moreover, I encountered some cases for which I got a correct
+#'   result only with the option \code{degenerate=TRUE} in the
+#'   \code{delaunay} function. I will probably remove this function in the
+#'   next version.
 #' @export
 surface <- function(tessellation){
   if(!inherits(tessellation, "delaunay")){
