@@ -4,11 +4,15 @@
 [![R-CMD-check](https://github.com/stla/tessellation/workflows/R-CMD-check/badge.svg)](https://github.com/stla/tessellation/actions)
 <!-- badges: end -->
 
-This package is not on CRAN yet. You can install it by typing:
+To install the development version, run:
 
 ```r
-remotes::install_github("stla/tessellation", dependencies = TRUE, build_vignettes = TRUE)
+remotes::install_github("stla/tessellation", dependencies = TRUE)
 ```
+
+I did a vignette but it was too big for the CRAN submission. So I used 
+**pkgdown**, and you can find the [vignette here](https://stla.github.io/tessellation/articles/the-tessellation-package.html).
+
 
 ## Delaunay and Voronoï tessellations.
 
