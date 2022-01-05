@@ -93,14 +93,14 @@ exteriorDelaunayEdges <- function(tessellation){
 #' @param points the points given as a matrix, one point per row
 #' @param atinfinity Boolean, whether to include a point at infinity
 #' @param degenerate Boolean, whether to include degenerate tiles
-#' @param exteriorEdges Boolean, for dimension 3 only, wheter to return
+#' @param exteriorEdges Boolean, for dimension 3 only, whether to return
 #'   the exterior edges (see below)
 #'
 #' @return The Delaunay tessellation with many details, in a list. This list
 #'   contains three fields:
 #' \describe{
-#'   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these are the
-#'   points passed to the function}
+#'   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these
+#'   are the points passed to the function}
 #'   \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
 #'   tetrahedra in dimension 3)}
 #'   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}

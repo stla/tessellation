@@ -4,7 +4,7 @@ library(randomcoloR)
 
 cube <- t(rgl::cube3d()$vb[-4L, ])
 
-ptson <- runif_on_cube(20, 3)
+ptson <- runif_in_cube(20, 3)
 
 pts <- rbind(cube, ptson)
 

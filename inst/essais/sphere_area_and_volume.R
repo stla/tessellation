@@ -35,11 +35,11 @@ sphere <- parametric3d(fx, fy, fz, umin = 0, umax = 2*pi, vmin = 0, vmax = pi,
                        engine = "rgl", n = 30, color = "black", fill = FALSE)
 
 sphere <- parametric3d(fx, fy, fz, umin = 0, umax = 2*pi, vmin = 0, vmax = pi,
-                       engine = "none", n = 30)
+                       engine = "none", n = 40)
 
 vertices <- rbind(sphere$v1, sphere$v2, sphere$v3)
 
-d <- delaunay(vertices, degenerate = TRUE)
+d <- delaunay(vertices)#, degenerate = TRUE)
 volume(d)  # 4*pi/3
 surface(d) # 4*pi
 
