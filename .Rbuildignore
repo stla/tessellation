@@ -6,3 +6,6 @@
 ^inst/screenshots$
 ^\.Rprofile$
 ^cran-comments\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
