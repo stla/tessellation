@@ -73,7 +73,7 @@ plotTetrahedron(tetrahedron, alpha = 0.3)
 spheres3d(randomPoints, radius = 0.04, color = "black")
 ```
 
-![](Tetrahedron.gif)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/Tetrahedron.gif)
 
 Now let's compute and plot the Delaunay tessellation of these seven points:
 
@@ -86,7 +86,8 @@ material3d(lwd = 2)
 plotDelaunay3D(del, color="random", luminosity = "bright", alpha=0.5)
 ```
 
-![](TetrahedronDelaunay.gif)
+
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/TetrahedronDelaunay_cpressd.gif)
 
 It is not easy to visualize a 3D Delaunay tessellation. The colors are not 
 very helpful. Something which helps a little is to plot the exterior edges as 
@@ -105,11 +106,11 @@ plotDelaunay3D(
 )
 ```
 
-![](TetrahedronDelaunayWithTubes.gif)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/TetrahedronDelaunayWihTubes_cpressd.gif)
 
 Let's have a look at each tile, separately:
 
-![](TetrahedronTiles.png)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/TetrahedronTiles.png)
 
 
 # Voronoï tessellation
@@ -129,7 +130,7 @@ material3d(lwd = 2)
 plotVoronoiDiagram(v, luminosity = "dark")
 ```
 
-![](VoronoiTetrahedron.gif)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiTetrahedron_cpressd.gif)
 
 Well, not very funny. Let's add some fun. We draw two circles around the 
 tetrahedron (two sets of points on circles, I should say):
@@ -147,7 +148,7 @@ spheres3d(randomPoints, radius = 0.04, color = "black")
 spheres3d(circles, radius = 0.04, color = "black")
 ```
 
-![](TetrahedronAndTwoCircles.png)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/TetrahedronAndTwoCircles.png)
 
 And now we gonna draw the Voronoï diagram of this object. There are seven 
 bounded cells:
@@ -168,7 +169,7 @@ bg3d("palegoldenrod")
 plotVoronoiDiagram(v, colors = turbo(7))
 ```
 
-![](VoronoiTetrahedronWithCircles.gif)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiTetrahedronWithCircles_cpressd.gif)
 
 Now, let's enclose a cube with three circles, and let's draw the corresponding 
 Voronoï diagram:
@@ -199,7 +200,7 @@ bg3d("palegoldenrod")
 plotVoronoiDiagram(v, colors = paletteer_c("grDevices::Dark 3", 8L))
 ```
 
-![](CubeWithCircles.gif)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/CubeWithCircles_cpressd.gif)
 
 The Voronoï diagram is highly symmetric.
 
@@ -226,7 +227,7 @@ bg3d("aliceblue")
 plotVoronoiDiagram(v, colors = rainbow(20))
 ```
 
-![](DodecahedronWithCircles.gif)
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/DodecahedronWithCircles_cpressd.gif)
 
 
 Try it with `del <- delaunay(pts, degenerate = FALSE)`. 
