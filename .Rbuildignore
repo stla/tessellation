@@ -5,3 +5,4 @@
 ^inst/essais$
 ^inst/screenshots$
 ^\.Rprofile$
+^cran-comments\.md$
