@@ -1,0 +1,10 @@
+pandoc: 2.7.3
+pkgdown: 2.0.1
+pkgdown_sha: ~
+articles:
+  the-tessellation-package: the-tessellation-package.html
+last_built: 2022-01-05T17:41Z
+urls:
+  reference: https://stla.github.io/tessellation/reference
+  article: https://stla.github.io/tessellation/articles
+
