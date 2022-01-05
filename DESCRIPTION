@@ -17,7 +17,8 @@ Suggests:
     uniformly,
     viridisLite,
     paletteer
-URL: https://github.com/stla/tessellation
+URL: https://github.com/stla/tessellation,
+    https://stla.github.io/tessellation/
 BugReports: https://github.com/stla/tessellation/issues
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr
