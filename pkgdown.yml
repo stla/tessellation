@@ -3,7 +3,7 @@ pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   the-tessellation-package: the-tessellation-package.html
-last_built: 2022-01-06T15:24Z
+last_built: 2022-01-06T16:52Z
 urls:
   reference: https://stla.github.io/tessellation/reference
   article: https://stla.github.io/tessellation/articles
