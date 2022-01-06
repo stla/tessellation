@@ -350,10 +350,10 @@ plotDelaunay2D <- function(
     edges <- lapply(tessellation[["tilefacets"]], function(tilefacet){
       as.integer(keys(tilefacet[["subsimplex"]][["vertices"]]))
     })
-    cat("nedges:\n")
-    print(length(edges))
-    edges <- uniqueWith(edges, sameSegments)
-    print(length(edges))
+    # cat("nedges:\n")
+    # print(length(edges))
+    # edges <- uniqueWith(edges, sameSegments)
+    # print(length(edges))
     for(edge in edges){
       p0 <- vertices[edge[1L], ]
       p1 <- vertices[edge[2L], ]
