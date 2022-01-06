@@ -43,10 +43,10 @@ d <- delaunay(centricCuboctahedron())
 v <- voronoi(d)
 cell13 <- v[[13]]
 isBoundedCell(cell13) # TRUE
-library(rgl)
+\donttest{library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
 plotBoundedCell3D(
   cell13, edgesAsTubes = TRUE, tubeRadius = 0.03, tubeColor = "yellow",
   facetsColor = "navy", alpha = 0.7
-)
+)}
 }
