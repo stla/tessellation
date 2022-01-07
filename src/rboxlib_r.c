@@ -87,7 +87,7 @@ int qh_rboxpoints(qhT *qh, char* rbox_command) {
   double anglediff, angle, x, y, cube= 0.0, diamond= 0.0;
   double box= qh_DEFAULTbox; /* scale all numbers before output */
   double randmax= qh_RANDOMmax;
-  char command[200], seedbuf[200];
+  char command[200], seedbuf[20];
   char *s= command, *t, *first_point= NULL;
   time_t timedata;
   int exitcode;

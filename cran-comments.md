@@ -3,6 +3,7 @@
 - local R 4.1.2 installation, Windows 10
 - win-builder
 - Ubuntu, via Github action
+- R-hub
 
 
 ## R CMD check results
