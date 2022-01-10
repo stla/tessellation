@@ -1,3 +1,7 @@
+This is a resubmission. I fixed a mispelled word in DESCRIPTION and I added a 
+link to the website of the 'Qhull' library.
+
+
 ## Testing environments
 
 - local R 4.1.2 installation, Windows 10
