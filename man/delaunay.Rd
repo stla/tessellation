@@ -28,13 +28,15 @@ third coordinate of a point for its elevation; see the example}
 }
 \value{
 If the function performs an elevated Delaunay tessellation, then
-  the returned value is a list with three fields: \code{mesh}, \code{edges},
-  and \code{volume}. The \code{mesh} field is an object of class
-  \code{mesh3d}, ready for plotting with the \strong{rgl} package. The
+  the returned value is a list with four fields: \code{mesh}, \code{edges},
+  \code{volume}, and \code{surface}. The \code{mesh} field is an object of
+  class \code{mesh3d}, ready for plotting with the \strong{rgl} package. The
   \code{edges} field provides the indices of the edges, given as an integer
-  matrix with two columns. Finally the \code{volume} field provides the sum
-  of the volumes under the Delaunay triangles, that is to say the total
-  volume under the triangulated surface.
+  matrix with two columns. The \code{volume} field provides the sum of the
+  volumes under the Delaunay triangles, that is to say the total volume
+  under the triangulated surface. Finally, the \code{surface} field provides
+  the sum of the areas of the Delaunay triangles, thus this an approximate
+  value of the area of the surface that is triangulated.
 
 Otherwise, the function returns the Delaunay tessellation with many details,
   in a list. This list contains three fields:

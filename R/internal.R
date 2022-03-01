@@ -38,3 +38,15 @@ isBoolean <- function(x){
   is.atomic(x) && is.logical(x) && length(x) == 1L && !is.na(x)
 }
 
+
+crossProduct <- function(v, w){
+  c(
+    v[2L] * w[3L] - v[3L] * w[2L],
+    v[3L] * w[1L] - v[1L] * w[3L],
+    v[1L] * w[2L] - v[2L] * w[1L]
+  )
+}
+
+triangleArea <- function(A, B, C){
+  sqrt(c(crossprod(crossProduct(B-A, C-A)))) / 2
+}
