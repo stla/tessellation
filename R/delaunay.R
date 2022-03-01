@@ -101,9 +101,21 @@ volume_under_triangle <- function(x, y, z){
 #' @param degenerate Boolean, whether to include degenerate tiles
 #' @param exteriorEdges Boolean, for dimension 3 only, whether to return
 #'   the exterior edges (see below)
+#' @param elevation Boolean, only for three-dimensional points; if \code{TRUE},
+#'   the function performs an elevated Delaunay tessellation, using the
+#'   third coordinate of a point for its elevation; see the example
 #'
-#' @return The Delaunay tessellation with many details, in a list. This list
-#'   contains three fields:
+#' @return If the function performs an elevated Delaunay tessellation, then
+#'   the returned value is a list with three fields: \code{mesh}, \code{edges},
+#'   and \code{volume}. The \code{mesh} field is an object of class
+#'   \code{mesh3d}, ready for plotting with the \strong{rgl} package. The
+#'   \code{edges} field provides the indices of the edges, given as an integer
+#'   matrix with two columns. Finally the \code{volume} field provides the sum
+#'   of the volumes under the Delaunay triangles, that is to say the total
+#'   volume under the triangulated surface.
+#'
+#' Otherwise, the function returns the Delaunay tessellation with many details,
+#'   in a list. This list contains three fields:
 #' \describe{
 #'   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these
 #'   are the points passed to the function}
@@ -161,6 +173,12 @@ volume_under_triangle <- function(x, y, z){
 #' @importFrom hash hash keys
 #' @importFrom rgl tmesh3d
 #'
+#' @note The package provides the functions \code{\link{plotDelaunay2D}} to
+#'   plot a 2D Delaunay tessellation and \code{\link{plotDelaunay3D}} to
+#'   plot a 3D Delaunay tessellation. But there is no function to plot an
+#'   elevated Delaunay tessellation; the examples show how to plot such a
+#'   Delaunay tessellation.
+#'
 #' @seealso \code{\link{getDelaunaySimplicies}}
 #' @examples library(tessellation)
 #' points <- rbind(
@@ -178,6 +196,25 @@ volume_under_triangle <- function(x, y, z){
 #' del$vertices[[1]]
 #' del$tiles[[1]]
 #' del$tilefacets[[1]]
+#'
+#' # an elevated Delaunay tessellation ####
+#' f <- function(x, y){
+#'   dnorm(x) * dnorm(y)
+#' }
+#' x <- y <- seq(-5, 5, length.out = 50)
+#' grd <- expand.grid(x = x, y = y) # grid on the xy-plane
+#' points <- as.matrix(transform( # data (x_i, y_i, z_i)
+#'   grd, z = f(x, y)
+#' ))
+#' del <- delaunay(points, elevation = TRUE)
+#' del[["volume"]] # close to 1, as expected
+#' # plotting
+#' library(rgl)
+#' mesh <- del[["mesh"]]
+#' open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
+#' aspect3d(1, 1, 20)
+#' shade3d(mesh, color = "limegreen")
+#' wire3d(mesh)
 delaunay <- function(
   points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE,
   elevation = FALSE
@@ -239,7 +276,6 @@ delaunay <- function(
       "volume" = sum(volumes)
     )
     attr(out, "elevation") <- TRUE
-    attr(out, "volumes") <- volumes
     return(out)
   }
   if(anyDuplicated(points)){
@@ -327,6 +363,12 @@ delaunay <- function(
 #' tess <- delaunay(pts)
 #' getDelaunaySimplicies(tess)
 getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
+      call. = TRUE
+    )
+  }
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",
@@ -382,6 +424,12 @@ plotDelaunay2D <- function(
   tessellation, border = "black", color = "distinct", hue = "random",
   luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
 ){
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
+      call. = TRUE
+    )
+  }
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",
@@ -478,6 +526,12 @@ plotDelaunay3D <- function(
   tessellation, color = "distinct", hue = "random", luminosity = "light",
   alpha = 0.3, exteriorEdgesAsTubes = FALSE, tubeRadius, tubeColor
 ){
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
+      call. = TRUE
+    )
+  }
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",

@@ -4,7 +4,13 @@
 \alias{delaunay}
 \title{Delaunay triangulation}
 \usage{
-delaunay(points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE)
+delaunay(
+  points,
+  atinfinity = FALSE,
+  degenerate = FALSE,
+  exteriorEdges = FALSE,
+  elevation = FALSE
+)
 }
 \arguments{
 \item{points}{the points given as a matrix, one point per row}
@@ -15,10 +21,23 @@ delaunay(points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE)
 
 \item{exteriorEdges}{Boolean, for dimension 3 only, whether to return
 the exterior edges (see below)}
+
+\item{elevation}{Boolean, only for three-dimensional points; if \code{TRUE},
+the function performs an elevated Delaunay tessellation, using the
+third coordinate of a point for its elevation; see the example}
 }
 \value{
-The Delaunay tessellation with many details, in a list. This list
-  contains three fields:
+If the function performs an elevated Delaunay tessellation, then
+  the returned value is a list with three fields: \code{mesh}, \code{edges},
+  and \code{volume}. The \code{mesh} field is an object of class
+  \code{mesh3d}, ready for plotting with the \strong{rgl} package. The
+  \code{edges} field provides the indices of the edges, given as an integer
+  matrix with two columns. Finally the \code{volume} field provides the sum
+  of the volumes under the Delaunay triangles, that is to say the total
+  volume under the triangulated surface.
+
+Otherwise, the function returns the Delaunay tessellation with many details,
+  in a list. This list contains three fields:
 \describe{
   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these
   are the points passed to the function}
@@ -74,6 +93,13 @@ The \strong{tilefacets} field is a list with the following fields:
 \description{
 Delaunay triangulation (or tessellation) of a set of points.
 }
+\note{
+The package provides the functions \code{\link{plotDelaunay2D}} to
+  plot a 2D Delaunay tessellation and \code{\link{plotDelaunay3D}} to
+  plot a 3D Delaunay tessellation. But there is no function to plot an
+  elevated Delaunay tessellation; the examples show how to plot such a
+  Delaunay tessellation.
+}
 \examples{
 library(tessellation)
 points <- rbind(
@@ -91,6 +117,25 @@ del <- delaunay(points)
 del$vertices[[1]]
 del$tiles[[1]]
 del$tilefacets[[1]]
+
+# an elevated Delaunay tessellation ####
+f <- function(x, y){
+  dnorm(x) * dnorm(y)
+}
+x <- y <- seq(-5, 5, length.out = 50)
+grd <- expand.grid(x = x, y = y) # grid on the xy-plane
+points <- as.matrix(transform( # data (x_i, y_i, z_i)
+  grd, z = f(x, y)
+))
+del <- delaunay(points, elevation = TRUE)
+del[["volume"]] # close to 1, as expected
+# plotting
+library(rgl)
+mesh <- del[["mesh"]]
+open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
+aspect3d(1, 1, 20)
+shade3d(mesh, color = "limegreen")
+wire3d(mesh)
 }
 \seealso{
 \code{\link{getDelaunaySimplicies}}
