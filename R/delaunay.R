@@ -221,6 +221,10 @@ delaunay <- function(
   points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE,
   elevation = FALSE
 ){
+  stopifnot(isBoolean(atinfinity))
+  stopifnot(isBoolean(degenerate))
+  stopifnot(isBoolean(exteriorEdges))
+  stopifnot(isBoolean(elevation))
   if(!is.matrix(points) || !is.numeric(points)){
     stop("The `points` argument must be a numeric matrix.", call. = TRUE)
   }
@@ -234,7 +238,6 @@ delaunay <- function(
   if(any(is.na(points))){
     stop("Points with missing values are not allowed.", call. = TRUE)
   }
-  stopifnot(isBoolean(elevation))
   if(elevation){
     if(dimension != 3L){
       stop(
