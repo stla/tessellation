@@ -73,7 +73,7 @@ exteriorDelaunayEdges <- function(tessellation){
   # print(A_Bs)
   # unique_edges <- edges[which(table(A_Bs) == 1L), ]
   # print(unique_edges)
-#  edges < unique(edges)
+  #  edges < unique(edges)
   vertices <- unique(vertices)
   # vertices <- points[unique(c(edges)), ]
   # nedges <- nrow(edges)
@@ -85,6 +85,12 @@ exteriorDelaunayEdges <- function(tessellation){
   # }
   attr(edges3, "vertices") <- vertices
   edges3
+}
+
+volume_under_triangle <- function(x, y, z){
+  sum(z) *
+    (x[1L]*y[2L] - x[2L]*y[1L] + x[2L]*y[3L] -
+       x[3L]*y[2L] + x[3L]*y[1L] - x[1L]*y[3L]) / 6
 }
 
 #' @title Delaunay triangulation
@@ -152,7 +158,9 @@ exteriorDelaunayEdges <- function(tessellation){
 #'
 #' @export
 #' @useDynLib tessellation, .registration = TRUE
-#' @importFrom hash hash
+#' @importFrom hash hash keys
+#' @importFrom rgl tmesh3d
+#'
 #' @seealso \code{\link{getDelaunaySimplicies}}
 #' @examples library(tessellation)
 #' points <- rbind(
@@ -171,7 +179,8 @@ exteriorDelaunayEdges <- function(tessellation){
 #' del$tiles[[1]]
 #' del$tilefacets[[1]]
 delaunay <- function(
-  points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE
+  points, atinfinity = FALSE, degenerate = FALSE, exteriorEdges = FALSE,
+  elevation = FALSE
 ){
   if(!is.matrix(points) || !is.numeric(points)){
     stop("The `points` argument must be a numeric matrix.", call. = TRUE)
@@ -185,6 +194,56 @@ delaunay <- function(
   }
   if(any(is.na(points))){
     stop("Points with missing values are not allowed.", call. = TRUE)
+  }
+  stopifnot(isBoolean(elevation))
+  if(elevation){
+    if(dimension != 3L){
+      stop(
+        "To get an elevated Delaunay tessellation (`elevation=TRUE`), ",
+        "you have to provide three-dimensional points.",
+        call. = TRUE
+      )
+    }
+    # elevations <- points[, 3L]
+    # points <- points[, c(1L, 2L)]
+    del <- delaunay(
+      points[, c(1L, 2L)], atinfinity = atinfinity, degenerate = degenerate,
+      exteriorEdges = FALSE, elevation = FALSE
+    )
+    delVertices <- del[["vertices"]]
+    ids <- vapply(delVertices, `[[`, integer(1L), "id")
+    #vertices <- do.call(cbind, lapply(delVertices, `[[`, "point"))
+    vertices <- points[ids, ]
+    triangles <- do.call(rbind, lapply(del[["tiles"]], function(tile){
+      indices <- tile[["vertices"]]
+      if(tile[["orientation"]] == -1L){
+        indices <- indices[c(1L, 3L, 2L)]
+      }
+      indices
+    }))
+    mesh <- tmesh3d(
+      vertices = t(vertices),
+      indices = t(triangles),
+      homogeneous = FALSE
+    )
+    edges <- t(vapply(del[["tilefacets"]], function(x){
+      as.integer(keys(x[["subsimplex"]][["vertices"]]))
+    }, numeric(2L)))
+    volumes <- apply(triangles, 1L, function(trgl){
+      trgl <- vertices[trgl, ]
+      volume_under_triangle(trgl[, 1L], trgl[, 2L], trgl[, 3L])
+    })
+    out <- list(
+      "mesh"   = mesh,
+      "edges"  = edges,
+      "volume" = sum(volumes)
+    )
+    attr(out, "elevation") <- TRUE
+    attr(out, "volumes") <- volumes
+    return(out)
+  }
+  if(anyDuplicated(points)){
+    stop("There are some duplicated points.", call. = TRUE)
   }
   storage.mode(points) <- "double"
   errfile <- tempfile(fileext = ".txt")
@@ -204,8 +263,13 @@ delaunay <- function(
   pointsAsList <- lapply(1L:nrow(points), function(i) points[i, ])
   tiles <- tess[["tiles"]]
   for(i in seq_along(tiles)){
-    simplex <- tiles[[i]][["simplex"]]
+    tile <- tiles[[i]]
+    simplex <- tile[["simplex"]]
     vertices <- simplex[["vertices"]]
+    tess[["tiles"]][[i]] <- c(
+      list("vertices" = vertices),
+      tile
+    )
     tess[["tiles"]][[i]][["simplex"]][["vertices"]] <-
       hash(as.character(vertices), pointsAsList[vertices])
   }

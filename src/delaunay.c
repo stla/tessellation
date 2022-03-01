@@ -177,7 +177,7 @@ TesselationT* tesselation(double* sites,
                 qh_pointid(qh, vertex->point);
             i_vertex++;
           }
-          qsortu(allfacets[i_facet].simplex.sitesids, dim + 1);
+          //qsortu(allfacets[i_facet].simplex.sitesids, dim + 1);
         }
 
         { /* neighbors facets of the facet */

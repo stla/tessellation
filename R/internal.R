@@ -32,3 +32,9 @@ sameSegments <- function(seg1ids, seg2ids){
   ((seg1ids[[1L]] == seg2ids[[1L]]) && (seg1ids[[2L]] == seg2ids[[2L]])) ||
     ((seg1ids[[1L]] == seg2ids[[2L]]) && (seg1ids[[2L]] == seg2ids[[1L]]))
 }
+
+
+isBoolean <- function(x){
+  is.atomic(x) && is.logical(x) && length(x) == 1L && !is.na(x)
+}
+
