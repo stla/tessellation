@@ -39,3 +39,7 @@ The Voronoï diagram of some points along a Fermat spiral:
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral2.gif)
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral3.gif)
+
+An elevated Delaunay tessellation:
+
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/volcano.png)
