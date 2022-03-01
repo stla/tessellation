@@ -102,6 +102,7 @@ Edge3 <- R6Class(
     #' open3d(windowRect = c(50, 50, 562, 562))
     #' invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
     plot = function(edgeAsTube = FALSE, tubeRadius, tubeColor){
+      stopifnot(isBoolean(edgeAsTube))
       if(edgeAsTube){
         edge <- cylinder3d(
           rbind(

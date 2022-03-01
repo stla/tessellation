@@ -98,6 +98,12 @@ voronoi <- function(tessellation){
       call. = TRUE
     )
   }
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
+      call. = TRUE
+    )
+  }
   v <- voronoi0(voronoiCell(identity, identity), tessellation)
   nbounded <- attr(v, "nbounded")
   message(
@@ -154,6 +160,7 @@ isBoundedCell <- function(cell){
 #' cellvertices <- cellVertices(cell13)
 #' spheres3d(cellvertices, radius = 0.1, color = "green")
 cellVertices <- function(cell, check.bounded = TRUE){
+  stopifnot(isBoolean(check.bounded))
   if(check.bounded && !isBoundedCell(cell)){
     stop(
       "This function applies to bounded cells only.",
@@ -211,6 +218,8 @@ plotBoundedCell3D <- function(
   cell, edgesAsTubes = FALSE, tubeRadius, tubeColor,
   facetsColor = NA, alpha = 1, check.bounded = TRUE
 ){
+  stopifnot(isBoolean(edgesAsTubes))
+  stopifnot(isBoolean(check.bounded))
   if(check.bounded && !isBoundedCell(cell)){
     stop(
       "This function applies to bounded cells only.",
@@ -300,6 +309,7 @@ plotBoundedCell2D <- function(
   # if(is.tuple(cell)){
   #   cell <- cell[["cell"]]
   # }
+  stopifnot(isBoolean(check.bounded))
   if(!is.na(color)){
     vertices <- cellVertices(cell, check.bounded = check.bounded)
     # stackedVertices <- lapply(cell, function(edge) edge$stack())

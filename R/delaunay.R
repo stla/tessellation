@@ -286,6 +286,7 @@ delaunay <- function(
       "surface" = sum(areas)
     )
     attr(out, "elevation") <- TRUE
+    class(out) <- "delaunay"
     return(out)
   }
   if(anyDuplicated(points)){
@@ -373,15 +374,16 @@ delaunay <- function(
 #' tess <- delaunay(pts)
 #' getDelaunaySimplicies(tess)
 getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
-  if(isTRUE(attr(tessellation, "elevation"))){
-    stop(
-      "This function is not conceived for elevated Delaunay tessellations.",
-      call. = TRUE
-    )
-  }
+  stopifnot(isBoolean(hashes))
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
       call. = TRUE
     )
   }
@@ -434,15 +436,15 @@ plotDelaunay2D <- function(
   tessellation, border = "black", color = "distinct", hue = "random",
   luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
 ){
-  if(isTRUE(attr(tessellation, "elevation"))){
-    stop(
-      "This function is not conceived for elevated Delaunay tessellations.",
-      call. = TRUE
-    )
-  }
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
       call. = TRUE
     )
   }
@@ -536,15 +538,16 @@ plotDelaunay3D <- function(
   tessellation, color = "distinct", hue = "random", luminosity = "light",
   alpha = 0.3, exteriorEdgesAsTubes = FALSE, tubeRadius, tubeColor
 ){
-  if(isTRUE(attr(tessellation, "elevation"))){
-    stop(
-      "This function is not conceived for elevated Delaunay tessellations.",
-      call. = TRUE
-    )
-  }
+  stopifnot(isBoolean(exteriorEdgesAsTubes))
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
       call. = TRUE
     )
   }
@@ -624,6 +627,12 @@ volume <- function(tessellation){
       call. = TRUE
     )
   }
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
+      call. = TRUE
+    )
+  }
   tileVolumes <- vapply(tessellation[["tiles"]], function(tile){
     tile[["simplex"]][["volume"]]
   }, numeric(1L))
@@ -655,6 +664,12 @@ surface <- function(tessellation){
   if(!inherits(tessellation, "delaunay")){
     stop(
       "The argument `tessellation` must be an output of the `delaunay` function.",
+      call. = TRUE
+    )
+  }
+  if(isTRUE(attr(tessellation, "elevation"))){
+    stop(
+      "This function is not conceived for elevated Delaunay tessellations.",
       call. = TRUE
     )
   }
