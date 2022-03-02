@@ -299,19 +299,26 @@ delaunay <- function(
     # edges <- t(vapply(del[["tilefacets"]], function(x){
     #   as.integer(keys(x[["subsimplex"]][["vertices"]]))
     # }, numeric(2L)))
-    volumes <- apply(Triangles, 1L, function(trgl){
+    # volumes <- apply(Triangles, 1L, function(trgl){
+    #   trgl <- vertices[trgl, ]
+    #   volume_under_triangle(trgl[, 1L], trgl[, 2L], trgl[, 3L])
+    # })
+    # areas <- apply(Triangles, 1L, function(trgl){
+    #   trgl <- vertices[trgl, ]
+    #   triangleArea(trgl[1L, ], trgl[2L, ], trgl[3L, ])
+    # })
+    volumes_and_areas <- apply(Triangles, 1L, function(trgl){
       trgl <- vertices[trgl, ]
-      volume_under_triangle(trgl[, 1L], trgl[, 2L], trgl[, 3L])
-    })
-    areas <- apply(Triangles, 1L, function(trgl){
-      trgl <- vertices[trgl, ]
-      triangleArea(trgl[1L, ], trgl[2L, ], trgl[3L, ])
+      c(
+        volume_under_triangle(trgl[, 1L], trgl[, 2L], trgl[, 3L]),
+        triangleArea(trgl[1L, ], trgl[2L, ], trgl[3L, ])
+      )
     })
     out <- list(
       "mesh"    = mesh,
       "edges"   = vcgGetEdge(mesh),
-      "volume"  = sum(volumes),
-      "surface" = sum(areas)
+      "volume"  = sum(volumes_and_areas[1L, ]),
+      "surface" = sum(volumes_and_areas[2L, ])
     )
     attr(out, "elevation") <- TRUE
     class(out) <- "delaunay"
