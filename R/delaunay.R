@@ -263,17 +263,15 @@ delaunay <- function(
     y <- points[, 2L]
     x <- (x - min(x)) / diff(range(x))
     y <- (y - min(y)) / diff(range(y))
-    xy <- cbind(x, y)
     #xy <- points[, c(1L, 2L)]
-    o <- order(round(x+y, 6), y-x)
-    xy <- xy[o, ]
+    o <- order(round(x+y, 6L), y-x)
+    xy <- cbind(x, y)[o, ]
+    if(anyDuplicated(xy)){
+      stop("There are some duplicated points.", call. = TRUE)
+    }
     points <- points[o, ]
     # xy <- round(points[, c(1L, 2L)], 6)
-    cat("tripack<<\n")
-    print(dim(xy))
-    print(str(xy))
     Triangles <- triangles(tri.mesh(xy[, 1L], xy[, 2L]))
-    cat("tripack>>\n")
     # dd <- deldir::deldir(points[,1], points[,2], sort = FALSE, round = FALSE)
 
     # delVertices <- del[["vertices"]]
