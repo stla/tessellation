@@ -4,7 +4,7 @@ f <- function(x, y){
   exp(-(x*x + y*y))
 }
 x <- seq(0, 5, length.out = 60)
-y <- seq(-5, 5, length.out = 60)
+y <- seq(-5, 0, length.out = 60)
 points <- as.matrix(transform( # data (x_i, y_i, z_i)
   expand.grid(x = x, y = y), z = f(x, y)
 ))
