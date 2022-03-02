@@ -255,15 +255,21 @@ delaunay <- function(
     #   exteriorEdges = FALSE, elevation = FALSE
     # )
     # cgal <- RCGAL::delaunay(points[, c(1L, 2L)])
-    xy <- points[, c(1L, 2L)]
-    o <- order(round(rowSums(xy),6), xy[, 2L]-xy[, 1L])
+
+    x <- points[, 1L]
+    y <- points[, 2L]
+    x <- (x - min(x)) / diff(range(x))
+    y <- (y - min(y)) / diff(range(y))
+    xy <- cbind(x, y)
+    #xy <- points[, c(1L, 2L)]
+    o <- order(round(x+y, 6), y-x)
     xy <- xy[o, ]
     points <- points[o, ]
     # xy <- round(points[, c(1L, 2L)], 6)
     cat("tripack<<\n")
     print(dim(xy))
     print(str(xy))
-    Triangles <- triangles(tri.mesh(xy[,1], xy[,2]))
+    Triangles <- triangles(tri.mesh(xy[, 1L], xy[, 2L]))
     cat("tripack>>\n")
     # dd <- deldir::deldir(points[,1], points[,2], sort = FALSE, round = FALSE)
 
@@ -282,7 +288,7 @@ delaunay <- function(
     #   indices
     # }))
     # triangles <- cgal$faces
-    Triangles <- Triangles[, 1:3]
+    Triangles <- Triangles[, 1L:3L]
     #triangles <- deldir::triMat(dd)
     vertices <- points
     mesh <- tmesh3d(

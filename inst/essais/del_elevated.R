@@ -3,7 +3,7 @@ library(tessellation)
 f <- function(x, y){
   exp(-(x*x + y*y))
 }
-x <- seq(-5, 5, length.out = 60)
+x <- seq(0, 5, length.out = 60)
 y <- seq(-5, 5, length.out = 60)
 points <- as.matrix(transform( # data (x_i, y_i, z_i)
   expand.grid(x = x, y = y), z = f(x, y)
@@ -13,6 +13,13 @@ del <- delaunay(points, elevation = TRUE)
 dd <- RCGAL::delaunay(points, elevation = TRUE)
 del$volume
 dd$volume
+
+library(rgl)
+mesh <- del$mesh
+open3d(windowRect = c(50, 50, 562, 562))
+shade3d(mesh, color = "yellow")
+wire3d(mesh, color = "black")
+
 
 xy <- as.matrix(expand.grid(x = x, y = y))
 # xyo <- xy[order(rowSums(xy)), ]
