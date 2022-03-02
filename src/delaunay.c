@@ -30,7 +30,7 @@ TesselationT* tesselation(double* sites,
                           unsigned* exitcode,
                           const char* errfilename) {
   char opts[50]; /* option flags for qhull, see qh_opt.htm */
-  sprintf(opts, "qhull d Qt Q7 Qbb%s%s", atinfinity ? " Qz" : "",
+  sprintf(opts, "qhull d Qt Qbb%s%s", atinfinity ? " Qz" : "",
           dim > 3 ? " Qx" : "");
   qhT qh_qh; /* Qhull's data structure */
   qhT* qh = &qh_qh;

@@ -175,6 +175,7 @@ volume_under_triangle <- function(x, y, z){
 #' @importFrom hash hash keys
 #' @importFrom rgl tmesh3d
 #' @importFrom tripack tri.mesh triangles
+#' @importFrom Rvcg vcgGetEdge
 #'
 #' @note The package provides the functions \code{\link{plotDelaunay2D}} to
 #'   plot a 2D Delaunay tessellation and \code{\link{plotDelaunay3D}} to
@@ -302,7 +303,7 @@ delaunay <- function(
     })
     out <- list(
       "mesh"    = mesh,
-      "edges"   = NULL,#edges,
+      "edges"   = vcgGetEdge(mesh),
       "volume"  = sum(volumes),
       "surface" = sum(areas)
     )
