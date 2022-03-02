@@ -174,6 +174,7 @@ volume_under_triangle <- function(x, y, z){
 #' @useDynLib tessellation, .registration = TRUE
 #' @importFrom hash hash keys
 #' @importFrom rgl tmesh3d
+#' @importFrom tripack tri.mesh triangles
 #'
 #' @note The package provides the functions \code{\link{plotDelaunay2D}} to
 #'   plot a 2D Delaunay tessellation and \code{\link{plotDelaunay3D}} to
@@ -248,40 +249,60 @@ delaunay <- function(
     }
     # elevations <- points[, 3L]
     # points <- points[, c(1L, 2L)]
-    del <- delaunay(
-      points[, c(1L, 2L)], atinfinity = atinfinity, degenerate = degenerate,
-      exteriorEdges = FALSE, elevation = FALSE
-    )
-    delVertices <- del[["vertices"]]
-    ids <- vapply(delVertices, `[[`, integer(1L), "id")
+    # del <- delaunay(
+    #   points[, c(1L, 2L)], atinfinity = atinfinity, degenerate = degenerate,
+    #   exteriorEdges = FALSE, elevation = FALSE
+    # )
+    # cgal <- RCGAL::delaunay(points[, c(1L, 2L)])
+    xy <- points[, c(1L, 2L)]
+    o <- order(round(rowSums(xy),6), xy[, 2L]-xy[, 1L])
+    xy <- xy[o, ]
+    points <- points[o, ]
+    # xy <- round(points[, c(1L, 2L)], 6)
+    cat("tripack<<\n")
+    print(dim(xy))
+    print(str(xy))
+    Triangles <- triangles(tri.mesh(xy[,1], xy[,2]))
+    cat("tripack>>\n")
+    # dd <- deldir::deldir(points[,1], points[,2], sort = FALSE, round = FALSE)
+
+    # delVertices <- del[["vertices"]]
+    # ids <- vapply(delVertices, `[[`, integer(1L), "id")
+
     #vertices <- do.call(cbind, lapply(delVertices, `[[`, "point"))
-    vertices <- points[ids, ]
-    triangles <- do.call(rbind, lapply(del[["tiles"]], function(tile){
-      indices <- tile[["vertices"]]
-      if(tile[["orientation"]] == -1L){
-        indices <- indices[c(1L, 3L, 2L)]
-      }
-      indices
-    }))
+
+    # vertices <- points[ids, ]
+
+    # triangles <- do.call(rbind, lapply(del[["tiles"]], function(tile){
+    #   indices <- tile[["vertices"]]
+    #   if(tile[["orientation"]] == -1L){
+    #     indices <- indices[c(2L, 1L, 3L)]
+    #   }
+    #   indices
+    # }))
+    # triangles <- cgal$faces
+    Triangles <- Triangles[, 1:3]
+    #triangles <- deldir::triMat(dd)
+    vertices <- points
     mesh <- tmesh3d(
       vertices = t(vertices),
-      indices = t(triangles),
+      indices = t(Triangles),
       homogeneous = FALSE
     )
-    edges <- t(vapply(del[["tilefacets"]], function(x){
-      as.integer(keys(x[["subsimplex"]][["vertices"]]))
-    }, numeric(2L)))
-    volumes <- apply(triangles, 1L, function(trgl){
+    # edges <- t(vapply(del[["tilefacets"]], function(x){
+    #   as.integer(keys(x[["subsimplex"]][["vertices"]]))
+    # }, numeric(2L)))
+    volumes <- apply(Triangles, 1L, function(trgl){
       trgl <- vertices[trgl, ]
       volume_under_triangle(trgl[, 1L], trgl[, 2L], trgl[, 3L])
     })
-    areas <- apply(triangles, 1L, function(trgl){
+    areas <- apply(Triangles, 1L, function(trgl){
       trgl <- vertices[trgl, ]
       triangleArea(trgl[1L, ], trgl[2L, ], trgl[3L, ])
     })
     out <- list(
       "mesh"    = mesh,
-      "edges"   = edges,
+      "edges"   = NULL,#edges,
       "volume"  = sum(volumes),
       "surface" = sum(areas)
     )
