@@ -1,4 +1,4 @@
-# tessellation 1.0.0.9000
+# tessellation 2.0.0
 
 New feature: elevated Delaunay tesselation.
 
