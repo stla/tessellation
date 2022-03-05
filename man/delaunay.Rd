@@ -39,7 +39,7 @@ If the function performs an elevated Delaunay tessellation, then
   the sum of the areas of the Delaunay triangles, thus this an approximate
   value of the area of the surface that is triangulated.
   The elevated Delaunay tessellation is built with the help of the
-  \strong{tripack} package.
+  \strong{interp} package.
 
 Otherwise, the function returns the Delaunay tessellation with many details,
   in a list. This list contains three fields:

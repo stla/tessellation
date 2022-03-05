@@ -10,7 +10,7 @@ Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
 Description: Delaunay and Voronoï tessellations, with emphasis on the two-dimensional and the three-dimensional cases (the package provides functions to plot the tessellations for these cases). Delaunay tessellations are computed in C with the help of the 'Qhull' library <http://www.qhull.org/>.
 License: GPL-3
 Encoding: UTF-8
-Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales, english, tripack, Rvcg
+Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales, english, interp, Rvcg
 Suggests: 
     rmarkdown,
     knitr,
