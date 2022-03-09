@@ -23,20 +23,22 @@ delaunay(
 the exterior edges (see below)}
 
 \item{elevation}{Boolean, only for three-dimensional points; if \code{TRUE},
-the function performs an elevated Delaunay tessellation, using the
-third coordinate of a point for its elevation; see the example}
+the function performs an elevated Delaunay triangulation (also called 2.5D
+Delaunay triangulation), using the third coordinate of a point as its
+elevation; see the example}
 }
 \value{
 If the function performs an elevated Delaunay tessellation, then
   the returned value is a list with four fields: \code{mesh}, \code{edges},
   \code{volume}, and \code{surface}. The \code{mesh} field is an object of
   class \code{mesh3d}, ready for plotting with the \strong{rgl} package. The
-  \code{edges} field provides the indices of the vertices of the edges, and
-  others informations; see \code{\link[Rvcg]{vcgGetEdge}}.
+  \code{edges} field is an integer matrix which provides the indices of the
+  vertices of the edges, and an indicator of whether an edge is a border
+  edge; this matrix is obtained with \code{\link[Rvcg]{vcgGetEdge}}.
   The \code{volume} field provides the sum of the
   volumes under the Delaunay triangles, that is to say the total volume
   under the triangulated surface. Finally, the \code{surface} field provides
-  the sum of the areas of the Delaunay triangles, thus this an approximate
+  the sum of the areas of the Delaunay triangles, thus this is an approximate
   value of the area of the surface that is triangulated.
   The elevated Delaunay tessellation is built with the help of the
   \strong{interp} package.
@@ -46,8 +48,8 @@ Otherwise, the function returns the Delaunay tessellation with many details,
 \describe{
   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these
   are the points passed to the function}
-  \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
-  tetrahedra in dimension 3)}
+  \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension
+  2, tetrahedra in dimension 3)}
   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
   \item{\emph{mesh}}{a 'rgl' mesh (\code{\link[rgl]{mesh3d}} object)}
   \item{\emph{edges}}{a two-columns integer matrix representing the edges,
@@ -145,6 +147,33 @@ open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
 aspect3d(1, 1, 20)
 shade3d(mesh, color = "limegreen")
 wire3d(mesh)
+
+# another elevated Delaunay triangulation, to check the correctness of
+#   the calculated surface ####
+library(Rvcg)
+library(rgl)
+cap <- vcgSphericalCap(angleRad = pi/2, subdivision = 3)
+open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
+shade3d(cap, color = "lawngreen")
+wire3d(cap)
+# exact value of the surface of the spherical cap:
+R <- 1
+h <- R * (1 - sin(pi/2/2))
+2 * pi * R * h
+# our approximation:
+points <- t(cap$vb[-4, ]) # the points on the spherical cap
+del <- delaunay(points, elevation = TRUE)
+del[["surface"]]
+# try to increase `subdivision` in `vcgSphericalCap` to get a
+#   better approximation of the true value
+# note that 'Rvcg' returns the same result as ours:
+vcgArea(cap)
+# let's check the volume as well:
+pi * h^2 * (R - h/3) # true value
+del[["volume"]]
+# there's a warning with 'Rvcg':
+tryCatch(vcgVolume(cap), warning = function(w) message(w))
+suppressWarnings({vcgVolume(cap)})
 }
 \seealso{
 \code{\link{getDelaunaySimplicies}}
