@@ -357,11 +357,22 @@ delaunay <- function(
       hash(as.character(vertices), pointsAsList[vertices])
   }
   tilefacets <- tess[["tilefacets"]]
-  for(i in seq_along(tilefacets)){
-    subsimplex <- tilefacets[[i]][["subsimplex"]]
-    vertices <- subsimplex[["vertices"]]
-    tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
-      hash(as.character(vertices), pointsAsList[vertices])
+  if(dimension == 3L){
+    nTriangles <- length(tilefacets)
+    Triangles <- matrix(NA_integer_, nrow = nTriangles, ncol = 3L)
+    for(i in 1L:nTriangles){
+      subsimplex <- tilefacets[[i]][["subsimplex"]]
+      vertices <- Triangles[i, ] <- subsimplex[["vertices"]]
+      tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
+        hash(as.character(vertices), pointsAsList[vertices])
+    }
+  }else{
+    for(i in seq_along(tilefacets)){
+      subsimplex <- tilefacets[[i]][["subsimplex"]]
+      vertices <- subsimplex[["vertices"]]
+      tess[["tilefacets"]][[i]][["subsimplex"]][["vertices"]] <-
+        hash(as.character(vertices), pointsAsList[vertices])
+    }
   }
   attr(tess, "points") <- points
   if(dimension == 3L && exteriorEdges){
@@ -375,6 +386,14 @@ delaunay <- function(
       "A subsimplex volume is nothing but the length of an edge."
     )
   }else if(dimension == 3L){
+    tess[["mesh"]] <- mesh <- tmesh3d(
+      vertices = t(points),
+      indices = t(Triangles)
+    )
+    tess[["edges"]] <- `colnames<-`(
+      as.matrix(vcgGetEdge(mesh))[, c(1L, 2L, 3L)],
+      c("v1", "v2", "triangle")
+    )
     attr(tess[["tiles"]], "info") <-
       "Dimension 3. Tiles are tetrahedra."
     attr(tess[["tilefacets"]], "info") <- paste0(
