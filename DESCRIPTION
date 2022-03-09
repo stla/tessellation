@@ -1,7 +1,7 @@
 Package: tessellation
 Type: Package
 Title: Delaunay and Voronoï Tessellations
-Version: 2.0.0
+Version: 2.0.0.9000
 Authors@R: c(
   person("Stéphane", "Laurent", role=c("aut","cre"), email="laurent_step@outlook.fr"),
   person("C. B.", "Barber", role="cph", comment="author of the Qhull library"),

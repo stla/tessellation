@@ -13,7 +13,9 @@ Edge3 <- R6Class(
 
   private = list(
     .A = c(NA_real_, NA_real_, NA_real_),
-    .B = c(NA_real_, NA_real_, NA_real_)
+    .B = c(NA_real_, NA_real_, NA_real_),
+    .idA = NA_integer_,
+    .idB = NA_integer_
   ),
 
   active = list(
@@ -45,20 +47,53 @@ Edge3 <- R6Class(
         )
         private[[".B"]] <- B
       }
+    },
+
+    #' @field idA get or set the id of vertex \code{A}
+    idA = function(value) {
+      if(missing(value)){
+        private[[".idA"]]
+      } else {
+        idA <- as.vector(value)
+        stopifnot(
+          is.atomic(idA),
+          is.numeric(idA),
+          length(idA) == 1L
+        )
+        private[[".idA"]] <- idA
+      }
+    },
+
+    #' @field idB get or set the id of vertex \code{B}
+    idB = function(value){
+      if(missing(value)){
+        private[[".idB"]]
+      } else {
+        idB <- as.vector(value)
+        stopifnot(
+          is.atomic(idB),
+          is.numeric(idB),
+          length(idB) == 1L
+        )
+        private[[".idB"]] <- idB
+      }
     }
+
   ),
 
   public = list(
     #' @description Create a new \code{Edge3} object.
     #' @param A the vertex \code{A}
     #' @param B the vertex \code{B}
+    #' @param idA the id of vertex \code{A}, an integer; can be missing
+    #' @param idB the id of vertex \code{B}, an integer; can be missing
     #' @return A new \code{Edge3} object.
     #' @examples edge <- Edge3$new(c(1, 1, 1), c(1, 2, 3))
     #' edge
     #' edge$A
     #' edge$A <- c(1, 0, 0)
     #' edge
-    initialize = function(A, B) {
+    initialize = function(A, B, idA, idB) {
       A <- as.vector(A)
       stopifnot(
         is.numeric(A),
@@ -78,15 +113,51 @@ Edge3 <- R6Class(
       }
       private[[".A"]] <- A
       private[[".B"]] <- B
+
+      if(!missing(idA)){
+        idA <- as.vector(idA)
+        stopifnot(
+          is.atomic(idA),
+          is.numeric(idA),
+          length(idA) == 1L
+        )
+        private[[".idA"]] <- as.integer(idA)
+      }else{
+        private[[".idA"]] <- NA_integer_
+      }
+      if(!missing(idB)){
+        idB <- as.vector(idB)
+        stopifnot(
+          is.atomic(idB),
+          is.numeric(idB),
+          length(idB) == 1L
+        )
+        private[[".idB"]] <- as.integer(idB)
+      }else{
+        private[[".idB"]] <- NA_integer_
+      }
+
     },
 
     #' @description Show instance of an \code{Edge3} object.
     #' @param ... ignored
     #' @examples Edge3$new(c(2, 0, 0), c(3, -1, 4))
     print = function(...) {
+      idA <- private[[".idA"]]
+      idB <- private[[".idB"]]
+      if(!is.na(idA)){
+        idA <- sprintf(" (%d)", idA)
+      }else{
+        idA <- ""
+      }
+      if(!is.na(idB)){
+        idB <- sprintf(" (%d)", idB)
+      }else{
+        idB <- ""
+      }
       cat("Edge:\n")
-      cat(" vertex A: ", toString(private[[".A"]]), "\n", sep = "")
-      cat(" vertex B: ", toString(private[[".B"]]), "\n", sep = "")
+      cat(" vertex A: ", toString(private[[".A"]]), idA, "\n", sep = "")
+      cat(" vertex B: ", toString(private[[".B"]]), idB, "\n", sep = "")
     },
 
     #' @description Plot an \code{Edge3} object.

@@ -42,13 +42,17 @@ If the function performs an elevated Delaunay tessellation, then
   \strong{interp} package.
 
 Otherwise, the function returns the Delaunay tessellation with many details,
-  in a list. This list contains three fields:
+  in a list. This list contains five fields:
 \describe{
   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these
   are the points passed to the function}
   \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
   tetrahedra in dimension 3)}
   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
+  \item{\emph{mesh}}{a 'rgl' mesh (\code{\link[rgl]{mesh3d}} object)}
+  \item{\emph{edges}}{a two-columns integer matrix representing the edges,
+  each row represents an edge; the two integers of a row are the indices of
+  the two points which form the edge.}
 }
 In dimension 3, the list contains an additional field \emph{exteriorEdges}
   if you set \code{exteriorEdges = TRUE}. This is the list of the exterior

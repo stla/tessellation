@@ -45,6 +45,10 @@ invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
 \item{\code{A}}{get or set the vertex \code{A}}
 
 \item{\code{B}}{get or set the vertex \code{B}}
+
+\item{\code{idA}}{get or set the id of vertex \code{A}}
+
+\item{\code{idB}}{get or set the id of vertex \code{B}}
 }
 \if{html}{\out{</div>}}
 }
@@ -64,7 +68,7 @@ invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
 \subsection{Method \code{new()}}{
 Create a new \code{Edge3} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Edge3$new(A, B)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Edge3$new(A, B, idA, idB)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -73,6 +77,10 @@ Create a new \code{Edge3} object.
 \item{\code{A}}{the vertex \code{A}}
 
 \item{\code{B}}{the vertex \code{B}}
+
+\item{\code{idA}}{the id of vertex \code{A}, an integer; can be missing}
+
+\item{\code{idB}}{the id of vertex \code{B}, an integer; can be missing}
 }
 \if{html}{\out{</div>}}
 }

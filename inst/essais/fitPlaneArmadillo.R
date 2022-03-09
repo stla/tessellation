@@ -1,5 +1,23 @@
 
 cpp <- '
+arma::umat tcp(const arma::umat & A){
+  arma::umat M(A*A.t());
+  return M;
+}
+'
+library(Rcpp)
+cppFunction(
+  cpp,
+  depends = "RcppArmadillo"
+)
+
+A <- toeplitz(c(1L, 2L))
+M <- tcp(A)
+str(M)
+# num [1:2, 1:2] 5 4 4 5
+
+
+cpp <- '
 arma::mat fitPlane(const arma::mat& points){
   int K(points.n_rows);
   arma::mat A(points.t());

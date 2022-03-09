@@ -39,23 +39,28 @@ exteriorDelaunayEdges <- function(tessellation){
   edges <- unique(edges)
   hullfacets <- cxhull(points)[["facets"]]
   edges3 <- list()
-  vertices <- NULL
+  vertices <- matrix(nrow = 0L, ncol = 3L)
+  rnames <- integer(0L)
   for(i in 1L:nrow(edges)){
     edge <- edges[i, ]
-    A <- points[edge[1L], ]
+    idA <- edge[1L]
+    A <- points[idA, ]
     x <- vapply(hullfacets, function(f){
       c(crossprod(f[["normal"]], A)) + f[["offset"]]
     }, numeric(1L))
     Abelongs <- which(abs(x) < prec)
-    B <- points[edge[2L], ]
+    idB <- edge[2L]
+    B <- points[idB, ]
     if(length(Abelongs)){
       x <- vapply(Abelongs, function(j){
         f <- hullfacets[[j]]
         c(crossprod(f[["normal"]], B)) + f[["offset"]]
       }, numeric(1L))
       if(any(abs(x) < prec)){
-        edges3 <- append(edges3, list(Edge3$new(A = A, B = B)))
+        edges3 <-
+          append(edges3, list(Edge3$new(A = A, B = B, idA = idA, idB = idB)))
         vertices <- rbind(vertices, A, B)
+        rnames <- c(rnames, c(idA, idB))
       }
     }
   }
@@ -74,7 +79,9 @@ exteriorDelaunayEdges <- function(tessellation){
   # unique_edges <- edges[which(table(A_Bs) == 1L), ]
   # print(unique_edges)
   #  edges < unique(edges)
-  vertices <- unique(vertices)
+  o <- order(rnames)
+  vertices <- vertices[o, ]
+  rownames(vertices) <- as.character(rnames[o])
   # vertices <- points[unique(c(edges)), ]
   # nedges <- nrow(edges)
   # edges3 <- vector("list", length = nedges)
@@ -83,7 +90,7 @@ exteriorDelaunayEdges <- function(tessellation){
   #   edges3[[i]] <-
   #     Edge3$new(A = points[edge[1L], ], B = points[edge[2L], ])
   # }
-  attr(edges3, "vertices") <- vertices
+  attr(edges3, "vertices") <- unique(vertices)
   edges3
 }
 
@@ -120,13 +127,17 @@ volume_under_triangle <- function(x, y, z){
 #'   \strong{interp} package.
 #'
 #' Otherwise, the function returns the Delaunay tessellation with many details,
-#'   in a list. This list contains three fields:
+#'   in a list. This list contains five fields:
 #' \describe{
 #'   \item{\emph{vertices}}{the vertices (or sites) of the tessellation; these
 #'   are the points passed to the function}
 #'   \item{\emph{tiles}}{the tiles of the tessellation (triangles in dimension 2,
 #'   tetrahedra in dimension 3)}
 #'   \item{\emph{tilefacets}}{the facets of the tiles of the tessellation}
+#'   \item{\emph{mesh}}{a 'rgl' mesh (\code{\link[rgl]{mesh3d}} object)}
+#'   \item{\emph{edges}}{a two-columns integer matrix representing the edges,
+#'   each row represents an edge; the two integers of a row are the indices of
+#'   the two points which form the edge.}
 #' }
 #' In dimension 3, the list contains an additional field \emph{exteriorEdges}
 #'   if you set \code{exteriorEdges = TRUE}. This is the list of the exterior
@@ -391,8 +402,8 @@ delaunay <- function(
       indices = t(Triangles)
     )
     tess[["edges"]] <- `colnames<-`(
-      as.matrix(vcgGetEdge(mesh))[, c(1L, 2L, 3L)],
-      c("v1", "v2", "triangle")
+      as.matrix(vcgGetEdge(mesh))[, c(1L, 2L)],
+      c("v1", "v2")
     )
     attr(tess[["tiles"]], "info") <-
       "Dimension 3. Tiles are tetrahedra."
@@ -614,9 +625,9 @@ plotDelaunay3D <- function(
     )
   }
   simplicies <- getDelaunaySimplicies(tessellation, hashes = TRUE)
-  edges <- unique(do.call(rbind, lapply(simplicies, function(simplex){
-    t(combn(as.integer(keys(simplex)), 2L))
-  })))
+  # edges <- unique(do.call(rbind, lapply(simplicies, function(simplex){
+  #   t(combn(as.integer(keys(simplex)), 2L))
+  # })))
   nsimplicies <- length(simplicies)
   if(!isFALSE(color)){
     color <- match.arg(color, c("random", "distinct"))
@@ -633,6 +644,7 @@ plotDelaunay3D <- function(
       }
     }
   }
+  edges <- tessellation[["edges"]]
   for(i in 1L:nrow(edges)){
     edge <- edges[i, ]
     p1 <- vertices[edge[1L], ]
