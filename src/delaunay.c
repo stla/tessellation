@@ -9,13 +9,6 @@
 #include "qhull_ra.h"
 #include "utils.h"
 
-// void printfacet(qhT* qh, facetT* facet){
-//   vertexT *vertex, **vertexp;
-//   FOREACHvertex_(facet->vertices){
-//     printf("facetid: %d, pointid: %d ", facet->id, qh_pointid(qh,
-//     vertex->point));
-//   }
-// }
 
 unsigned facetOK_(facetT* facet, unsigned degenerate) {
   return !facet->upperdelaunay && (degenerate || !facet->degenerate);
