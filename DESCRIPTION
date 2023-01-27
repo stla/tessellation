@@ -1,23 +1,41 @@
-Package: tessellation
 Type: Package
+Package: tessellation
 Title: Delaunay and Voronoï Tessellations
-Version: 2.1.0
+Version: 2.1.1
 Authors@R: c(
-  person("Stéphane", "Laurent", role=c("aut","cre"), email="laurent_step@outlook.fr"),
-  person("C. B.", "Barber", role="cph", comment="author of the Qhull library"),
-  person("The Geometry Center", role="cph"))
+    person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre")),
+    person("C. B.", "Barber", role = "cph",
+           comment = "author of the Qhull library"),
+    person("The Geometry Center", role = "cph")
+  )
 Maintainer: Stéphane Laurent <laurent_step@outlook.fr>
-Description: Delaunay and Voronoï tessellations, with emphasis on the two-dimensional and the three-dimensional cases (the package provides functions to plot the tessellations for these cases). Delaunay tessellations are computed in C with the help of the 'Qhull' library <http://www.qhull.org/>.
+Description: Delaunay and Voronoï tessellations, with emphasis on the
+    two-dimensional and the three-dimensional cases (the package provides
+    functions to plot the tessellations for these cases). Delaunay
+    tessellations are computed in C with the help of the 'Qhull' library
+    <http://www.qhull.org/>.
 License: GPL-3
-Encoding: UTF-8
-Imports: hash, rgl, randomcoloR, utils, R6, sets, cxhull, graphics, scales, english, interp, Rvcg
-Suggests: 
-    rmarkdown,
-    knitr,
-    uniformly,
-    viridisLite,
-    paletteer
 URL: https://github.com/stla/tessellation,
     https://stla.github.io/tessellation/
 BugReports: https://github.com/stla/tessellation/issues
+Imports: 
+    cxhull,
+    english,
+    graphics,
+    hash,
+    interp,
+    R6,
+    randomcoloR,
+    rgl,
+    Rvcg,
+    scales,
+    sets,
+    utils
+Suggests: 
+    knitr,
+    paletteer,
+    rmarkdown,
+    uniformly,
+    viridisLite
+Encoding: UTF-8
 RoxygenNote: 7.1.2

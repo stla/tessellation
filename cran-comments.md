@@ -1,10 +1,4 @@
-
-## Testing environments
-
-- local R 4.1.2 installation, Windows 10
-- win-builder
-- Ubuntu 20, via Github action
-- mac-builder
+I replaced `sprintf` with `snprintf`.
 
 
 ## R CMD check results

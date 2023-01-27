@@ -1,3 +1,8 @@
+# tessellation 2.1.1
+
+Changed `sprintf` to `snprintf` in the C code.
+
+
 # tessellation 2.1.0
 
 * Improved doc and examples.
