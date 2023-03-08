@@ -1,7 +1,7 @@
 Type: Package
 Package: tessellation
 Title: Delaunay and Voronoï Tessellations
-Version: 2.1.1
+Version: 2.1.2
 Authors@R: c(
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre")),
     person("C. B.", "Barber", role = "cph",
