@@ -1,4 +1,4 @@
-I replaced `sprintf` with `snprintf`.
+I fixed the `snprintf` calls.
 
 
 ## R CMD check results
