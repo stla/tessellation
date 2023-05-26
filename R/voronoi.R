@@ -433,7 +433,7 @@ plotVoronoiDiagram <- function(
       randomColor(ncells, hue = hue, luminosity = luminosity), alpha
     )
   }else if(identical(colors, "distinct")){
-    colors <- scales::alpha(distinctColorPalette(ncells))
+    colors <- scales::alpha(distinctColorPalette(ncells), alpha)
   }else if(identical(colors, NA)){
     colors <- rep(NA, ncells)
   }else{
@@ -444,9 +444,8 @@ plotVoronoiDiagram <- function(
           ncells, length(colors)
         )
       )
-    }else{
-      colors <- scales::alpha(colors)
     }
+    colors <- scales::alpha(colors, alpha)
   }
   if(dimension == 2L){
     for(i in 1L:ncells){

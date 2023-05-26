@@ -1,3 +1,8 @@
+# tessellation 2.1.3
+
+Fixed a minor mistake in the `plotVoronoiDiagram` function.
+
+
 # tessellation 2.1.2
 
 Fixed a small mistake in the C code.

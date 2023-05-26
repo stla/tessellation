@@ -55,16 +55,16 @@ invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Edge3$new()}}
-\item \href{#method-print}{\code{Edge3$print()}}
-\item \href{#method-plot}{\code{Edge3$plot()}}
-\item \href{#method-stack}{\code{Edge3$stack()}}
-\item \href{#method-clone}{\code{Edge3$clone()}}
+\item \href{#method-Edge3-new}{\code{Edge3$new()}}
+\item \href{#method-Edge3-print}{\code{Edge3$print()}}
+\item \href{#method-Edge3-plot}{\code{Edge3$plot()}}
+\item \href{#method-Edge3-stack}{\code{Edge3$stack()}}
+\item \href{#method-Edge3-clone}{\code{Edge3$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Edge3-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Edge3-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{Edge3} object.
 \subsection{Usage}{
@@ -101,8 +101,8 @@ edge
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Edge3-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Edge3-print}{}}}
 \subsection{Method \code{print()}}{
 Show instance of an \code{Edge3} object.
 \subsection{Usage}{
@@ -126,8 +126,8 @@ Show instance of an \code{Edge3} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-plot"></a>}}
-\if{latex}{\out{\hypertarget{method-plot}{}}}
+\if{html}{\out{<a id="method-Edge3-plot"></a>}}
+\if{latex}{\out{\hypertarget{method-Edge3-plot}{}}}
 \subsection{Method \code{plot()}}{
 Plot an \code{Edge3} object.
 \subsection{Usage}{
@@ -162,8 +162,8 @@ invisible(lapply(cell13[["cell"]], function(edge) edge$plot()))
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-stack"></a>}}
-\if{latex}{\out{\hypertarget{method-stack}{}}}
+\if{html}{\out{<a id="method-Edge3-stack"></a>}}
+\if{latex}{\out{\hypertarget{method-Edge3-stack}{}}}
 \subsection{Method \code{stack()}}{
 Stack the two vertices of the edge (this is for internal
 purpose).
@@ -173,8 +173,8 @@ purpose).
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Edge3-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Edge3-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

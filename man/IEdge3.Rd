@@ -37,14 +37,14 @@ IEdge3$new(c(2, 0, 0), c(3, -1, 4))
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{IEdge3$new()}}
-\item \href{#method-print}{\code{IEdge3$print()}}
-\item \href{#method-clone}{\code{IEdge3$clone()}}
+\item \href{#method-IEdge3-new}{\code{IEdge3$new()}}
+\item \href{#method-IEdge3-print}{\code{IEdge3$print()}}
+\item \href{#method-IEdge3-clone}{\code{IEdge3$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-IEdge3-new"></a>}}
+\if{latex}{\out{\hypertarget{method-IEdge3-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{IEdge3} object.
 \subsection{Usage}{
@@ -77,8 +77,8 @@ iedge
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-IEdge3-print"></a>}}
+\if{latex}{\out{\hypertarget{method-IEdge3-print}{}}}
 \subsection{Method \code{print()}}{
 Show instance of an \code{IEdge3} object.
 \subsection{Usage}{
@@ -102,8 +102,8 @@ Show instance of an \code{IEdge3} object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-IEdge3-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-IEdge3-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
