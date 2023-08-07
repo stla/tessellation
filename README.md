@@ -40,6 +40,11 @@ The Voronoï diagram of some points along a Fermat spiral:
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/VoronoiFermatSpiral3.gif)
 
+The Voronoï diagram of an enclosed septuaginta:
+
+![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/septuaginta.gif)
+
+
 An elevated Delaunay tessellation:
 
 ![](https://raw.githubusercontent.com/stla/tessellation/main/inst/screenshots/volcano.png)
