@@ -1,3 +1,8 @@
+# tessellation 2.1.3.9000
+
+Fixed a misspelled word.
+
+
 # tessellation 2.1.3
 
 Fixed a minor mistake in the `plotVoronoiDiagram` function.

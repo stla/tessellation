@@ -176,5 +176,5 @@ tryCatch(vcgVolume(cap), warning = function(w) message(w))
 suppressWarnings({vcgVolume(cap)})
 }
 \seealso{
-\code{\link{getDelaunaySimplicies}}
+\code{\link{getDelaunaySimplices}}
 }

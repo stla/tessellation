@@ -199,7 +199,7 @@ volume_under_triangle <- function(x, y, z){
 #'   elevated Delaunay tessellation; the examples show how to plot such a
 #'   Delaunay tessellation.
 #'
-#' @seealso \code{\link{getDelaunaySimplicies}}
+#' @seealso \code{\link{getDelaunaySimplices}}
 #' @examples library(tessellation)
 #' points <- rbind(
 #'  c(0.5,0.5,0.5),
@@ -447,15 +447,17 @@ delaunay <- function(
   tess
 }
 
-#' @title Delaunay simplicies
-#' @description Get Delaunay simplicies (tiles).
+#' @title Delaunay simplices
+#' @description Get Delaunay simplices (tiles).
 #'
 #' @param tessellation the output of \code{\link{delaunay}}
-#' @param hashes Boolean, whether to return the simplicies as hash maps
+#' @param hashes Boolean, whether to return the simplices as hash maps
 #'
-#' @return The list of simplicies of the Delaunay tessellation.
+#' @return The list of simplices of the Delaunay tessellation.
 #' @export
 #' @importFrom hash values
+#' @name getDelaunaySimplices
+#' @rdname getDelaunaySimplices
 #'
 #' @examples library(tessellation)
 #' pts <- rbind(
@@ -469,8 +471,8 @@ delaunay <- function(
 #'   c(-5, -5, -10)
 #' )
 #' tess <- delaunay(pts)
-#' getDelaunaySimplicies(tess)
-getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
+#' getDelaunaySimplices(tess)
+getDelaunaySimplices <- function(tessellation, hashes = FALSE){
   stopifnot(isBoolean(hashes))
   if(!inherits(tessellation, "delaunay")){
     stop(
@@ -484,12 +486,19 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE){
       call. = TRUE
     )
   }
-  simplicies <-
+  simplices <-
     lapply(lapply(tessellation[["tiles"]], `[[`, "simplex"), `[[`, "vertices")
   if(!hashes){
-    simplicies <- lapply(simplicies, function(simplex) t(values(simplex)))
+    simplices <- lapply(simplices, function(simplex) t(values(simplex)))
   }
-  simplicies
+  simplices
+}
+
+#' @export
+#' @name getDelaunaySimplices
+#' @rdname getDelaunaySimplices
+getDelaunaySimplicies <- function(tessellation, hashes = FALSE) {
+  getDelaunaySimplices(tessellation, hashes)
 }
 
 
@@ -555,15 +564,15 @@ plotDelaunay2D <- function(
   plot(vertices, type = "n", ...)
   if(!isFALSE(color)){
     color <- match.arg(color, c("random", "distinct"))
-    simplicies <- getDelaunaySimplicies(tessellation, hashes = TRUE)
-    nsimplicies <- length(simplicies)
+    simplices <- getDelaunaySimplices(tessellation, hashes = TRUE)
+    nsimplices <- length(simplices)
     if(color == "random"){
-      colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+      colors <- randomColor(nsimplices, hue = hue, luminosity = luminosity)
     }else{
-      colors <- distinctColorPalette(nsimplicies)
+      colors <- distinctColorPalette(nsimplices)
     }
-    for(i in 1L:nsimplicies){
-      triangle <- t(values(simplicies[[i]]))
+    for(i in 1L:nsimplices){
+      triangle <- t(values(simplices[[i]]))
       polygon(triangle, border = NA, col = colors[i])
     }
   }
@@ -655,21 +664,21 @@ plotDelaunay3D <- function(
       call. = TRUE
     )
   }
-  simplicies <- getDelaunaySimplicies(tessellation, hashes = TRUE)
-  # edges <- unique(do.call(rbind, lapply(simplicies, function(simplex){
+  simplices <- getDelaunaySimplices(tessellation, hashes = TRUE)
+  # edges <- unique(do.call(rbind, lapply(simplices, function(simplex){
   #   t(combn(as.integer(keys(simplex)), 2L))
   # })))
-  nsimplicies <- length(simplicies)
+  nsimplices <- length(simplices)
   if(!isFALSE(color)){
     color <- match.arg(color, c("random", "distinct"))
     if(color == "random"){
-      colors <- randomColor(nsimplicies, hue = hue, luminosity = luminosity)
+      colors <- randomColor(nsimplices, hue = hue, luminosity = luminosity)
     }else{
-      colors <- distinctColorPalette(nsimplicies)
+      colors <- distinctColorPalette(nsimplices)
     }
     triangles <- combn(4L, 3L)
-    for(i in 1L:nsimplicies){
-      simplex <- t(values(simplicies[[i]]))
+    for(i in 1L:nsimplices){
+      simplex <- t(values(simplices[[i]]))
       for(j in 1L:4L){
         triangles3d(simplex[triangles[, j], ], color = colors[i], alpha = alpha)
       }
