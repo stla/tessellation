@@ -15,9 +15,11 @@ delaunay(
 \arguments{
 \item{points}{the points given as a matrix, one point per row}
 
-\item{atinfinity}{Boolean, whether to include a point at infinity}
+\item{atinfinity}{Boolean, whether to include a point at infinity;
+ignored if \code{elevation=TRUE}}
 
-\item{degenerate}{Boolean, whether to include degenerate tiles}
+\item{degenerate}{Boolean, whether to include degenerate tiles;
+ignored if \code{elevation=TRUE}}
 
 \item{exteriorEdges}{Boolean, for dimension 3 only, whether to return
 the exterior edges (see below)}
@@ -145,16 +147,16 @@ library(rgl)
 mesh <- del[["mesh"]]
 open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
 aspect3d(1, 1, 20)
-shade3d(mesh, color = "limegreen")
+shade3d(mesh, color = "limegreen", polygon_offset = 1)
 wire3d(mesh)
 
-# another elevated Delaunay triangulation, to check the correctness of
-#   the calculated surface ####
+# another elevated Delaunay triangulation, to check the correctness
+#   of the calculated surface and the calculated volume ####
 library(Rvcg)
 library(rgl)
 cap <- vcgSphericalCap(angleRad = pi/2, subdivision = 3)
 open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
-shade3d(cap, color = "lawngreen")
+shade3d(cap, color = "lawngreen", polygon_offset = 1)
 wire3d(cap)
 # exact value of the surface of the spherical cap:
 R <- 1

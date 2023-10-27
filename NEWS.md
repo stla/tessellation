@@ -1,6 +1,8 @@
-# tessellation 2.1.3.9000
+# tessellation 2.2.0
 
-Fixed a misspelled word.
+- Fixed a misspelled word.
+
+- The package does no longer depend on the 'interp' package.
 
 
 # tessellation 2.1.3

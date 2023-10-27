@@ -101,5 +101,5 @@ library(rgl)
 mesh <- del[["mesh"]]
 open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
 aspect3d(1, 1, 20)
-shade3d(mesh, color = "limegreen")
+shade3d(mesh, color = "limegreen", polygon_offset = 1)
 wire3d(mesh)

@@ -104,8 +104,10 @@ volume_under_triangle <- function(x, y, z){
 #' @description Delaunay triangulation (or tessellation) of a set of points.
 #'
 #' @param points the points given as a matrix, one point per row
-#' @param atinfinity Boolean, whether to include a point at infinity
-#' @param degenerate Boolean, whether to include degenerate tiles
+#' @param atinfinity Boolean, whether to include a point at infinity;
+#'   ignored if \code{elevation=TRUE}
+#' @param degenerate Boolean, whether to include degenerate tiles;
+#'   ignored if \code{elevation=TRUE}
 #' @param exteriorEdges Boolean, for dimension 3 only, whether to return
 #'   the exterior edges (see below)
 #' @param elevation Boolean, only for three-dimensional points; if \code{TRUE},
@@ -190,7 +192,6 @@ volume_under_triangle <- function(x, y, z){
 #' @useDynLib tessellation, .registration = TRUE
 #' @importFrom hash hash keys
 #' @importFrom rgl tmesh3d
-#' @importFrom interp tri.mesh triangles
 #' @importFrom Rvcg vcgGetEdge
 #'
 #' @note The package provides the functions \code{\link{plotDelaunay2D}} to
@@ -200,6 +201,7 @@ volume_under_triangle <- function(x, y, z){
 #'   Delaunay tessellation.
 #'
 #' @seealso \code{\link{getDelaunaySimplices}}
+#'
 #' @examples library(tessellation)
 #' points <- rbind(
 #'  c(0.5,0.5,0.5),
@@ -233,16 +235,16 @@ volume_under_triangle <- function(x, y, z){
 #' mesh <- del[["mesh"]]
 #' open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
 #' aspect3d(1, 1, 20)
-#' shade3d(mesh, color = "limegreen")
+#' shade3d(mesh, color = "limegreen", polygon_offset = 1)
 #' wire3d(mesh)
 #'
-#' # another elevated Delaunay triangulation, to check the correctness of
-#' #   the calculated surface ####
+#' # another elevated Delaunay triangulation, to check the correctness
+#' #   of the calculated surface and the calculated volume ####
 #' library(Rvcg)
 #' library(rgl)
 #' cap <- vcgSphericalCap(angleRad = pi/2, subdivision = 3)
 #' open3d(windowRect = c(100, 100, 612, 356), zoom = 0.6)
-#' shade3d(cap, color = "lawngreen")
+#' shade3d(cap, color = "lawngreen", polygon_offset = 1)
 #' wire3d(cap)
 #' # exact value of the surface of the spherical cap:
 #' R <- 1
@@ -291,47 +293,41 @@ delaunay <- function(
         call. = TRUE
       )
     }
-    # elevations <- points[, 3L]
-    # points <- points[, c(1L, 2L)]
-    # del <- delaunay(
-    #   points[, c(1L, 2L)], atinfinity = atinfinity, degenerate = degenerate,
-    #   exteriorEdges = FALSE, elevation = FALSE
-    # )
-    # cgal <- RCGAL::delaunay(points[, c(1L, 2L)])
+    del <- delaunay(
+      points[, c(1L, 2L)], atinfinity = FALSE, degenerate = FALSE,
+      exteriorEdges = FALSE, elevation = FALSE
+    )
 
-    x <- points[, 1L]
-    y <- points[, 2L]
-    x <- (x - min(x)) / diff(range(x))
-    y <- (y - min(y)) / diff(range(y))
-    #xy <- points[, c(1L, 2L)]
-    o <- order(round(x+y, 6L), y-x)
-    xy <- cbind(x, y)[o, ]
-    if(anyDuplicated(xy)){
-      stop("There are some duplicated points.", call. = TRUE)
-    }
-    points <- points[o, ]
-    # xy <- round(points[, c(1L, 2L)], 6)
-    Triangles <- triangles(tri.mesh(xy[, 1L], xy[, 2L]))
-    # dd <- deldir::deldir(points[,1], points[,2], sort = FALSE, round = FALSE)
+    # x <- points[, 1L]
+    # y <- points[, 2L]
+    # x <- (x - min(x)) / diff(range(x))
+    # y <- (y - min(y)) / diff(range(y))
+    # #xy <- points[, c(1L, 2L)]
+    # o <- order(round(x+y, 6L), y-x)
+    # xy <- cbind(x, y)[o, ]
+    # if(anyDuplicated(xy)){
+    #   stop("There are some duplicated points.", call. = TRUE)
+    # }
+    # points <- points[o, ]
+    # # xy <- round(points[, c(1L, 2L)], 6)
+    # Triangles <- triangles(tri.mesh(xy[, 1L], xy[, 2L]))
 
-    # delVertices <- del[["vertices"]]
-    # ids <- vapply(delVertices, `[[`, integer(1L), "id")
+    delVertices <- del[["vertices"]]
+    ids <- vapply(delVertices, `[[`, integer(1L), "id")
 
     #vertices <- do.call(cbind, lapply(delVertices, `[[`, "point"))
 
-    # vertices <- points[ids, ]
+    vertices <- points[ids, ]
 
-    # triangles <- do.call(rbind, lapply(del[["tiles"]], function(tile){
-    #   indices <- tile[["vertices"]]
-    #   if(tile[["orientation"]] == -1L){
-    #     indices <- indices[c(2L, 1L, 3L)]
-    #   }
-    #   indices
-    # }))
-    # triangles <- cgal$faces
-    Triangles <- Triangles[, 1L:3L]
-    #triangles <- deldir::triMat(dd)
-    vertices <- points
+    Triangles <- do.call(rbind, lapply(del[["tiles"]], function(tile){
+      indices <- tile[["vertices"]]
+      if(tile[["orientation"]] == -1L){
+        indices <- indices[c(2L, 1L, 3L)]
+      }
+      indices
+    }))
+    # Triangles <- Triangles[, 1L:3L]
+    # vertices <- points
     mesh <- tmesh3d(
       vertices = t(vertices),
       indices = t(Triangles),
