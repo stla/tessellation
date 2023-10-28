@@ -55,7 +55,8 @@ pts <- rbind(square, ptsin)
 d <- delaunay(pts)
 opar <- par(mar = c(0, 0, 0, 0))
 plotDelaunay2D(
-  d, xlab = NA, ylab = NA, asp = 1, color = "random"
+  d, xlab = NA, ylab = NA, asp = 1, color = "random",
+  randomArgs = list(hue = "random", luminosity = "dark")
 )
 par(opar)
 }
