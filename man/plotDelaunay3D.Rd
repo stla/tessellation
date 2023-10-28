@@ -7,8 +7,8 @@
 plotDelaunay3D(
   tessellation,
   color = "distinct",
-  hue = "random",
-  luminosity = "light",
+  distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+  randomArgs = list(hue = "random", luminosity = "bright"),
   alpha = 0.3,
   exteriorEdgesAsTubes = FALSE,
   tubeRadius,
@@ -20,11 +20,14 @@ plotDelaunay3D(
 
 \item{color}{controls the filling colors of the tetrahedra, either
 \code{FALSE} for no color, \code{"random"} to use
-\code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
-\code{\link[randomcoloR]{distinctColorPalette}}}
+\code{\link[colorsGen]{randomColor}}, or \code{"distinct"} to use
+\code{\link[Polychrome]{createPalette}}}
 
-\item{hue, luminosity}{if \code{color = "random"}, these arguments are passed
-to \code{\link[randomcoloR]{randomColor}}}
+\item{distinctArgs}{if \code{color = "distinct"}, a list of arguments
+passed to \code{\link[Polychrome]{createPalette}}}
+
+\item{randomArgs}{if \code{color = "random"}, a list of arguments passed
+to \code{\link[colorsGen]{randomColor}}}
 
 \item{alpha}{opacity, number between 0 and 1}
 
@@ -59,9 +62,9 @@ pts <- rbind(
 tess <- delaunay(pts)
 library(rgl)
 open3d(windowRect = c(50, 50, 562, 562))
-plotDelaunay3D(tess)
-open3d(windowRect = c(50, 50, 562, 562))
+plotDelaunay3D(tess, color = "random")
+\donttest{open3d(windowRect = c(50, 50, 562, 562))
 plotDelaunay3D(
   tess, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.3, tubeColor = "yellow"
-)
+)}
 }

@@ -347,15 +347,17 @@ plotBoundedCell2D <- function(
 #'
 #' @param v an output of \code{\link{voronoi}}
 #' @param colors this can be \code{"random"} to use random colors for the cells
-#'   (with \code{\link[randomcoloR]{randomColor}}), \code{"distinct"} to use
+#'   with \code{\link[colorsGen]{randomColor}}, \code{"distinct"} to use
 #'   distinct colors with the help of
-#'   \code{\link[randomcoloR]{distinctColorPalette}}, or this can be \code{NA}
+#'   \code{\link[Polychrome]{createPalette}}, or this can be \code{NA}
 #'   for no colors, or a vector of colors; the length of this vector
 #'   of colors must match the number of bounded cells, which is displayed when
 #'   you run the \code{\link{voronoi}} function and that you can also get by
 #'   typing \code{attr(v, "nbounded")}
-#' @param hue,luminosity if \code{colors = "random"}, these arguments are passed
-#'   to \code{\link[randomcoloR]{randomColor}}
+#' @param distinctArgs if \code{colors = "distinct"}, a list of arguments
+#'   passed to \code{\link[Polychrome]{createPalette}}
+#' @param randomArgs if \code{colors = "random"}, a list of arguments passed
+#'   to \code{\link[colorsGen]{randomColor}}
 #' @param alpha opacity, a number between 0 and 1
 #'   (used when \code{colors} is not \code{NA})
 #' @param ... arguments passed to \code{\link{plotBoundedCell2D}} or
@@ -409,9 +411,12 @@ plotBoundedCell2D <- function(
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
 #' material3d(lwd = 2)
-#' \donttest{plotVoronoiDiagram(v, luminosity = "bright")}
+#' \donttest{plotVoronoiDiagram(v)}
 plotVoronoiDiagram <- function(
-  v, colors = "random", hue = "random", luminosity = "light", alpha = 1, ...
+  v, colors = "random",
+  distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+  randomArgs = list(hue = "random", luminosity = "bright"),
+  alpha = 1, ...
 ){
   if(!inherits(v, "voronoi")){
     stop(
@@ -430,10 +435,10 @@ plotVoronoiDiagram <- function(
   }
   if(identical(colors, "random")){
     colors <- scales::alpha(
-      randomColor(ncells, hue = hue, luminosity = luminosity), alpha
+      rcolors(ncells, randomArgs), alpha
     )
   }else if(identical(colors, "distinct")){
-    colors <- scales::alpha(distinctColorPalette(ncells), alpha)
+    colors <- scales::alpha(distinctColors(ncells, distinctArgs), alpha)
   }else if(identical(colors, NA)){
     colors <- rep(NA, ncells)
   }else{

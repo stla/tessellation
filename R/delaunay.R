@@ -506,10 +506,12 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE) {
 #'   no borders
 #' @param color controls the filling colors of the triangles, either
 #'   \code{FALSE} for no color, \code{"random"} to use
-#'   \code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
-#'   \code{\link[randomcoloR]{distinctColorPalette}}
-#' @param hue,luminosity if \code{color = "random"}, these arguments are passed
-#'   to \code{\link[randomcoloR]{randomColor}}
+#'   \code{\link[colorsGen]{randomColor}}, or \code{"distinct"} to use
+#'   \code{\link[Polychrome]{createPalette}}
+#' @param distinctArgs if \code{color = "distinct"}, a list of arguments
+#'   passed to \code{\link[Polychrome]{createPalette}}
+#' @param randomArgs if \code{color = "random"}, a list of arguments passed
+#'   to \code{\link[colorsGen]{randomColor}}
 #' @param lty,lwd graphical parameters
 #' @param ... arguments passed to \code{\link{plot}}
 #'
@@ -562,10 +564,10 @@ plotDelaunay2D <- function(
     color <- match.arg(color, c("random", "distinct"))
     simplices <- getDelaunaySimplices(tessellation, hashes = TRUE)
     nsimplices <- length(simplices)
-    if(color == "random"){
-      colors <- randomColor(nsimplices, hue = hue, luminosity = luminosity)
-    }else{
-      colors <- distinctColorPalette(nsimplices)
+    if(color == "random") {
+      colors <- rcolors(nsimplices, randomArgs)
+    } else {
+      colors <- distinctColors(nsimplices, distinctArgs)
     }
     for(i in 1L:nsimplices){
       triangle <- t(values(simplices[[i]]))
@@ -597,10 +599,12 @@ plotDelaunay2D <- function(
 #' @param tessellation the output of \code{\link{delaunay}}
 #' @param color controls the filling colors of the tetrahedra, either
 #'   \code{FALSE} for no color, \code{"random"} to use
-#'   \code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
-#'   \code{\link[randomcoloR]{distinctColorPalette}}
-#' @param hue,luminosity if \code{color = "random"}, these arguments are passed
-#'   to \code{\link[randomcoloR]{randomColor}}
+#'   \code{\link[colorsGen]{randomColor}}, or \code{"distinct"} to use
+#'   \code{\link[Polychrome]{createPalette}}
+#' @param distinctArgs if \code{color = "distinct"}, a list of arguments
+#'   passed to \code{\link[Polychrome]{createPalette}}
+#' @param randomArgs if \code{color = "random"}, a list of arguments passed
+#'   to \code{\link[colorsGen]{randomColor}}
 #' @param alpha opacity, number between 0 and 1
 #' @param exteriorEdgesAsTubes Boolean, whether to plot the exterior edges
 #'   as tubes; in order to use this feature, you need to set
@@ -612,7 +616,6 @@ plotDelaunay2D <- function(
 #'
 #' @return No value, just renders a 3D plot.
 #' @export
-#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom utils combn
 #' @importFrom rgl triangles3d spheres3d
 #' @importFrom hash keys values
@@ -631,13 +634,15 @@ plotDelaunay2D <- function(
 #' tess <- delaunay(pts)
 #' library(rgl)
 #' open3d(windowRect = c(50, 50, 562, 562))
-#' plotDelaunay3D(tess)
-#' open3d(windowRect = c(50, 50, 562, 562))
+#' plotDelaunay3D(tess, color = "random")
+#' \donttest{open3d(windowRect = c(50, 50, 562, 562))
 #' plotDelaunay3D(
 #'   tess, exteriorEdgesAsTubes = TRUE, tubeRadius = 0.3, tubeColor = "yellow"
-#' )
+#' )}
 plotDelaunay3D <- function(
-  tessellation, color = "distinct", hue = "random", luminosity = "light",
+  tessellation, color = "distinct",
+  distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+  randomArgs = list(hue = "random", luminosity = "bright"),
   alpha = 0.3, exteriorEdgesAsTubes = FALSE, tubeRadius, tubeColor
 ){
   stopifnot(isBoolean(exteriorEdgesAsTubes))
@@ -660,22 +665,24 @@ plotDelaunay3D <- function(
       call. = TRUE
     )
   }
-  simplices <- getDelaunaySimplices(tessellation, hashes = TRUE)
-  # edges <- unique(do.call(rbind, lapply(simplices, function(simplex){
-  #   t(combn(as.integer(keys(simplex)), 2L))
-  # })))
-  nsimplices <- length(simplices)
-  if(!isFALSE(color)){
+  # simplices <- getDelaunaySimplices(tessellation, hashes = TRUE)
+  # # edges <- unique(do.call(rbind, lapply(simplices, function(simplex){
+  # #   t(combn(as.integer(keys(simplex)), 2L))
+  # # })))
+  # nsimplices <- length(simplices)
+  if(!isFALSE(color)) {
     color <- match.arg(color, c("random", "distinct"))
-    if(color == "random"){
-      colors <- randomColor(nsimplices, hue = hue, luminosity = luminosity)
-    }else{
-      colors <- distinctColorPalette(nsimplices)
+    simplices <- getDelaunaySimplices(tessellation, hashes = TRUE)
+    nsimplices <- length(simplices)
+    if(color == "random") {
+      colors <- rcolors(nsimplices, randomArgs)
+    } else {
+      colors <- distinctColors(nsimplices, distinctArgs)
     }
     triangles <- combn(4L, 3L)
-    for(i in 1L:nsimplices){
+    for(i in 1L:nsimplices) {
       simplex <- t(values(simplices[[i]]))
-      for(j in 1L:4L){
+      for(j in 1L:4L) {
         triangles3d(simplex[triangles[, j], ], color = colors[i], alpha = alpha)
       }
     }

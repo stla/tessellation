@@ -23,15 +23,18 @@ no borders}
 
 \item{color}{controls the filling colors of the triangles, either
 \code{FALSE} for no color, \code{"random"} to use
-\code{\link[randomcoloR]{randomColor}}, or \code{"distinct"} to use
-\code{\link[randomcoloR]{distinctColorPalette}}}
-
-\item{hue, luminosity}{if \code{color = "random"}, these arguments are passed
-to \code{\link[randomcoloR]{randomColor}}}
+\code{\link[colorsGen]{randomColor}}, or \code{"distinct"} to use
+\code{\link[Polychrome]{createPalette}}}
 
 \item{lty, lwd}{graphical parameters}
 
 \item{...}{arguments passed to \code{\link{plot}}}
+
+\item{distinctArgs}{if \code{color = "distinct"}, a list of arguments
+passed to \code{\link[Polychrome]{createPalette}}}
+
+\item{randomArgs}{if \code{color = "random"}, a list of arguments passed
+to \code{\link[colorsGen]{randomColor}}}
 }
 \value{
 No value, just renders a 2D plot.
