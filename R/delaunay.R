@@ -517,7 +517,6 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE) {
 #'
 #' @return No value, just renders a 2D plot.
 #' @export
-#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom hash keys values
 #' @importFrom graphics plot polygon par segments
 #'

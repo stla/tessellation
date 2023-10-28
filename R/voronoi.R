@@ -365,7 +365,6 @@ plotBoundedCell2D <- function(
 #'
 #' @return No returned value.
 #' @export
-#' @importFrom randomcoloR randomColor distinctColorPalette
 #' @importFrom scales alpha
 #'
 #' @note Sometimes, it is necessary to set the option \code{degenerate=TRUE}
