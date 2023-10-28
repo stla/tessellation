@@ -532,12 +532,14 @@ getDelaunaySimplicies <- function(tessellation, hashes = FALSE) {
 #' d <- delaunay(pts)
 #' opar <- par(mar = c(0, 0, 0, 0))
 #' plotDelaunay2D(
-#'   d, xlab = NA, ylab = NA, asp = 1, color = "random", luminosity = "dark"
+#'   d, xlab = NA, ylab = NA, asp = 1, color = "random"
 #' )
 #' par(opar)
 plotDelaunay2D <- function(
-  tessellation, border = "black", color = "distinct", hue = "random",
-  luminosity = "light", lty = par("lty"), lwd = par("lwd"), ...
+  tessellation, border = "black", color = "distinct",
+  distinctArgs = list(seedcolors = c("#ff0000", "#00ff00", "#0000ff")),
+  randomArgs = list(hue = "random", luminosity = "bright"),
+  lty = par("lty"), lwd = par("lwd"), ...
 ){
   if(!inherits(tessellation, "delaunay")){
     stop(
