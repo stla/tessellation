@@ -5,7 +5,7 @@
 - The package does no longer depend on the 'interp' package.
 
 - The package does no longer depend on the 'randomcoloR' package, but it now 
-depends on the packages 'colorsGen' and 'Polychrome'
+depends on the packages 'colorsGen' and 'Polychrome'.
 
 
 # tessellation 2.1.3
