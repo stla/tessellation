@@ -1,7 +1,7 @@
 Type: Package
 Package: tessellation
 Title: Delaunay and Voronoï Tessellations
-Version: 2.1.3.9001
+Version: 2.2.0
 Authors@R: c(
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("aut", "cre")),
     person("C. B.", "Barber", role = "cph",
@@ -37,6 +37,5 @@ Suggests:
     rmarkdown,
     uniformly,
     viridisLite
-Remotes: stla/colorsGen
 Encoding: UTF-8
 RoxygenNote: 7.2.3
