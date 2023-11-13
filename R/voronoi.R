@@ -184,6 +184,51 @@ cellVertices <- function(cell, check.bounded = TRUE){
   vertices
 }
 
+#' @title Volume of a bounded Voronoï cell
+#' @description For a bounded 2D Voronoï cell, returns the area of the cell,
+#'   and for a bounded 3D Voronoï cell, returns the volume of the cell and
+#'   its surface area.
+#'
+#' @param cell a bounded 2D or 3D Voronoï cell
+#'
+#' @return A number, the area/volume of the cell, and in the 3D case, the
+#'   surface area of the cell is attached to this number as an attribute.
+#' @export
+#' @importFrom cxhull cxhull TrianglesXYZ
+#'
+#' @examples library(tessellation)
+#' d <- delaunay(centricCuboctahedron())
+#' v <- voronoi(d)
+#' cell13 <- v[[13]]
+#' isBoundedCell(cell13) # TRUE
+#' cellVolume(cell13)
+cellVolume <- function(cell) {
+  if(!isBoundedCell(cell)){
+    stop(
+      "This function applies to bounded cells only.",
+      call. = TRUE
+    )
+  }
+  dimension <- length(cell[["site"]])
+  vertices <- cellVertices(cell)
+  hull <- cxhull(vertices, triangulate = TRUE)
+  volume <- hull[["volume"]]
+  if(dimension == 3L) {
+    trgls <- TrianglesXYZ(hull)
+    ntrgls <- nrow(trgls) %/% 3L
+    area <- 0
+    for(i in 1L:ntrgls) {
+      k <- 3L*(i-1L)
+      A <- trgls[k+1L, ]
+      B <- trgls[k+2L, ]
+      C <- trgls[k+3L, ]
+      area <- area + triangleArea(A, B, C)
+    }
+    attr(volume, "area") <- area
+  }
+  volume
+}
+
 #' @title Plot a bounded Voronoï 3D cell
 #' @description Plot a bounded Voronoï 3D cell with \strong{rgl}.
 #'

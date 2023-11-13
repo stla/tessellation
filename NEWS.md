@@ -1,3 +1,11 @@
+# tessellation 2.3.0
+
+New function `cellVolume`. It returns the volume of a bounded 2D or 3D Voronoï
+cell (i.e. the area in 2D, the volume in 3D). 
+For a bounded 3D Voronoï cell, in addition to the volume of the cell, the 
+surface area of the cell is also returned.
+
+
 # tessellation 2.2.0
 
 - Fixed a misspelled word.
